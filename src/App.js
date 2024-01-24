@@ -1,9 +1,15 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 function App() {
   return (
-    <Routes/>
+    <Router>
+      <Routes>
+        <Route>
+          
+        </Route>
+      </Routes>
+    </Router>
   );
 };
 
