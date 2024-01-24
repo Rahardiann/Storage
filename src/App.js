@@ -1,13 +1,11 @@
-import './App.css';
-import LoginForm from './components/login/loginform';
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
-    <div>
-      <LoginForm />
-      {/* Other components or content */}
-    </div>
+    <Routes/>
   );
-}
+};
 
-export default App;
+export default App
+
