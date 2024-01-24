@@ -1,0 +1,47 @@
+/* Dashboard.css */
+.dashboard-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .statistics {
+    display: flex;
+  }
+  
+  .statistics-top {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .statistic-box {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .legend {
+    width: 150px;
+    margin-right: 20px;
+  }
+  
+  .legend-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .info-icon {
+    margin-right: 5px;
+  }
+  
+  .pie-chart {
+    flex: 1;
+  }
+  
+  .statistics-bottom {
+    display: flex;
+    justify-content: space-around;
+  }
+  

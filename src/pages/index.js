@@ -1,4 +1,4 @@
-import Homepage from "./homepage/homepage";
+import Dashboard from "./homepage/dashboard";
 import LoginForm from "./login/loginform";
 
-export {Homepage, LoginForm};
+export {Dashboard, LoginForm};
