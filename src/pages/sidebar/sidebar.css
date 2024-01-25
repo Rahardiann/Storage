@@ -1,60 +1,40 @@
-/* Sidebar.css */
+/* sidebar.css */
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .logo {
-    width: 80px; /* Sesuaikan dengan ukuran logo Anda */
-    height: 80px; /* Sesuaikan dengan ukuran logo Anda */
-  }
-  
-  .menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu li {
-    margin-bottom: 10px;
-  }
-  
-  .menu a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px;
-    display: block;
-    transition: background 0.3s;
-  }
+  width: 250px; /* Lebar sidebar */
+  height: 100vh; /* Tinggi sidebar sesuai tinggi layar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .menu-link {
-    display: flex;
-    align-items: center;
-  }
-  
-  .icon {
-    margin-right: 10px; /* Atur spasi di antara ikon dan teks */
-  }
-  
-  .text {
-    margin-left: 5px; /* Atur spasi di antara ikon dan teks */
-  }
-  
-  
-  .menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
+.logo-container {
+  margin-top: 20px; /* Jarak dari atas */
+}
+
+.logo {
+  max-width: 100%; /* Lebar maksimum logo */
+}
+
+.menu {
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin-top: 40px;
+  margin-bottom: 10px; /* Jarak antara setiap menu */
+}
+
+.menu-link {
+  font-size: medium;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white; /* Warna teks menu */
+}
+
+.icon {
+  margin-right: 10px; /* Jarak antara ikon dan teks */
+}
