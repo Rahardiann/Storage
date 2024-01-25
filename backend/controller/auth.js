@@ -14,7 +14,7 @@ exports.login = async (request, response) => {
         response.status(200).json({
             status: true,
             data: result,
-            message: "Login Berhasil tol"
+            message: "Login Berhasil"
         })
     } else {
         response.status(400).json({
