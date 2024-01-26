@@ -2,7 +2,7 @@
 import React from 'react';
 import Sidebar from '../sidebar/sidebar';
 // import "../homepage/dashboard.css"
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie } from 'recharts';
 
 
 const Dashboard = () => {
@@ -79,7 +79,16 @@ const Dashboard = () => {
       pv: 4300,
       amt: 2100,
     },
-  ];
+  ]
+  
+  const anj = [
+    { name: "Geeksforgeeks", students: 400 },
+    { name: "Technical scripter", students: 700 },
+    { name: "Geek-i-knack", students: 200 },
+    { name: "Geek-o-mania", students: 1000 },
+]
+  
+  ;
   return (
     <div className="flex flex-wrap"> {/* Menggunakan flex container dan wrap untuk responsif */}
       <Sidebar />
@@ -108,8 +117,26 @@ const Dashboard = () => {
             <Bar dataKey="month" fill="#4A55A2" />
           </BarChart>
           </ResponsiveContainer>
+        
         </div>
+
       </div>
+        
+      <ResponsiveContainer width={"100%"} height={100}>
+          <PieChart width={100} height={100}>
+                <Tooltip />
+                <Pie
+                    data={anj}
+                    dataKey="students"
+                    outerRadius={250}
+                    innerRadius={150}
+                    fill="green"
+                    label={({ name, students }) =>
+                        `${name}: ${students}`
+                    }
+                />
+            </PieChart>
+          </ResponsiveContainer>
     </div>
   );
 };
