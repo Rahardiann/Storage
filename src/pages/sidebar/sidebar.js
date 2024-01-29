@@ -13,7 +13,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className={`flex flex-col h-lvh ${minimized ? 'w-16' : 'w-64'} bg-main transition-all ease-in-out duration-300`}>
+    <div className={`flex flex-col h-screen ${minimized ? 'w-16' : 'w-64'} bg-main transition-all ease-in-out duration-300`}>
       <div className="p-4">
         <img src={Logosidebar} alt="Logo" className={`size-32  w-full ${minimized ? 'mx-auto' : 'mt-8'}`} />
       </div>

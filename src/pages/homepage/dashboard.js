@@ -2,8 +2,7 @@
 import React from 'react';
 import Sidebar from '../sidebar/sidebar';
 // import "../homepage/dashboard.css"
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie } from 'recharts';
-
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'; // Impor Cell dari Recharts
 
 const Dashboard = () => {
   const data = [
@@ -86,21 +85,29 @@ const Dashboard = () => {
     { name: "Technical scripter", students: 700 },
     { name: "Geek-i-knack", students: 200 },
     { name: "Geek-o-mania", students: 1000 },
-]
-  
-  ;
-  return (
-    <div className="flex flex-wrap"> {/* Menggunakan flex container dan wrap untuk responsif */}
-      <Sidebar />
+] ;
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-      <div className="flex-1 p-4 md:p-8 lg:p-12 xl:p-16"> {/* Memberikan padding yang berbeda pada berbagai ukuran layar */}
-        <div
-          className="bg-blue-200 p-4 md:p-8 lg:p-12 xl:p-16 rounded shadow-lg"
-        >
-          <ResponsiveContainer width="100%" height={300}>
+// Fungsi untuk menampilkan label kustom di dalam pie chart
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+  const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+
+  return (
+    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+return (
+  <div className="flex h-screen">
+    <Sidebar />
+    <div className="flex-1 p-4 md:p-8 lg:p-12 xl:p-16">
+      <div className="bg-blue-200 p-4 md:p-8 lg:p-12 xl:p-16 rounded shadow-lg">
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart
-            width={500}
-            height={300}
             data={data}
             margin={{
               top: 10,
@@ -116,29 +123,34 @@ const Dashboard = () => {
             <Legend />
             <Bar dataKey="month" fill="#4A55A2" />
           </BarChart>
-          </ResponsiveContainer>
-        
-        </div>
-
+        </ResponsiveContainer>
       </div>
-        
-      <ResponsiveContainer width={"100%"} height={100}>
-          <PieChart width={100} height={100}>
-                <Tooltip />
-                <Pie
-                    data={anj}
-                    dataKey="students"
-                    outerRadius={250}
-                    innerRadius={150}
-                    fill="green"
-                    label={({ name, students }) =>
-                        `${name}: ${students}`
-                    }
-                />
-            </PieChart>
-          </ResponsiveContainer>
+      <div className="flex-1 p-4 md:p-8 lg:p-12 xl:p-16">
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart width={800} height={800}>
+            <Pie
+              data={anj}
+              cx="70%"
+              cy="70%"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="students"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
-  );
+  </div>
+);
 };
+
+
+
 
 export default Dashboard;
