@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../login/loginform.css";
 import backgroundImage from "../../assets/login.png";
 import logoSVG from "../../assets/logologin.svg";
-import axios from "axios";
+import axios from '../../config/axiosConfig';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/login",
+        "/user/login",
         data
       );
 
@@ -38,7 +38,7 @@ const LoginForm = () => {
         window.location.reload();
       } else {
         sessionStorage.setItem("id_user", response.data.data.id);
-        navigate("/home");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.error(error);

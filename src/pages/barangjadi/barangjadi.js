@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../sidebar/sidebar';
+import axios from '../../config/axiosConfig'
 
-const Stokbarangjadi = () => {
+function Stokbarangjadi() {
+
+  const [stok, setStok] = useState([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(`/bjadi/`)
+        setStok(response.data.data)
+        console.log()
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetch()
+  }, [])
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -34,18 +51,13 @@ const Stokbarangjadi = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* Isi tabel akan diisi dengan data dari backend */}
-                <tr>
-                  <td className="border border-gray-500 px-4 py-2">1</td>
-                  <td className="border border-gray-500 px-4 py-2">Barang A</td>
-                  <td className="border border-gray-500 px-4 py-2">10</td>
+                {stok.map((item, index) => (
+                  <tr>
+                  <td className="border border-gray-500 px-4 py-2">{index + 1}</td>
+                  <td className="border border-gray-500 px-4 py-2">{item.nm_bjadi}</td>
+                  <td className="border border-gray-500 px-4 py-2">{item.jml_bjadi}</td>
                 </tr>
-                <tr>
-                  <td className="border border-gray-500 px-4 py-2">2</td>
-                  <td className="border border-gray-500 px-4 py-2">Barang B</td>
-                  <td className="border border-gray-500 px-4 py-2">20</td>
-                </tr>
-                {/* Data lainnya */}
+                ))}
               </tbody>
             </table>
           </div>
