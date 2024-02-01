@@ -18,7 +18,8 @@ exports.getAllBjadi = async (request, response) => {
 exports.createBjadi = async (request, response) => {
     let data = {
         nm_bjadi: request.body.nm_bjadi,
-        jml_bjadi: request.body.jml_bjadi
+        jml_bjadi: request.body.jml_bjadi,
+        gambar: request.body.gambar
     }
     bjadiModel.create(data)
     .then(result => {
