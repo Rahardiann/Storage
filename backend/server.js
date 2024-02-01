@@ -15,10 +15,13 @@ const bmentahRoutes =
 require(`./routes/barang_mentah`)
 const userRoutes = 
 require(`./routes/auth`)
+const masterRoutes =
+require('./routes/master')
 
 app.use(`/bjadi`, bjadiRoutes)
 app.use(`/bmentah`, bmentahRoutes)
 app.use(`/user`, userRoutes)
+app.use(`/master`, masterRoutes)
 
 app.listen(port, () => {
     console.log(`Gass port ${port}`)
