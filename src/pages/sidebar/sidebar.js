@@ -45,7 +45,7 @@ const Sidebar = () => {
         </li>
       </ul>
       <div className="p-4">
-        <button className="bg-blue-200 text-main btn btn-blue  py-1 rounded" onClick={toggleSidebar}>
+        <button className="bg-blue-200 text-main btn btn-blue  py-2 rounded" onClick={toggleSidebar}>
           {minimized ? '>' : '<'}
         </button>
       </div>
