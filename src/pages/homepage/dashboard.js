@@ -130,11 +130,11 @@ return (
           <PieChart width={800} height={800}>
             <Pie
               data={anj}
-              cx="70%"
-              cy="70%"
+              cx="60%"
+              cy="45%"
               labelLine={false}
               label={renderCustomizedLabel}
-              outerRadius={80}
+              outerRadius={130}
               fill="#8884d8"
               dataKey="students"
             >
