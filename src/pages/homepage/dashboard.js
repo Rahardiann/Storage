@@ -1,6 +1,7 @@
-// Dashboard.js
-import React from 'react';
+import {useEffect, useState} from 'react';
 import Sidebar from '../sidebar/sidebar';
+import axios from '../../config/axiosConfig';
+import React from 'react';
 import {
   BarChart,
   Bar,
@@ -56,7 +57,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
           <div className="bg-blue-200 p-4 md:p-8 lg:p-12 xl:p-16 rounded shadow-lg">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                data={data}
+                data={bjadi}
                 margin={{ top: 10, right: 20, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
@@ -74,7 +75,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
           <ResponsiveContainer width="100%" height={300}>
             <PieChart width={800} height={800}>
               <Pie
-                data={anj}
+                data={bmentah}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -83,7 +84,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
                 fill="#8884d8"
                 dataKey="students"
               >
-                {anj.map((entry, index) => (
+                {bmentah.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
