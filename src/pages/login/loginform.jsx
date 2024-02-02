@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../login/loginform.css";
 import backgroundImage from "../../assets/login.png";
 import logoSVG from "../../assets/logologin.svg";
 import axios from '../../config/axiosConfig';
