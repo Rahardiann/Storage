@@ -25,34 +25,34 @@ const Sidebar = () => {
       </div>
       <ul className="flex-grow">
         <li className="my-4">
-          <Link to="/dashboard" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(true)}>
+          <Link to="/dashboard" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaHome className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Dashboard</span>}
           </Link>
         </li>
         <li className="my-10">
-          <Link to="/barangjadi" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(true)}>
+          <Link to="/barangjadi" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaBox className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Jadi</span>}
           </Link>
         </li>
         <li className="my-10">
-          <Link to="/stock-barang-mentah" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(true)}>
+          <Link to="/stock-barang-mentah" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaCubes className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Mentah</span>}
           </Link>
         </li>
         <li className="my-10">
-          <Link to="/riwayat" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(true)}>
+          <Link to="/riwayat" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaHistory className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Riwayat</span>}
           </Link>
         </li>
         <li className="my-10">
-          <Link to="/logout" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(true)}>
+          <Link to="/logout" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaSignOutAlt className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Logout</span>}
           </Link>
         </li>
       </ul>
       {window.innerWidth <= 768 && !minimized && (
         <div className="p-4">
-          <button className="bg-blue-200 text-main btn btn-blue py-2 rounded" onClick={() => setMinimized(true)}>
+          <button className="bg-blue-200 text-main btn btn-blue py-2 rounded" onClick={() => setMinimized(window.innerWidth <= 768)}>
             <FaBars />
           </button>
         </div>
