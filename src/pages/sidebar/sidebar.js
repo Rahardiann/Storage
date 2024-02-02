@@ -19,34 +19,34 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className={`flex flex-col h-screen ${minimized ? 'w-16' : 'w-64'} bg-main transition-all ease-in-out duration-300`}>
-      <div className="p-4">
+    <div className={`flex flex-col h-screen ${minimized ? 'w-16' : 'w-64'} bg-main transition-all ease-in-out duration-300`} style={{ maxWidth: minimized && window.innerWidth <= 768 ? '50px' : '220px' }}>
+      <div className="p-3">
         <img src={Logosidebar} alt="Logo" className={`size-32 w-full ${minimized ? 'mx-auto' : 'mt-8'}`} />
       </div>
       <ul className="flex-grow">
         <li className="my-4">
           <Link to="/dashboard" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
-            <FaHome className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Dashboard</span>}
+            <FaHome className={`ml-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Dashboard</span>}
           </Link>
         </li>
         <li className="my-10">
           <Link to="/barangjadi" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
-            <FaBox className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Jadi</span>}
+            <FaBox className={`ml-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Jadi</span>}
           </Link>
         </li>
         <li className="my-10">
           <Link to="/stock-barang-mentah" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
-            <FaCubes className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Mentah</span>}
+            <FaCubes className={`ml-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Stock Barang Mentah</span>}
           </Link>
         </li>
         <li className="my-10">
           <Link to="/riwayat" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
-            <FaHistory className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Riwayat</span>}
+            <FaHistory className={`ml-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Riwayat</span>}
           </Link>
         </li>
         <li className="my-10">
           <Link to="/logout" className={`flex items-center text-white text-base sidebar-item ${minimized ? 'pl-2' : 'pl-4'} hover:text-gray-400`} onClick={() => setMinimized(window.innerWidth <= 768)}>
-            <FaSignOutAlt className={`mr-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Logout</span>}
+            <FaSignOutAlt className={`ml-2 ${minimized ? 'ml-3' : 'mr-4'}`} /> {!minimized && <span>Logout</span>}
           </Link>
         </li>
       </ul>
