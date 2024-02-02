@@ -49,7 +49,7 @@ const LoginForm = () => {
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex items-center justify-center">
-        <div className="w-80 p-20 flex flex-col items-center justify-center bg-white rounded-lg shadow-md">
+        <div className="w-80 p-20 flex flex-col items-center justify-center bg-white rounded-lg ">
           <img src={logoSVG} alt="Logo" className="logo" />
           <h2  className="text-2xl font-bold mb-8 text-center">Login</h2>
           <form onSubmit={handleLogin} className="w-80 max-w-sm">
