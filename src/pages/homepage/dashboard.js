@@ -2,81 +2,81 @@
 import React from 'react';
 import Sidebar from '../sidebar/sidebar';
 // import "../homepage/dashboard.css"
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'; // Impor Cell dari Recharts
+import { BarChart, Bar, Rectangle, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'; // Impor Cell dari Recharts
 
 const Dashboard = () => {
   const data = [
     {
       name: 'Januaro',
-      month: 4000,
+      Barang_Masuk: 4000,
       pv: 2400,
-      amt: 2400,
+      Barang_keluar: 2400,
     },
     {
       name: 'Februari',
-      month: 3000,
+      Barang_Masuk: 3000,
       pv: 1398,
-      amt: 2210,
+      Barang_keluar: 2210,
     },
     {
       name: 'maret',
-      month: 2000,
+      Barang_Masuk: 2000,
       pv: 9800,
-      amt: 2290,
+      Barang_keluar: 2290,
     },
     {
       name: 'April',
-      month: 2780,
+      Barang_Masuk: 2780,
       pv: 3908,
-      amt: 2000,
+      Barang_keluar: 2000,
     },
     {
       name: 'Mei',
-      month: 1890,
+      Barang_Masuk: 1890,
       pv: 4800,
-      amt: 2181,
+      Barang_keluar: 2181,
     },
     {
       name: 'Juni',
-      month: 2390,
+      Barang_Masuk: 2390,
       pv: 3800,
-      amt: 2500,
+      Barang_keluar: 2500,
     },
     {
       name: 'Juli',
-      month: 3490,
+      Barang_Masuk: 3490,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
     {
       name: 'agustus',
-      month: 3490,
+      Barang_Masuk: 3490,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
     {
       name: 'september',
-      month: 340,
+      Barang_Masuk: 340,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
     {
       name: 'oktober',
-      month: 3420,
+      Barang_Masuk: 3420,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
     {
       name: 'november',
-      month: 1490,
+      Barang_Masuk: 1490,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
     {
       name: 'desember',
-      month: 5490,
+      Barang_Masuk: 5490,
       pv: 4300,
-      amt: 2100,
+      Barang_keluar: 2100,
     },
   ]
   
@@ -121,7 +121,8 @@ return (
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="month" fill="#4A55A2" />
+            <Bar dataKey="Barang_Masuk" fill="#8884d8" />
+          <Bar dataKey="Barang_keluar" fill="#82ca9d"  />
           </BarChart>
         </ResponsiveContainer>
       </div>
