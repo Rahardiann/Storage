@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   bjadi.init({
     nm_bjadi: DataTypes.STRING,
-    jml_bjadi: DataTypes.STRING,
+    jml_bjadi: DataTypes.INTEGER,
     gambar: DataTypes.STRING
   }, {
     sequelize,

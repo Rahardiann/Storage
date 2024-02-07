@@ -17,11 +17,14 @@ const userRoutes =
 require(`./routes/auth`)
 const masterRoutes =
 require('./routes/master')
+const statistikRoutes =
+require('./routes/statistik')
 
 app.use(`/bjadi`, bjadiRoutes)
 app.use(`/bmentah`, bmentahRoutes)
 app.use(`/user`, userRoutes)
 app.use(`/master`, masterRoutes)
+app.use(`/statistik`, statistikRoutes)
 
 app.listen(port, () => {
     console.log(`Gass port ${port}`)

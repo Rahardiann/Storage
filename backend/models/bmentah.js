@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   bmentah.init({
     nm_bmentah: DataTypes.STRING,
-    jml_bmentah: DataTypes.STRING,
+    jml_bmentah: DataTypes.INTEGER,
     gambar: DataTypes.STRING
   }, {
     sequelize,

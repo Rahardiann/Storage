@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       jml_bjadi: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       gambar: {
         type: Sequelize.STRING
