@@ -85,7 +85,7 @@ const LoginForm = () => {
           </form>
         </div>
       </div>
-      <div className="flex-1 bg-blue-300 flex items-center justify-center">
+      <div className="flex-1 bg-blue-300 flex items-center justify-center hidden sm:flex">
         <img src={backgroundImage} alt="Background" className="max-w-full" />
       </div>
       <ToastContainer />
