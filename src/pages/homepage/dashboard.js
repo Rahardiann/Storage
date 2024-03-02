@@ -19,6 +19,8 @@ import {
 const Dashboard = () => {
   const [bjadi, setBjadi] = useState([])
   const [bmentah, setBmentah] = useState([])
+  const [stat, setStat] = useState([])
+  const [merge, setMerge] = useState([])
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,6 +30,20 @@ const Dashboard = () => {
 
         const response1 = await axios.get("/bmentah/")
         setBmentah(response1.data.data)
+
+        const response2 = await axios.get("/statistik/")
+        const uniqueMonths = new Set();
+        const flattenedStat = response2.data.data.flat().reduce((acc, item) => {
+          if (!uniqueMonths.has(item.bulan)) {
+            uniqueMonths.add(item.bulan); // Add the month to the set
+            acc.push({ ...item });
+          }
+          return acc;
+        }, []);
+
+        setStat(flattenedStat);
+
+        console.log(stat)  
       } catch (err) {
         console.log(err)
       }
@@ -35,7 +51,7 @@ const Dashboard = () => {
     fetch()
   }, [])
   
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -57,16 +73,16 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
           <div className="bg-blue-200 p-4 md:p-8 lg:p-12 xl:p-16 rounded shadow-lg">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart
-                data={bjadi}
-                margin={{ top: 10, right: 20, left: 20, bottom: 5 }}
+                data={stat}
+                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="bulan" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
-                <Bar dataKey="Barang_Masuk" fill="#8884d8" />
-                <Bar dataKey="Barang_keluar" fill="#82ca9d" />
+                <Legend /> 
+                <Bar dataKey="jml_bmentah" fill="#8884d8" name="Barang Mentah" />
+                <Bar dataKey="jml_bjadi" fill="#82ca9d" name="Barang Jadi" />
               </BarChart>
             </ResponsiveContainer>
           </div>
