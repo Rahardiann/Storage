@@ -3,7 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
 
-function Stokbarangjadi() {
+function Stokbarangmentah() {
   const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
@@ -72,7 +72,7 @@ function Stokbarangjadi() {
         {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl font-bold mb-20">
-            STOK BARANG JADI
+            STOK BARANG MENTAH
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -93,7 +93,7 @@ function Stokbarangjadi() {
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-                Tambah Barang Jadi
+                Tambah Barang Mentah
                 <button
                   onClick={() => setShowForm(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
@@ -175,7 +175,7 @@ function Stokbarangjadi() {
                   <th className="border border-gray-500 px-4 py-2 w-12">
                     Nomer
                   </th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Barang Jadi</th>
+                  <th className="border border-gray-500 px-4 py-2">Nama Barang Mentah</th>
                   <th className="border border-gray-500 px-4 py-2">Jumlah</th>
                   <th className="border border-gray-500 px-4 py-2 w-20">
                     Info
@@ -251,4 +251,4 @@ function Stokbarangjadi() {
   );
 }
 
-export default Stokbarangjadi;
+export default Stokbarangmentah;
