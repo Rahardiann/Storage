@@ -47,7 +47,7 @@ function Stokbarangjadi() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(/bjadi/);
+        const response = await axios.get("/bjadi/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
