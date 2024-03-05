@@ -47,7 +47,7 @@ function Kategori() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/bjadi/");
+        const response = await axios.get("/master/kategori");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -157,12 +157,12 @@ function Kategori() {
               </thead>
               <tbody>
                 {stok.map((item, index) => (
-                  <tr key={index}>
+                  <tr>
                     <td className="border text-center border-gray-500 px-2 py-2">
-                      {index + 1}
+                      {item.kode}
                     </td>
                     <td className="border text-center border-gray-500 px-4 py-2">
-                      {item.nm_bjadi}
+                      {item.kategori}
                     </td>
                   </tr>
                 ))}

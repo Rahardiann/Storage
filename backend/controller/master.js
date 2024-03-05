@@ -4,6 +4,20 @@ const bjadiModel = master.dat_bjadi
 const bmentahModel = master.dat_bmentah
 const Op = require(`sequelize`).Op;
 
+exports.getKategoriMaster = async (request, response) => {
+  kategoriModel.findAll()
+  .then(result => {
+      response.json({
+          data: result
+      })
+  })
+  .catch(error => {
+      response.json({
+          message: error.message
+      })
+  })
+}
+
 exports.kategoriMaster = async (request, response) => {
     let data = {
         kategori: request.body.kategori,
@@ -24,6 +38,20 @@ exports.kategoriMaster = async (request, response) => {
     })
 }
 
+exports.getBjadiMaster = async (request, response) => {
+  bjadiModelModel.findAll()
+  .then(result => {
+      response.json({
+          data: result
+      })
+  })
+  .catch(error => {
+      response.json({
+          message: error.message
+      })
+  })
+}
+
 exports.bjadiMaster = async (request, response) => {
     let data = {
         kategori: request.body.kategori,
@@ -42,6 +70,20 @@ exports.bjadiMaster = async (request, response) => {
             message: error.message
         })
     })
+}
+
+exports.getBmentahMaster = async (request, response) => {
+  bmentahModel.findAll()
+  .then(result => {
+      response.json({
+          data: result
+      })
+  })
+  .catch(error => {
+      response.json({
+          message: error.message
+      })
+  })
 }
 
 exports.bmentahMaster = async (request, response) => {
