@@ -8,27 +8,36 @@ function Kategori() {
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [kategoriBarang, setKategoriBarang] = useState("");
+  const [kategori, setKategori] = useState("");
   const [namaBarang, setNamaBarang] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
+  const [kode, setKode] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
 
   const handleAddBarang = () => {
     const newBarang = {
-      kategori: kategoriBarang,
+      kategori: kategori,
       nama: namaBarang,
-      jumlah: jumlahBarang,
+      kode: kode,
       foto: fotoBarang,
     };
 
     setListBarang((prevList) => [...prevList, newBarang]);
     setShowForm(false);
     // Reset form input
-    setKategoriBarang("");
+    setKategori("");
     setNamaBarang("");
-    setJumlahBarang("");
+    setKode("");
     setFotoBarang("");
+
+    axios.post('/master/kategori', newBarang)
+    .then(response => {
+      console.log('Data berhasil ditambahkan:', response.data);
+    })
+    .catch(error => {
+      console.error('Gagal menambahkan data:', error);
+      // Handle error jika perlu
+    });
   };
 
   const handleImageUpload = (e) => {
@@ -47,7 +56,7 @@ function Kategori() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/master/kategori");
+        const response = await axios.get("/master/Kategori");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -72,7 +81,7 @@ function Kategori() {
         {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl font-bold mb-20">
-            KATEGORI BARANG
+            Kategori BARANG
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -119,21 +128,21 @@ function Kategori() {
                 <div className="flex">
                   <input
                     type=""
-                    value={jumlahBarang}
-                    onChange={(e) => setJumlahBarang(e.target.value)}
+                    value={kode}
+                    onChange={(e) => setKode(e.target.value)}
                     placeholder="Kode"
                     className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                   />
-                  {/* Bagian kategori */}
+                  {/* Bagian Kategori */}
                   <input
                     type=""
-                    value={kategoriBarang}
-                    onChange={(e) => setKategoriBarang(e.target.value)}
+                    value={kategori}
+                    onChange={(e) => setKategori(e.target.value)}
                     placeholder="Kategori Barang"
                     className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                   />
                 </div>
-                <button
+                <button 
                   onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >

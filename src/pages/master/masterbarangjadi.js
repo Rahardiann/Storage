@@ -30,6 +30,15 @@ function Masterbarangjadi() {
     setNamaBarang("");
     setJumlahBarang("");
     setFotoBarang("");
+
+    axios.post('/master/', newBarang)
+    .then(response => {
+      console.log('Data berhasil ditambahkan:', response.data);
+    })
+    .catch(error => {
+      console.error('Gagal menambahkan data:', error);
+      // Handle error jika perlu
+    });
   };
 
   const handleImageUpload = (e) => {
@@ -48,7 +57,7 @@ function Masterbarangjadi() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/master/bjadi/");
+        const response = await axios.get("/master/bjadi");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -177,9 +186,9 @@ function Masterbarangjadi() {
               </thead>
               <tbody>
                 {stok.map((item, index) => (
-                  <tr key={index}>
+                  <tr>
                     <td className="border text-center border-gray-500 px-2 py-2">
-                      {index + 1}
+                      {item.kategori}
                     </td>
                     <td className="border text-center border-gray-500 px-4 py-2">
                       {item.nm_bjadi}
