@@ -131,6 +131,7 @@ function Masterbarangjadi() {
                   value={kodebarang}
                   onChange={(e) => setKodebarang(e.target.value)}
                   className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
+                  disabled
                 >
                   <option value="" disabled>
                     Kode
