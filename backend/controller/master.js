@@ -39,7 +39,7 @@ exports.kategoriMaster = async (request, response) => {
 }
 
 exports.getBjadiMaster = async (request, response) => {
-  bjadiModelModel.findAll()
+  bjadiModel.findAll()
   .then(result => {
       response.json({
           data: result
