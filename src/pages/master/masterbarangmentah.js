@@ -13,6 +13,7 @@ function MasterBarangMentah() {
   const [jumlahBarang, setJumlahBarang] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
+  const [kodebarang, setKodebarang] = useState("");
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -88,8 +89,8 @@ function MasterBarangMentah() {
             />
           </div>
 
-          {/* Form Input */}
-          {showForm && (
+           {/* Form Input */}
+           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
@@ -115,21 +116,26 @@ function MasterBarangMentah() {
               {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 
-                {/* Bagian Kode */}
-                <div className="flex">
-                  <input
-                    type=""
-                    value={jumlahBarang}
-                    onChange={(e) => setJumlahBarang(e.target.value)}
-                    placeholder="Kode"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  />
+                 {/* Bagian Kode */}
+                 <div className="flex">
+                <select
+                  value={kodebarang}
+                  onChange={(e) => setKodebarang(e.target.value)}
+                  className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
+                >
+                  <option value="" disabled>
+                    Kode
+                  </option>
+                  <option value="kategori1"> 1</option>
+                  <option value="kategori2"> 2</option>
+                  <option value="kategori3"> 3</option>
+                </select>
 
                 {/* Dropdown Kategori Barang */}
                 <select
                   value={kategoriBarang}
                   onChange={(e) => setKategoriBarang(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                  className="border border-gray-400 p-2 rounded mb-2 w-1/2"
                 >
                   <option value="" disabled>
                     Pilih Kategori Barang
@@ -156,7 +162,6 @@ function MasterBarangMentah() {
               </div>
             </div>
           )}
-
           {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border border-gray-500 w-full">

@@ -13,6 +13,7 @@ function Masterbarangjadi() {
   const [jumlahBarang, setJumlahBarang] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
+  const [kodebarang, setKodebarang] = useState("");
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -115,21 +116,26 @@ function Masterbarangjadi() {
               {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 
-                {/* Bagian Kode */}
-                <div className="flex">
-                  <input
-                    type=""
-                    value={jumlahBarang}
-                    onChange={(e) => setJumlahBarang(e.target.value)}
-                    placeholder="Kode"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  />
+                 {/* Bagian Kode */}
+                 <div className="flex">
+                <select
+                  value={kodebarang}
+                  onChange={(e) => setKodebarang(e.target.value)}
+                  className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
+                >
+                  <option value="" disabled>
+                    Kode
+                  </option>
+                  <option value="kategori1"> 1</option>
+                  <option value="kategori2"> 2</option>
+                  <option value="kategori3"> 3</option>
+                </select>
 
                 {/* Dropdown Kategori Barang */}
                 <select
                   value={kategoriBarang}
                   onChange={(e) => setKategoriBarang(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                  className="border border-gray-400 p-2 rounded mb-2 w-1/2"
                 >
                   <option value="" disabled>
                     Pilih Kategori Barang
