@@ -48,7 +48,7 @@ function MasterBarangMentah() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/bjadi/");
+        const response = await axios.get("/master/bmentah/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);

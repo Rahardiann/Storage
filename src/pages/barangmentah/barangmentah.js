@@ -47,7 +47,7 @@ function Stokbarangmentah() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/bjadi/");
+        const response = await axios.get("/bmentah/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -189,10 +189,10 @@ function Stokbarangmentah() {
                       {index + 1}
                     </td>
                     <td className="border border-gray-500 px-4 py-2">
-                      {item.nm_bjadi}
+                      {item.nm_bmentah}
                     </td>
                     <td className="border border-gray-500 px-4 py-2">
-                      {item.jml_bjadi}
+                      {item.jml_bmentah}
                     </td>
                     <td className="border border-gray-500 px-8 py-2">
                       <button
