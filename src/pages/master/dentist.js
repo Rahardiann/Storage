@@ -2,34 +2,50 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
+import EditIcon from "@material-ui/icons/Edit";
 
 function Masterbarangjadi() {
-  const [stok, setStok] = useState([]);
+ const [stok, setStok] = useState([
+   {
+     id: 1,
+     NamaDentist: "Herr Muller",
+     spesialist: "Dokter gigi"
+     
+   },
+
+   // Tambahkan data dummy sesuai kebutuhan
+ ]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namaBarang, setNamaBarang] = useState("");
+  const [namadentist, setNamaDentist] = useState("");
   const [jumlahBarang, setJumlahBarang] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [kodebarang, setKodebarang] = useState("");
+  const [spesialist, setSpesialist] = useState("");
+   const [id, setIDDentist] = useState("");
 
   const handleAddBarang = () => {
     const newBarang = {
       kategori: kategoriBarang,
-      nama: namaBarang,
+      nama: namadentist,
       jumlah: jumlahBarang,
       foto: fotoBarang,
+      spesialist: spesialist,
+      id: id
     };
 
+    setIDDentist("");
     setListBarang((prevList) => [...prevList, newBarang]);
     setShowForm(false);
     // Reset form input
     setKategoriBarang("");
-    setNamaBarang("");
+    setNamaDentist("");
     setJumlahBarang("");
     setFotoBarang("");
+    setSpesialist("");
 
     axios.post('/master/', newBarang)
     .then(response => {
@@ -81,8 +97,8 @@ function Masterbarangjadi() {
       <div className="p-8 w-screen overflow-auto">
         {/* Konten Stokbarangjadi */}
         <div>
-          <h1 className="font-sans text-2xl font-bold mb-20">
-            MASTER BARANG JADI
+          <h1 className="font-sans text-2xl text-third font-bold mb-20">
+            Dentist
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -124,45 +140,31 @@ function Masterbarangjadi() {
               </div>
               {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                
-                 {/* Bagian Kode */}
-                 <div className="flex">
-                <select
-                  value={kodebarang}
-                  onChange={(e) => setKodebarang(e.target.value)}
-                  className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
-                  disabled
-                >
-                  <option value="" disabled>
-                    Kode
-                  </option>
-                  <option value="kategori1"> 1</option>
-                  <option value="kategori2"> 2</option>
-                  <option value="kategori3"> 3</option>
-                </select>
+                {/* Bagian kategori */}
+                <input
+                  type="number"
+                  value={id}
+                  onChange={(e) => setIDDentist(e.target.value)}
+                  placeholder="ID Dentist"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                {/* Bagian kategori */}
+                <input
+                  type=""
+                  value={namadentist}
+                  onChange={(e) => setNamaDentist(e.target.value)}
+                  placeholder="Nama Dentist"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                {/* Bagian kategori */}
+                <input
+                  type=""
+                  value={spesialist}
+                  onChange={(e) => setSpesialist(e.target.value)}
+                  placeholder="Spesialist"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
 
-                {/* Dropdown Kategori Barang */}
-                <select
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-1/2"
-                >
-                  <option value="" disabled>
-                    Pilih Kategori Barang
-                  </option>
-                  <option value="kategori1">Kategori 1</option>
-                  <option value="kategori2">Kategori 2</option>
-                  <option value="kategori3">Kategori 3</option>
-                </select>
-                </div>
-                 {/* Bagian kategori */}
-                 <input
-                    type=""
-                    value={namaBarang}
-                    onChange={(e) =>setNamaBarang(e.target.value)}
-                    placeholder="Nama Barang"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  />
                 <button
                   onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
@@ -175,24 +177,36 @@ function Masterbarangjadi() {
 
           {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
-            <table className="table-auto border-collapse border border-gray-500 w-full">
-              <thead className="bg-main text-white">
+            <table className="table-auto  border-gray-500 w-full">
+              <thead className="bg-second text-gray-500">
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2 ">
-                    Kode
+                  <th className=" border-gray-500 px-4 py-2 w-32 ">
+                    ID Dentist
                   </th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Kategori</th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Barang</th>
+                  <th className=" border-gray-500 px-4 py-2">Nama Dentist</th>
+                  <th className=" border-gray-500 px-4 py-2">Spesialist</th>
+                  <th className=" border-gray-500 px-4 py-2">Edit</th>
                 </tr>
               </thead>
               <tbody>
                 {stok.map((item, index) => (
-                  <tr>
-                    <td className="border text-center border-gray-500 px-2 py-2">
-                      {item.kategori}
+                  <tr className="bg-second">
+                    <td className=" text-center border-gray-500 px-2 py-2">
+                      {item.id}
                     </td>
-                    <td className="border text-center border-gray-500 px-4 py-2">
-                      {item.nm_bjadi}
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.NamaDentist}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.spesialist}
+                    </td>
+                    <td className=" border-gray-500 text-center py-2">
+                      <button
+                        onClick={() => setShowForm(true)}
+                        className="text-blue-500"
+                      >
+                        <EditIcon />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -201,7 +215,6 @@ function Masterbarangjadi() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
