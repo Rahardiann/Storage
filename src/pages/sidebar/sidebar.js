@@ -9,8 +9,10 @@ import {
   FaBars,
   FaChevronDown,
   FaChevronUp,
+  FaAddressBook,
 } from "react-icons/fa";
-import Logosidebar from "../../assets/logosidebar.svg";
+import Logosidebar from "../../assets/logo.png";
+import { FaPerson } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [minimized, setMinimized] = useState(window.innerWidth <= 768);
@@ -36,7 +38,7 @@ const Sidebar = () => {
     <div
       className={`flex flex-col h-screen ${
         minimized ? "w-16" : "w-64"
-      } bg-main transition-all ease-in-out duration-300`}
+      } bg-white transition-all ease-in-out duration-300`}
       style={{
         maxWidth: minimized && window.innerWidth <= 768 ? "50px" : "220px",
       }}
@@ -52,7 +54,7 @@ const Sidebar = () => {
         <li className="my-4">
           <Link
             to="/dashboard"
-            className={`flex items-center text-white text-base sidebar-item ${
+            className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
             onClick={() => setMinimized(window.innerWidth <= 768)}
@@ -64,37 +66,37 @@ const Sidebar = () => {
         <li className="my-10">
           <Link
             to="/barangjadi"
-            className={`flex items-center text-white text-base sidebar-item ${
+            className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
             onClick={() => setMinimized(window.innerWidth <= 768)}
           >
-            <FaBox className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
-            {!minimized && <span>Stock Barang Jadi</span>}
+            <FaPerson className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Patient</span>}
           </Link>
         </li>
         <li className="my-10">
           <Link
             to="/barangmentah"
-            className={`flex items-center text-white text-base sidebar-item ${
+            className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
             onClick={() => setMinimized(window.innerWidth <= 768)}
           >
-            <FaCubes className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
-            {!minimized && <span>Stock Barang Mentah</span>}
+            <FaAddressBook className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Booking</span>}
           </Link>
         </li>
         <li className="my-10">
           <div className="relative">
             <button
-              className={`flex items-center text-white text-base sidebar-item ${
+              className={`flex items-center text-main text-base sidebar-item ${
                 minimized ? "pl-2" : "pl-4"
               } hover:text-gray-400`}
               onClick={toggleMaster}
             >
               <FaBox className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />
-              {!minimized && <span>Master</span>}
+              {!minimized && <span>Dentist & Promo</span>}
               <span className="absolute right-0 top-0 bottom-0 flex items-center pr-4">
                 {masterOpen ? <FaChevronUp /> : <FaChevronDown />}
               </span>
@@ -104,28 +106,21 @@ const Sidebar = () => {
                 masterOpen ? "block" : "hidden"
               }`}
             >
-              <li>
-                <Link
-                  to="/Master/KategoriBarang"
-                  className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Kategori Barang
-                </Link>
-              </li>
+              
               <li>
                 <Link
                   to="/Master/MasterBarangjadi"
-                  className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-100"
+                  className="block px-4 py-4 text-sm text-main hover:bg-gray-100"
                 >
-                  Master BarangJadi
+                  Dentist
                 </Link>
               </li>
               <li>
                 <Link
                   to="/Master/MasterBarangmentah"
-                  className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-100"
+                  className="block px-4 py-4 text-sm text-main hover:bg-gray-100"
                 >
-                  Master BarangMentah
+                  Promo
                 </Link>
               </li>
             </ul>
@@ -135,7 +130,7 @@ const Sidebar = () => {
         <li className="my-10">
           <Link
             to="/riwayat"
-            className={`flex items-center text-white text-base sidebar-item ${
+            className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
             onClick={() => setMinimized(window.innerWidth <= 768)}
@@ -147,7 +142,7 @@ const Sidebar = () => {
         <li className="my-10">
           <Link
             to="/logout"
-            className={`flex items-center text-white text-base sidebar-item ${
+            className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
             onClick={() => setMinimized(window.innerWidth <= 768)}
