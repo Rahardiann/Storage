@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   dat_bjadi.init({
+    kode: DataTypes.STRING,
     kategori: DataTypes.STRING,
     nm_bjadi: DataTypes.STRING,
   }, {

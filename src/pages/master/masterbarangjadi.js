@@ -4,61 +4,27 @@ import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
 
 function Masterbarangjadi() {
-  const [stok, setStok] = useState([]);
-  const [showImagePopup, setShowImagePopup] = useState(false);
-  const [popupImageSrc, setPopupImageSrc] = useState("");
+  const [bjadi, setBjadi] = useState([]);
+  // const [showImagePopup, setShowImagePopup] = useState(false);
+  // const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [kategoriBarang, setKategoriBarang] = useState("");
+  const [kategori, setKategori] = useState([]);
+  const [selectKategori, setSelectKategori] = useState([]);
+  const [selectKode, setSelectKode] = useState([]);
   const [namaBarang, setNamaBarang] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
-  const [fotoBarang, setFotoBarang] = useState("");
-  const [listBarang, setListBarang] = useState([]);
-  const [kodebarang, setKodebarang] = useState("");
-
-  const handleAddBarang = () => {
-    const newBarang = {
-      kategori: kategoriBarang,
-      nama: namaBarang,
-      jumlah: jumlahBarang,
-      foto: fotoBarang,
-    };
-
-    setListBarang((prevList) => [...prevList, newBarang]);
-    setShowForm(false);
-    // Reset form input
-    setKategoriBarang("");
-    setNamaBarang("");
-    setJumlahBarang("");
-    setFotoBarang("");
-
-    axios.post('/master/', newBarang)
-    .then(response => {
-      console.log('Data berhasil ditambahkan:', response.data);
-    })
-    .catch(error => {
-      console.error('Gagal menambahkan data:', error);
-      // Handle error jika perlu
-    });
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFotoBarang(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
+  // const [fotoBarang, setFotoBarang] = useState("");
+  
   useEffect(() => {
     const fetch = async () => {
       try {
         const response = await axios.get("/master/bjadi");
-        setStok(response.data.data);
+        setBjadi(response.data.data);
+
+        const response1 = await axios.get("/master/kategori");
+        setKategori(response1.data.data);
+
+        console.log(kategori);
+        console.log(bjadi);
       } catch (err) {
         console.log(err);
       }
@@ -66,20 +32,42 @@ function Masterbarangjadi() {
     fetch();
   }, []);
 
-  const handleShowImagePopup = (imageSrc) => {
-    setPopupImageSrc(imageSrc);
-    setShowImagePopup(true);
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   const reader = new FileReader();
+
+  //   reader.onloadend = () => {
+  //     setFotoBarang(reader.result);
+  //   };
+
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+  const handleKategori = (e) => {
+    setSelectKategori(e.target.value);
+
+    const selectedKode = kategori.find(item => item.kategori === selectKategori)
+    setSelectKode(selectedKode.kode);
+
+    console.log(selectKode)
+    console.log(selectKategori)
   };
 
-  const handleCloseImagePopup = () => {
-    setShowImagePopup(false);
-  };
+  // const handleShowImagePopup = (imageSrc) => {
+  //   setPopupImageSrc(imageSrc);
+  //   setShowImagePopup(true);
+  // };
+
+  // const handleCloseImagePopup = () => {
+  //   setShowImagePopup(false);
+  // };
 
   return (
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
-        {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl font-bold mb-20">
             MASTER BARANG JADI
@@ -98,10 +86,8 @@ function Masterbarangjadi() {
             />
           </div>
 
-          {/* Form Input */}
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Master Barang Jadi
                 <button
@@ -122,49 +108,33 @@ function Masterbarangjadi() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                
-                 {/* Bagian Kode */}
-                 <div className="flex">
-                <select
-                  value={kodebarang}
-                  onChange={(e) => setKodebarang(e.target.value)}
-                  className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
-                  disabled
-                >
-                  <option value="" disabled>
-                    Kode
-                  </option>
-                  <option value="kategori1"> 1</option>
-                  <option value="kategori2"> 2</option>
-                  <option value="kategori3"> 3</option>
-                </select>
+                <div className="flex">
+                  <select value={selectKode} className="border border-gray-400 p-2 rounded mb-2 w-1/2">
+                    <option>{selectKode}</option>
+                  </select>
 
-                {/* Dropdown Kategori Barang */}
-                <select
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-1/2"
-                >
-                  <option value="" disabled>
-                    Pilih Kategori Barang
-                  </option>
-                  <option value="kategori1">Kategori 1</option>
-                  <option value="kategori2">Kategori 2</option>
-                  <option value="kategori3">Kategori 3</option>
-                </select>
+                  <select value={selectKategori} onChange={handleKategori} className="border border-gray-400 p-2 rounded mb-2 w-1/2">
+                    {kategori.map((item) => (
+                      <option 
+                        key={item.id} 
+                        value={item.kategori}
+                      >
+                        {item.kategori}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                 {/* Bagian kategori */}
-                 <input
-                    type=""
-                    value={namaBarang}
-                    onChange={(e) =>setNamaBarang(e.target.value)}
-                    placeholder="Nama Barang"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  />
+                {/* Bagian kategori */}
+                <input
+                  type=""
+                  value={namaBarang}
+                  onChange={(e) => setNamaBarang(e.target.value)}
+                  placeholder="Nama Barang"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
                 <button
-                  onClick={handleAddBarang}
+                  // onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   Tambah Barang
@@ -178,15 +148,17 @@ function Masterbarangjadi() {
             <table className="table-auto border-collapse border border-gray-500 w-full">
               <thead className="bg-main text-white">
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2 ">
-                    Kode
+                  <th className="border border-gray-500 px-4 py-2 ">Kode</th>
+                  <th className="border border-gray-500 px-4 py-2">
+                    Nama Kategori
                   </th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Kategori</th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Barang</th>
+                  <th className="border border-gray-500 px-4 py-2">
+                    Nama Barang
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {stok.map((item, index) => (
+                {bjadi.map((item, index) => (
                   <tr>
                     <td className="border text-center border-gray-500 px-2 py-2">
                       {item.kategori}
@@ -201,7 +173,6 @@ function Masterbarangjadi() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

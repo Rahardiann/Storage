@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   dat_kategori.init({
     kategori: DataTypes.STRING,
-    kode: DataTypes.INTEGER
+    kode: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'dat_kategori',
