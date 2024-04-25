@@ -7,47 +7,54 @@ import EditIcon from "@material-ui/icons/Edit";
 
 function Stokbarangjadi() {
   const [stok, setStok] = useState([
-    {
-      id: 1,
-      nm_bjadi: "Bowo",
-      jml_bjadi: 10,
-      type_patient: "Modern User",
-      imageSrc: "image1.jpg",
-      Phone_number: "(+62) 2332437777",
-    },
+   
 
     // Tambahkan data dummy sesuai kebutuhan
   ]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namaBarang, setNamaBarang] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
-  const [fotoBarang, setFotoBarang] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [nama, setnama] = useState("");
+  const [noktp, setnoktp] = useState("");
+  const [nomr, setnomr] = useState("");
+  const [gender, setgender] = useState("");
   const [listBarang, setListBarang] = useState([]);
-  const [nomr, setNoMR] = useState("");
-  const [type, setType] = useState("");
+  const [nohp, setnohp] = useState("");
+  const [alamat, setalamat] = useState("");
 
-  const handleAddBarang = () => {
+  const handleAddBarang = async () => {
     const newBarang = {
-      kategori: kategoriBarang,
-      nama: namaBarang,
-      jumlah: jumlahBarang,
-      nomr: nomr,
-      type: type,
-      foto: fotoBarang,
+      email: email,
+      password: password,
+      nama: nama,
+      no_hp: nohp,
+      alamat: alamat,
+      no_ktp: noktp,
+      no_rekam_medis: nomr,
+      gender: gender,
     };
 
-    setListBarang((prevList) => [...prevList, newBarang]);
+    try {
+      const response = await axios.post("/user/register", newBarang);
+      console.log(response.data.data);
+      // Update state stok barang jika diperlukan
+      setStok((prevStok) => [...prevStok, response.data]);
+    } catch (error) {
+      console.error("Gagal menambahkan barang:", error);
+    }
+
     setShowForm(false);
     // Reset form input
-    setKategoriBarang("");
-    setNamaBarang("");
-    setJumlahBarang("");
-    setNoMR("");
-    setType("");
-    setFotoBarang("");
+    setemail("");
+    setpassword("");
+    setnama("");
+    setnohp("");
+    setalamat("");
+    setnoktp("");
+    setnomr("");
+    setgender("");
   };
 
   const handleImageUpload = (e) => {
@@ -55,7 +62,7 @@ function Stokbarangjadi() {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setFotoBarang(reader.result);
+      setnoktp(reader.result);
     };
 
     if (file) {
@@ -66,7 +73,7 @@ function Stokbarangjadi() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/bjadi/");
+        const response = await axios.get("/user");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -111,7 +118,7 @@ function Stokbarangjadi() {
               ADD
             </button>
             <input
-              type="text"
+              alamat="text"
               placeholder="Cari barang..."
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
@@ -122,7 +129,7 @@ function Stokbarangjadi() {
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-                Tambah Pattient
+                Tambah Patient
                 <button
                   onClick={() => setShowForm(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
@@ -146,47 +153,67 @@ function Stokbarangjadi() {
                 {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  placeholder="ID User"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
+                  placeholder="Email"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={nama}
+                  onChange={(e) => setnama(e.target.value)}
+                  placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
                 {/* Dropdown Nama Barang */}
                 <input
                   type="text"
-                  value={namaBarang}
-                  onChange={(e) => setNamaBarang(e.target.value)}
-                  placeholder="Username"
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
+                  placeholder="Password"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 {/* Dropdown Nama Barang */}
-                <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
+                <input
+                  type="number"
+                  value={nohp}
+                  onChange={(e) => setnohp(e.target.value)}
+                  placeholder="No HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                >
-                  <option value="" disabled>
-                    Type of Patient
-                  </option>
-                  <option value="kategori1">Modern User</option>
-                  <option value="kategori2">Manual User</option>
-                  <option value="kategori3">Digital User</option>
-                </select>
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={alamat}
+                  onChange={(e) => setalamat(e.target.value)}
+                  placeholder="Alamat"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="number"
+                  value={noktp}
+                  onChange={(e) => setnoktp(e.target.value)}
+                  placeholder="No KTP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
                 {/* Dropdown Kategori Barang */}
                 <input
                   type="number"
                   value={nomr}
-                  onChange={(e) => setNoMR(e.target.value)}
-                  placeholder="No Medical Record"
+                  onChange={(e) => setnomr(e.target.value)}
+                  placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 {/* Dropdown Kategori Barang */}
                 <input
-                  type="number"
-                  value={jumlahBarang}
-                  onChange={(e) => setJumlahBarang(e.target.value)}
-                  placeholder="Phone number"
+                  type="text"
+                  value={gender}
+                  onChange={(e) => setgender(e.target.value)}
+                  placeholder="Gender"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <button
@@ -208,7 +235,7 @@ function Stokbarangjadi() {
                   <th className=" border-gray-500 px-4 py-2">Username</th>
                   <th className=" border-gray-500 px-4 py-2">No MR</th>
                   <th className=" border-gray-500 px-4 py-2">
-                    Type of patient
+                    alamat of patient
                   </th>
                   <th className=" border-gray-500 px-4 py-2">Phone number</th>
                   <th className=" border-gray-500 px-4 py-2 w-20">Action</th>
@@ -221,16 +248,16 @@ function Stokbarangjadi() {
                       {index + 1}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      {item.nm_bjadi}
+                      {item.nama}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      {item.jml_bjadi}
+                      {item.no_rekam_medis}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      {item.type_patient}
+                      Digital User
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      {item.Phone_number}
+                      {item.no_hp}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       <button
