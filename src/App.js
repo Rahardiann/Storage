@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { Dashboard, LoginForm } from './pages'; // import halaman-halaman yang diperlukan
 import Stokbarangjadi from './pages/patient/barangjadi';
 import Stokbarangmentah from './pages/booking/barangmentah';
-import Riwayat from './pages/riwayat/riwayat';
+import Riwayat from './pages/jadwal/riwayat';
 import Kategori from './pages/master/kategori';
 import Masterbarangjadi from './pages/master/dentist';
 import MasterBarangMentah from './pages/master/masterbarangmentah';
