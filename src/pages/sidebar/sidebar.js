@@ -136,7 +136,7 @@ const Sidebar = () => {
             onClick={() => setMinimized(window.innerWidth <= 768)}
           >
             <FaHistory className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
-            {!minimized && <span>Riwayat</span>}
+            {!minimized && <span>Jadwal</span>}
           </Link>
         </li>
         <li className="my-10">

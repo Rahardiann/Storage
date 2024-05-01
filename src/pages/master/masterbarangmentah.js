@@ -72,8 +72,8 @@ function MasterBarangMentah() {
       <div className="p-8 w-screen overflow-auto">
         {/* Konten Stokbarangjadi */}
         <div>
-          <h1 className="font-sans text-2xl font-bold mb-20">
-            MASTER BARANG MENTAH
+          <h1 className="font-sans text-2xl font-bold mb-20 text-third">
+            Promo
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -89,8 +89,8 @@ function MasterBarangMentah() {
             />
           </div>
 
-           {/* Form Input */}
-           {showForm && (
+          {/* Form Input */}
+          {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
@@ -115,45 +115,42 @@ function MasterBarangMentah() {
               </div>
               {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                
-                 {/* Bagian Kode */}
-                 <div className="flex">
-                <select
-                  value={kodebarang}
-                  onChange={(e) => setKodebarang(e.target.value)}
-                  className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
-                  disabled
-                >
-                  <option value="">
-                    Kode
-                  </option>
-                  <option value="kategori1"> 1</option>
-                  <option value="kategori2"> 2</option>
-                  <option value="kategori3"> 3</option>
-                </select>
+                {/* Bagian Kode */}
+                <div className="flex">
+                  <select
+                    value={kodebarang}
+                    onChange={(e) => setKodebarang(e.target.value)}
+                    className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
+                    disabled
+                  >
+                    <option value="">Kode</option>
+                    <option value="kategori1"> 1</option>
+                    <option value="kategori2"> 2</option>
+                    <option value="kategori3"> 3</option>
+                  </select>
 
-                {/* Dropdown Kategori Barang */}
-                <select
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-1/2"
-                >
-                  <option value="" disabled>
-                    Pilih Kategori Barang
-                  </option>
-                  <option value="kategori1">Kategori 1</option>
-                  <option value="kategori2">Kategori 2</option>
-                  <option value="kategori3">Kategori 3</option>
-                </select>
+                  {/* Dropdown Kategori Barang */}
+                  <select
+                    value={kategoriBarang}
+                    onChange={(e) => setKategoriBarang(e.target.value)}
+                    className="border border-gray-400 p-2 rounded mb-2 w-1/2"
+                  >
+                    <option value="" disabled>
+                      Pilih Kategori Barang
+                    </option>
+                    <option value="kategori1">Kategori 1</option>
+                    <option value="kategori2">Kategori 2</option>
+                    <option value="kategori3">Kategori 3</option>
+                  </select>
                 </div>
-                 {/* Bagian kategori */}
-                 <input
-                    type=""
-                    value={namaBarang}
-                    onChange={(e) =>setNamaBarang(e.target.value)}
-                    placeholder="Nama Barang"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  />
+                {/* Bagian kategori */}
+                <input
+                  type=""
+                  value={namaBarang}
+                  onChange={(e) => setNamaBarang(e.target.value)}
+                  placeholder="Nama Barang"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
                 <button
                   onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
@@ -165,14 +162,19 @@ function MasterBarangMentah() {
           )}
           {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
-            <table className="table-auto border-collapse border border-gray-500 w-full">
-              <thead className="bg-main text-white">
+            <table className="table-auto border-collapse border-gray-500 w-full">
+              <thead className="bg-second text-white">
                 <tr>
-                  <th className="border border-gray-500 px-4 py-2 ">
-                    Kode
+                  <th className=" border-gray-500 px-4 py-2 ">Title</th>
+                  <th className=" border-gray-500 px-4 py-2">
+                    Sub Title
                   </th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Kategori</th>
-                  <th className="border border-gray-500 px-4 py-2">Nama Barang</th>
+                  <th className=" border-gray-500 px-4 py-2">
+                    Deskripsi 1
+                  </th>
+                  <th className=" border-gray-500 px-4 py-2">
+                    Deskripsi 2
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -191,7 +193,6 @@ function MasterBarangMentah() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
