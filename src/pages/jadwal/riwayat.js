@@ -7,15 +7,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 
 function Riwayat() {
-  const [stok, setStok] = useState([
-    {
-      id: 1,
-      NamaDentist: "Herr Muller",
-      spesialist: "Dokter gigi",
-    },
-
-    // Tambahkan data dummy sesuai kebutuhan
-  ]);
+  const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -75,7 +67,7 @@ function Riwayat() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/master/bjadi");
+        const response = await axios.get("/jadwal/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);

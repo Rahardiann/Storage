@@ -33,7 +33,7 @@ function Stokbarangjadi() {
       no_hp: nohp,
       alamat: alamat,
       no_ktp: noktp,
-      no_rekam_medis: nomr,
+      no_rekam_medis: nomr, 
       gender: gender,
     };
 

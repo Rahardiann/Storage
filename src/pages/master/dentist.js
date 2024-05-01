@@ -5,16 +5,7 @@ import PopupImage from "../../assets/login.png";
 import EditIcon from "@material-ui/icons/Edit";
 
 function Masterbarangjadi() {
- const [stok, setStok] = useState([
-   {
-     id: 1,
-     NamaDentist: "Herr Muller",
-     spesialist: "Dokter gigi"
-     
-   },
-
-   // Tambahkan data dummy sesuai kebutuhan
- ]);
+ const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -73,7 +64,7 @@ function Masterbarangjadi() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/master/bjadi");
+        const response = await axios.get("/dokter/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -195,7 +186,7 @@ function Masterbarangjadi() {
                       {item.id}
                     </td>
                     <td className=" text-center border-gray-500 px-4 py-2">
-                      {item.NamaDentist}
+                      {item.nama}
                     </td>
                     <td className=" text-center border-gray-500 px-4 py-2">
                       {item.spesialist}

@@ -5,20 +5,7 @@ import PopupImage from "../../assets/login.png";
 import EditIcon from "@material-ui/icons/Edit";
 
 function Stokbarangmentah() {
-  const [stok, setStok] = useState([
-    {
-      id: 1,
-      namaBarang: "Bowo",
-      jumlahBarang: 102,
-      date: "12 April 2023",
-      time: "09:10",
-      imageSrc: "image1.jpg",
-      Phone_number: "(+62) 2332437777",
-      dentist: "Antok",
-    },
-
-    // Tambahkan data dummy sesuai kebutuhan
-  ]);
+  const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -68,7 +55,7 @@ function Stokbarangmentah() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/bmentah/");
+        const response = await axios.get("/booking/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -216,23 +203,23 @@ function Stokbarangmentah() {
                 {stok.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
-                      {index + 1}
+                      {item.id_user} 
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.namaBarang}
+                      {item.user.nama}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.jumlahBarang}
+                      {item.user.no_rekam_medis}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.date}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.time}
+                      {item.tanggal_pemesanan}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.dentist}
-                    </td>
+                      {item.dokter.nama}
+                    </td> 
 
                     <td className=" border-gray-500 text-center py-2">
                       <button
