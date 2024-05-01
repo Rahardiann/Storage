@@ -1,7 +1,7 @@
 import React from 'react'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { Dashboard, LoginForm } from './pages'; // import halaman-halaman yang diperlukan
-import Stokbarangjadi from './pages/patient/barangjadi';
+import Patient from './pages/patient/patient';
 import Stokbarangmentah from './pages/booking/barangmentah';
 import Riwayat from './pages/jadwal/riwayat';
 import Kategori from './pages/master/kategori';
@@ -16,12 +16,12 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/barangjadi" element={<Stokbarangjadi/>} />
+        <Route path="/barangjadi" element={<Patient/>} />
         <Route path="/barangmentah" element={<Stokbarangmentah/>} />
         <Route path="/riwayat" element={<Riwayat/>} />
-        <Route path="/Master/KategoriBarang" element={<Kategori/>} />
-        <Route path="/Master/MasterBarangjadi" element={<Masterbarangjadi/>} />
-        <Route path="/Master/Masterbarangmentah" element={<MasterBarangMentah/>} />
+        <Route path="/master/kategoriBarang" element={<Kategori/>} />
+        <Route path="/master/masterBarangjadi" element={<Masterbarangjadi/>} />
+        <Route path="/master/masterbarangmentah" element={<MasterBarangMentah/>} />
       </Routes>
     </Router>
   );

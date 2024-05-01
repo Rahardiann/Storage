@@ -14,6 +14,7 @@ function Stokbarangjadi() {
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showFormedit, setShowFormedit] = useState(false);
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [nama, setnama] = useState("");
@@ -82,15 +83,6 @@ function Stokbarangjadi() {
     fetch();
   }, []);
 
-  const handleShowImagePopup = (imageSrc) => {
-    setPopupImageSrc(imageSrc);
-    setShowImagePopup(true);
-  };
-
-  const handleCloseImagePopup = () => {
-    setShowImagePopup(false);
-  };
-
   const handleEditBarang = (index) => {
     // Implementasi logika untuk mengedit barang
     console.log("Edit barang dengan index:", index);
@@ -123,6 +115,108 @@ function Stokbarangjadi() {
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
+
+          {/* Form edit */}
+          {showForm && (
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
+              {/* Header Form */}
+              <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
+                Tambah Patient
+                <button
+                  onClick={() => setShowFormedit(false)}
+                  className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              {/* Body Form */}
+              <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
+                  placeholder="Email"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={nama}
+                  onChange={(e) => setnama(e.target.value)}
+                  placeholder="Nama"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+
+                {/* Dropdown Nama Barang */}
+                <input
+                  type="text"
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
+                  placeholder="Password"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Nama Barang */}
+                <input
+                  type="number"
+                  value={nohp}
+                  onChange={(e) => setnohp(e.target.value)}
+                  placeholder="No HP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={alamat}
+                  onChange={(e) => setalamat(e.target.value)}
+                  placeholder="Alamat"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="number"
+                  value={noktp}
+                  onChange={(e) => setnoktp(e.target.value)}
+                  placeholder="No KTP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="number"
+                  value={nomr}
+                  onChange={(e) => setnomr(e.target.value)}
+                  placeholder="No Rekam Medis"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                {/* Dropdown Kategori Barang */}
+                <input
+                  type="text"
+                  value={gender}
+                  onChange={(e) => setgender(e.target.value)}
+                  placeholder="Gender"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <button
+                  onClick={handleAddBarang}
+                  className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Form Input */}
           {showForm && (
@@ -280,33 +374,6 @@ function Stokbarangjadi() {
           </div>
         </div>
       </div>
-
-      {/* Pop-up Image */}
-      {showImagePopup && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
-          <div className="bg-white p-8 rounded-lg">
-            <button
-              onClick={handleCloseImagePopup}
-              className="absolute top-0 right-0 p-2 m-4"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <img src={PopupImage} alt="" />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
