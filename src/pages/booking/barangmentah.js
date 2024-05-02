@@ -64,6 +64,7 @@ function Stokbarangmentah() {
     fetch();
   }, []);
 
+  
   const handleShowImagePopup = (imageSrc) => {
     setPopupImageSrc(imageSrc);
     setShowImagePopup(true);
@@ -193,8 +194,8 @@ function Stokbarangmentah() {
                   <th className=" border-gray-500 px-4 py-2 w-32">ID User</th>
                   <th className=" border-gray-500 px-4 py-2 w-38">Username</th>
                   <th className=" border-gray-500 px-4 py-2 w-32">No MR</th>
-                  <th className=" border-gray-500 px-4 py-2 ">Date</th>
-                  <th className=" border-gray-500 px-4 py-2">Time</th>
+                  <th className=" border-gray-500 px-4 py-2 ">Time</th>
+                  <th className=" border-gray-500 px-4 py-2">Date</th>
                   <th className=" border-gray-500 px-4 py-2">Dentist</th>
                   <th className=" border-gray-500 px-4 py-2 w-24">Action</th>
                 </tr>

@@ -25,9 +25,10 @@ function Riwayat() {
       kategori: kategoriBarang,
       nama: namadentist,
       jumlah: jumlahBarang,
-      foto: fotoBarang,
-      spesialist: spesialist,
+      jam: fotoBarang,
+      jadwal: spesialist,
       id: id,
+      
     };
 
     setIDDentist("");
@@ -40,16 +41,20 @@ function Riwayat() {
     setFotoBarang("");
     setSpesialist("");
 
-    axios
-      .post("/master/", newBarang)
-      .then((response) => {
-        console.log("Data berhasil ditambahkan:", response.data);
-      })
-      .catch((error) => {
-        console.error("Gagal menambahkan data:", error);
-        // Handle error jika perlu
-      });
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get("/jadwal");
+        setStok(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetch();
+  }, []);
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -177,8 +182,8 @@ function Riwayat() {
                  <th className=" border-gray-500 px-4 py-2 w-32 ">
                    Dentist
                  </th>
+                 <th className=" border-gray-500 px-4 py-2">Date</th>
                  <th className=" border-gray-500 px-4 py-2">Time</th>
-                 <th className=" border-gray-500 px-4 py-2">Spesialist</th>
                  <th className=" border-gray-500 px-4 py-2">Edit</th>
                </tr>
              </thead>
@@ -189,10 +194,10 @@ function Riwayat() {
                      {item.id}
                    </td>
                    <td className=" text-center border-gray-500 px-4 py-2">
-                     {item.NamaDentist}
+                     {item.jadwal}
                    </td>
                    <td className=" text-center border-gray-500 px-4 py-2">
-                     {item.spesialist}
+                     {item.jam}
                    </td>
                    <td className=" border-gray-500 text-center py-2">
                      <button

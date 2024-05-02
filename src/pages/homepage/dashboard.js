@@ -36,7 +36,7 @@ const Dashboard = () => {
     const newBarang = {
       kategori: kategoriBarang,
       nama: namadentist,
-      jumlah: jumlahBarang,
+      no_hp: jumlahBarang,
       foto: fotoBarang,
       spesialist: spesialist,
       id: id,
@@ -65,48 +65,19 @@ const Dashboard = () => {
       });
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get("/bjadi/")
-        setBjadi(response.data.data)
+   useEffect(() => {
+     const fetch = async () => {
+       try {
+         const response = await axios.get("/admin/");
+         setStok(response.data.data);
+       } catch (err) {
+         console.log(err);
+       }
+     };
+     fetch();
+   }, []);
 
-        const response1 = await axios.get("/bmentah/")
-        setBmentah(response1.data.data)
-
-        const response2 = await axios.get("/statistik/")
-        const uniqueMonths = new Set();
-        const flattenedStat = response2.data.data.flat().reduce((acc, item) => {
-          if (!uniqueMonths.has(item.bulan)) {
-            uniqueMonths.add(item.bulan); // Add the month to the set
-            acc.push({ ...item });
-          }
-          return acc;
-        }, []);
-
-        setStat(flattenedStat);
-
-        console.log(stat)  
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetch()
-  }, [])
   
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
-    const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
-
-    return (
-      <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
 
   return (
     <div className="flex h-screen">
@@ -181,10 +152,10 @@ const Dashboard = () => {
                     {item.id}
                   </td>
                   <td className=" text-center border-gray-500 px-4 py-2">
-                    {item.NamaDentist}
+                    {item.nama}
                   </td>
                   <td className=" text-center border-gray-500 px-4 py-2">
-                    {item.spesialist}
+                    {item.no_hp}
                   </td>
                   <td className=" text-center border-gray-500 px-4 py-2">
                     {item.email}

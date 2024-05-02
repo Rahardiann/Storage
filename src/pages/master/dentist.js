@@ -22,10 +22,11 @@ function Masterbarangjadi() {
     const newBarang = {
       kategori: kategoriBarang,
       nama: namadentist,
-      jumlah: jumlahBarang,
-      foto: fotoBarang,
+      no_hp: jumlahBarang,
+      email: fotoBarang,
       spesialist: spesialist,
-      id: id
+      id: id,
+
     };
 
     setIDDentist("");
@@ -175,7 +176,8 @@ function Masterbarangjadi() {
                     ID Dentist
                   </th>
                   <th className=" border-gray-500 px-4 py-2">Nama Dentist</th>
-                  <th className=" border-gray-500 px-4 py-2">Spesialist</th>
+                  <th className=" border-gray-500 px-4 py-2">No Hp</th>
+                  <th className=" border-gray-500 px-4 py-2">Email</th>
                   <th className=" border-gray-500 px-4 py-2">Edit</th>
                 </tr>
               </thead>
@@ -189,7 +191,10 @@ function Masterbarangjadi() {
                       {item.nama}
                     </td>
                     <td className=" text-center border-gray-500 px-4 py-2">
-                      {item.spesialist}
+                      {item.no_hp}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.email}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       <button
