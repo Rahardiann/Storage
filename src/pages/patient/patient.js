@@ -47,6 +47,7 @@ function Stokbarangjadi() {
     }
 
     setShowForm(false);
+    setShowFormedit(false);
     // Reset form input
     setemail("");
     setpassword("");
@@ -83,9 +84,22 @@ function Stokbarangjadi() {
     fetch();
   }, []);
 
-  const handleEditBarang = (index) => {
-    // Implementasi logika untuk mengedit barang
-    console.log("Edit barang dengan index:", index);
+  const handleEditBarang = async (id) => {
+    try {
+      const response = await axios.get(`/user/${id}`); // Ganti '/user' dengan endpoint yang sesuai untuk mengambil data barang berdasarkan ID
+      const barang = response.data.data;
+      setemail(barang.email);
+      setpassword(barang.password);
+      setnama(barang.nama);
+      setnohp(barang.no_hp);
+      setalamat(barang.alamat);
+      setnoktp(barang.no_ktp);
+      setnomr(barang.no_rekam_medis);
+      setgender(barang.gender);
+      setShowFormedit(true);
+    } catch (error) {
+      console.error("Gagal mengambil barang:", error);
+    }
   };
 
   const handleDeleteBarang = (index) => {
@@ -117,11 +131,11 @@ function Stokbarangjadi() {
           </div>
 
           {/* Form edit */}
-          {showForm && (
+          {showFormedit && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-                Tambah Patient
+                Edit Patient
                 <button
                   onClick={() => setShowFormedit(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
@@ -209,7 +223,7 @@ function Stokbarangjadi() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <button
-                  onClick={handleAddBarang}
+                  onClick={handleEditBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   Save
@@ -355,7 +369,7 @@ function Stokbarangjadi() {
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       <button
-                        onClick={() => setShowForm(true)}
+                        onClick={() => handleEditBarang(item.id)}
                         className="text-blue-500"
                       >
                         <EditIcon />
