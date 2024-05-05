@@ -6,11 +6,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
 function Stokbarangjadi() {
-  const [stok, setStok] = useState([
-   
-
-    // Tambahkan data dummy sesuai kebutuhan
-  ]);
+  const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -87,7 +83,10 @@ function Stokbarangjadi() {
   const handleEditBarang = async (id) => {
     try {
       const response = await axios.get(`/user/${id}`); // Ganti '/user' dengan endpoint yang sesuai untuk mengambil data barang berdasarkan ID
-      const barang = response.data.data;
+      const barang = response.data.data[0];
+
+      console.log(barang)
+
       setemail(barang.email);
       setpassword(barang.password);
       setnama(barang.nama);
@@ -97,7 +96,7 @@ function Stokbarangjadi() {
       setnomr(barang.no_rekam_medis);
       setgender(barang.gender);
       setShowFormedit(true);
-    } catch (error) {
+    } catch (error) { 
       console.error("Gagal mengambil barang:", error);
     }
   };
@@ -177,7 +176,6 @@ function Stokbarangjadi() {
                 {/* Dropdown Nama Barang */}
                 <input
                   type="text"
-                  value={password}
                   onChange={(e) => setpassword(e.target.value)}
                   placeholder="Password"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
