@@ -62,7 +62,7 @@ function Stokbarangmentah() {
       }
     };
     fetch();
-  }, []);
+  }, []); 
 
   
   const handleShowImagePopup = (imageSrc) => {
