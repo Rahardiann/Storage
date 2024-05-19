@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
-import PopupImage from "../../assets/login.png";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function Masterbarangjadi() {
- const [stok, setStok] = useState([]);
+  const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -16,7 +16,8 @@ function Masterbarangjadi() {
   const [listBarang, setListBarang] = useState([]);
   const [kodebarang, setKodebarang] = useState("");
   const [spesialist, setSpesialist] = useState("");
-   const [id, setIDDentist] = useState("");
+  const [id, setIDDentist] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -26,27 +27,63 @@ function Masterbarangjadi() {
       email: fotoBarang,
       spesialist: spesialist,
       id: id,
-
     };
 
-    setIDDentist("");
-    setListBarang((prevList) => [...prevList, newBarang]);
+    if (editingIndex !== null) {
+      const updatedList = [...listBarang];
+      updatedList[editingIndex] = newBarang;
+      setListBarang(updatedList);
+      setEditingIndex(null);
+      axios.put(`/dokter/${id}`, newBarang)
+        .then(response => {
+          console.log('Data berhasil diupdate:', response.data);
+        })
+        .catch(error => {
+          console.error('Gagal mengupdate data:', error);
+        });
+    } else {
+      setListBarang((prevList) => [...prevList, newBarang]);
+      axios.post('/master/', newBarang)
+        .then(response => {
+          console.log('Data berhasil ditambahkan:', response.data);
+        })
+        .catch(error => {
+          console.error('Gagal menambahkan data:', error);
+        });
+    }
+
     setShowForm(false);
     // Reset form input
+    setIDDentist("");
     setKategoriBarang("");
     setNamaDentist("");
     setJumlahBarang("");
     setFotoBarang("");
     setSpesialist("");
+  };
 
-    axios.post('/master/', newBarang)
-    .then(response => {
-      console.log('Data berhasil ditambahkan:', response.data);
-    })
-    .catch(error => {
-      console.error('Gagal menambahkan data:', error);
-      // Handle error jika perlu
-    });
+  const handleEditBarang = (index) => {
+    const barang = stok[index];
+    setIDDentist(barang.id);
+    setKategoriBarang(barang.kategori);
+    setNamaDentist(barang.nama);
+    setJumlahBarang(barang.no_hp);
+    setFotoBarang(barang.email);
+    setSpesialist(barang.spesialist);
+    setEditingIndex(index);
+    setShowForm(true);
+  };
+
+  const handleDeleteBarang = (index) => {
+    const barang = stok[index];
+    axios.delete(`/dokter/${barang.id}`)
+      .then(response => {
+        console.log('Data berhasil dihapus:', response.data);
+        setStok(stok.filter((_, i) => i !== index));
+      })
+      .catch(error => {
+        console.error('Gagal menghapus data:', error);
+      });
   };
 
   const handleImageUpload = (e) => {
@@ -87,7 +124,6 @@ function Masterbarangjadi() {
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
-        {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl text-third font-bold mb-20">
             Dentist
@@ -106,10 +142,8 @@ function Masterbarangjadi() {
             />
           </div>
 
-          {/* Form Input */}
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Master Barang Jadi
                 <button
@@ -130,9 +164,7 @@ function Masterbarangjadi() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Bagian kategori */}
                 <input
                   type="number"
                   value={id}
@@ -140,7 +172,6 @@ function Masterbarangjadi() {
                   placeholder="ID Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                {/* Bagian kategori */}
                 <input
                   type=""
                   value={namadentist}
@@ -148,7 +179,6 @@ function Masterbarangjadi() {
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                {/* Bagian kategori */}
                 <input
                   type=""
                   value={spesialist}
@@ -159,49 +189,47 @@ function Masterbarangjadi() {
 
                 <button
                   onClick={handleAddBarang}
-                  className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  Tambah Barang
+                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
-            <table className="table-auto  border-gray-500 w-full">
+            <table className="table-auto border-gray-500 w-full">
               <thead className="bg-second text-gray-500">
                 <tr>
-                  <th className=" border-gray-500 px-4 py-2 w-32 ">
-                    ID Dentist
-                  </th>
-                  <th className=" border-gray-500 px-4 py-2">Nama Dentist</th>
-                  <th className=" border-gray-500 px-4 py-2">No Hp</th>
-                  <th className=" border-gray-500 px-4 py-2">Email</th>
-                  <th className=" border-gray-500 px-4 py-2">Edit</th>
+                  <th className="border-gray-500 px-4 py-2 w-32">ID Dentist</th>
+                  <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
+                  <th className="border-gray-500 px-4 py-2">No Hp</th>
+                  <th className="border-gray-500 px-4 py-2">Email</th>
+                  <th className="border-gray-500 px-4 py-2">Edit</th>
+                  <th className="border-gray-500 px-4 py-2">Delete</th>
                 </tr>
               </thead>
               <tbody>
                 {stok.map((item, index) => (
-                  <tr className="bg-second">
-                    <td className=" text-center border-gray-500 px-2 py-2">
-                      {item.id}
-                    </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
-                      {item.nama}
-                    </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
-                      {item.no_hp}
-                    </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
-                      {item.email}
-                    </td>
-                    <td className=" border-gray-500 text-center py-2">
+                  <tr key={index} className="bg-second">
+                    <td className="text-center border-gray-500 px-2 py-2">{item.id}</td>
+                    <td className="text-center border-gray-500 px-4 py-2">{item.nama}</td>
+                    <td className="text-center border-gray-500 px-4 py-2">{item.no_hp}</td>
+                    <td className="text-center border-gray-500 px-4 py-2">{item.email}</td>
+                    <td className="border-gray-500 text-center py-2">
                       <button
-                        onClick={() => setShowForm(true)}
+                        onClick={() => handleEditBarang(index)}
                         className="text-blue-500"
                       >
                         <EditIcon />
+                      </button>
+                    </td>
+                    <td className="border-gray-500 text-center py-2">
+                      <button
+                        onClick={() => handleDeleteBarang(index)}
+                        className="text-red-500"
+                      >
+                        <DeleteIcon />
                       </button>
                     </td>
                   </tr>
