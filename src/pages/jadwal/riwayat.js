@@ -195,13 +195,13 @@ function Riwayat() {
                        isMulti
                        options={options}
                        menuPosition="fixed"
-                       menuPlacement="auto"
+                       className="basic-multi-select"
+                       classNamePrefix="select"
                        styles={{
-                        
-                         menu: (provided) => ({
+                         control: (provided) => ({
                            ...provided,
-                            // Atur lebar dropdown setelah dipilih
-                           fontSize: "0.8rem", // Atur ukuran font dropdown
+                           width: "200px", // Atur lebar kontrol (input) sesuai keinginan Anda
+                           margin: "0 auto", // Meletakkan input di tengah
                          }),
                          // Gaya CSS tambahan
                        }}
