@@ -4,6 +4,8 @@ import axios from '../../config/axiosConfig';
 import React from 'react';
 import EditIcon from "@material-ui/icons/Edit";
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import DeleteIcon from "@material-ui/icons/Delete";
+
 
 const Dashboard = () => {
   const [stok, setStok] = useState([
@@ -32,6 +34,33 @@ const Dashboard = () => {
   const [spesialist, setSpesialist] = useState("");
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
+  const [showFormedit, setShowFormedit] = useState(false);
+  
+
+  const handleEditBarang = async (id) => {
+    try {
+      const response = await axios.get(`/user/${id}`);
+      const barang = response.data.data[0];
+
+      setEmail(barang.email);
+      setNamaDentist(barang.nama);
+      setJumlahBarang(barang.no_hp);
+       // Set the editing ID
+      setShowFormedit(true);
+    } catch (error) {
+      console.error("Gagal mengambil barang:", error);
+    }
+  };
+
+  const handleDeleteBarang = async (id) => {
+    try {
+      await axios.delete(`/user/${id}`);
+      setStok((prevStok) => prevStok.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Gagal menghapus barang:", error);
+    }
+  };
+
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -126,9 +155,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-
-
-
         <div className="ml-24 mt-4 flex justify-between items-center">
           <h1 className="text-2xl text-main font-bold">Admin List</h1>
           <button
@@ -147,6 +173,7 @@ const Dashboard = () => {
                 <th className=" border-gray-500 px-4 py-2">Nama Admin</th>
                 <th className=" border-gray-500 px-4 py-2">Phone Number</th>
                 <th className=" border-gray-500 px-4 py-2">Email</th>
+                <th className=" border-gray-500 px-4 py-2">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -164,13 +191,95 @@ const Dashboard = () => {
                   <td className=" text-center border-gray-500 px-4 py-2">
                     {item.email}
                   </td>
+                  <td className=" border-gray-500 text-center py-2">
+                    <button
+                      onClick={() => handleEditBarang(item.id)}
+                      className="text-blue-500"
+                    >
+                      <EditIcon />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteBarang(item.id)}
+                      className="text-red-500 ml-2"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
+        {/* Form edit */}
+        {showFormedit && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
+            {/* Header Form */}
+            <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
+              Add Admin
+              <button
+                onClick={() => setShowForm(false)}
+                className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* Body Form */}
+            <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+              {/* Bagian kategori */}
+              <input
+                type="number"
+                value={id}
+                onChange={(e) => setIDDentist(e.target.value)}
+                placeholder="ID Admin"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={namadentist}
+                onChange={(e) => setNamaDentist(e.target.value)}
+                placeholder="Nama Admin"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+              {/* Bagian kategori */}
+              <input
+                type="number"
+                value={spesialist}
+                onChange={(e) => setSpesialist(e.target.value)}
+                placeholder="Phone Number"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
 
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+
+              <button
+                onClick={handleAddBarang}
+                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+              >
+                Tambah Barang
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Form Input */}
         {showForm && (
