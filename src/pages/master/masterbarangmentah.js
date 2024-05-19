@@ -9,27 +9,73 @@ function MasterBarangMentah() {
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namaBarang, setNamaBarang] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
-  const [fotoBarang, setFotoBarang] = useState("");
-  const [listBarang, setListBarang] = useState([]);
-  const [kodebarang, setKodebarang] = useState("");
+  const [judul, setJudul] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [gambar, setGambar] = useState("");
+  const [deskripsi_1, setDeskripsi1] = useState("");
+  const [deskripsi_2, setDeskripsi2] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [id, setId] = useState(null);
 
   const handleAddBarang = () => {
     const newBarang = {
       kategori: kategoriBarang,
-      nama: namaBarang,
-      jumlah: jumlahBarang,
-      foto: fotoBarang,
+      judul: judul,
+      subtitle: subtitle,
+      gambar: gambar,
+      deskripsi_1: deskripsi_1,
+      deskripsi_2: deskripsi_2,
     };
 
-    setListBarang((prevList) => [...prevList, newBarang]);
+    if (editingIndex !== null) {
+      const updatedList = [...stok];
+      updatedList[editingIndex] = newBarang;
+      setStok(updatedList);
+      axios.put(`/promo/${id}`, newBarang)
+        .then(response => {
+          console.log('Data berhasil diupdate:', response.data);
+        })
+        .catch(error => {
+          console.error('Gagal mengupdate data:', error);
+        });
+    } else {
+      axios.post('/promo/', newBarang)
+        .then(response => {
+          console.log('Data berhasil ditambahkan:', response.data);
+          setStok(prevList => [...prevList, response.data]);
+        })
+        .catch(error => {
+          console.error('Gagal menambahkan data:', error);
+        });
+    }
+
     setShowForm(false);
-    // Reset form input
-    setKategoriBarang("");
-    setNamaBarang("");
-    setJumlahBarang("");
-    setFotoBarang("");
+    resetForm();
+  };
+
+  const handleEditBarang = (index) => {
+    const barang = stok[index];
+    setId(barang.id);
+    setKategoriBarang(barang.kategori);
+    setJudul(barang.judul);
+    setSubtitle(barang.subtitle);
+    setGambar(barang.gambar);
+    setDeskripsi1(barang.deskripsi_1);
+    setDeskripsi2(barang.deskripsi_2);
+    setEditingIndex(index);
+    setShowForm(true);
+  };
+
+  const handleDeleteBarang = (index) => {
+    const barang = stok[index];
+    axios.delete(`/promo/${barang.id}`)
+      .then(response => {
+        console.log('Data berhasil dihapus:', response.data);
+        setStok(stok.filter((_, i) => i !== index));
+      })
+      .catch(error => {
+        console.error('Gagal menghapus data:', error);
+      });
   };
 
   const handleImageUpload = (e) => {
@@ -37,7 +83,7 @@ function MasterBarangMentah() {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setFotoBarang(reader.result);
+      setGambar(reader.result);
     };
 
     if (file) {
@@ -45,10 +91,21 @@ function MasterBarangMentah() {
     }
   };
 
+  const resetForm = () => {
+    setKategoriBarang("");
+    setJudul("");
+    setSubtitle("");
+    setGambar("");
+    setDeskripsi1("");
+    setDeskripsi2("");
+    setEditingIndex(null);
+    setId(null);
+  };
+
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/master/bmentah/");
+        const response = await axios.get("/promo/");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -70,7 +127,6 @@ function MasterBarangMentah() {
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
-        {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl font-bold mb-20 text-third">
             Promo
@@ -89,10 +145,8 @@ function MasterBarangMentah() {
             />
           </div>
 
-          {/* Form Input */}
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Master Barang Mentah
                 <button
@@ -113,27 +167,12 @@ function MasterBarangMentah() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Bagian Kode */}
                 <div className="flex">
-                  <select
-                    value={kodebarang}
-                    onChange={(e) => setKodebarang(e.target.value)}
-                    className="border  border-gray-400 p-2 rounded  mb-2 mr-2 w-1/2"
-                    disabled
-                  >
-                    <option value="">Kode</option>
-                    <option value="kategori1"> 1</option>
-                    <option value="kategori2"> 2</option>
-                    <option value="kategori3"> 3</option>
-                  </select>
-
-                  {/* Dropdown Kategori Barang */}
                   <select
                     value={kategoriBarang}
                     onChange={(e) => setKategoriBarang(e.target.value)}
-                    className="border border-gray-400 p-2 rounded mb-2 w-1/2"
+                    className="border border-gray-400 p-2 rounded mb-2 w-full"
                   >
                     <option value="" disabled>
                       Pilih Kategori Barang
@@ -143,48 +182,80 @@ function MasterBarangMentah() {
                     <option value="kategori3">Kategori 3</option>
                   </select>
                 </div>
-                {/* Bagian kategori */}
                 <input
-                  type=""
-                  value={namaBarang}
-                  onChange={(e) => setNamaBarang(e.target.value)}
+                  type="text"
+                  value={judul}
+                  onChange={(e) => setJudul(e.target.value)}
                   placeholder="Nama Barang"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="text"
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                  placeholder="Sub Title"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="text"
+                  value={deskripsi_1}
+                  onChange={(e) => setDeskripsi1(e.target.value)}
+                  placeholder="Deskripsi 1"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="text"
+                  value={deskripsi_2}
+                  onChange={(e) => setDeskripsi2(e.target.value)}
+                  placeholder="Deskripsi 2"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="file"
+                  onChange={handleImageUpload}
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <button
                   onClick={handleAddBarang}
-                  className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  Tambah Barang
+                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
                 </button>
               </div>
             </div>
           )}
-          {/* Tabel dengan Data */}
+
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border-gray-500 w-full">
               <thead className="bg-second text-white">
                 <tr>
-                  <th className=" border-gray-500 px-4 py-2 ">Title</th>
-                  <th className=" border-gray-500 px-4 py-2">
-                    Sub Title
-                  </th>
-                  <th className=" border-gray-500 px-4 py-2">
-                    Deskripsi 1
-                  </th>
-                  <th className=" border-gray-500 px-4 py-2">
-                    Deskripsi 2
-                  </th>
+                  <th className="border-gray-500 px-4 py-2">Title</th>
+                  <th className="border-gray-500 px-4 py-2">Sub Title</th>
+                  <th className="border-gray-500 px-4 py-2">Deskripsi 1</th>
+                  <th className="border-gray-500 px-4 py-2">Deskripsi 2</th>
+                  <th className="border-gray-500 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {stok.map((item, index) => (
                   <tr key={index}>
-                    <td className="border text-center border-gray-500 px-2 py-2">
-                      {index + 1}
-                    </td>
+                    <td className="border text-center border-gray-500 px-4 py-2">{item.judul}</td>
+                    <td className="border text-center border-gray-500 px-4 py-2">{item.subtitle}</td>
+                    <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_1}</td>
+                    <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_2}</td>
                     <td className="border text-center border-gray-500 px-4 py-2">
-                      {item.nm_bjadi}
+                      <button
+                        onClick={() => handleEditBarang(index)}
+                        className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteBarang(index)}
+                        className="bg-red-500 text-white font-bold py-1 px-2 rounded"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
