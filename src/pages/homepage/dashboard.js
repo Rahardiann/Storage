@@ -3,6 +3,7 @@ import Sidebar from '../sidebar/sidebar';
 import axios from '../../config/axiosConfig';
 import React from 'react';
 import EditIcon from "@material-ui/icons/Edit";
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
   const [stok, setStok] = useState([
@@ -125,6 +126,9 @@ const Dashboard = () => {
           </div>
         </div>
 
+
+
+
         <div className="ml-24 mt-4 flex justify-between items-center">
           <h1 className="text-2xl text-main font-bold">Admin List</h1>
           <button
@@ -165,6 +169,9 @@ const Dashboard = () => {
             </tbody>
           </table>
         </div>
+
+
+
         {/* Form Input */}
         {showForm && (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">

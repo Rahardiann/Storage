@@ -89,6 +89,7 @@ function Stokbarangjadi() {
 
       setemail(barang.email);
       setpassword(barang.password);
+      console.log(barang.email)
       setnama(barang.nama);
       setnohp(barang.no_hp);
       setalamat(barang.alamat);
