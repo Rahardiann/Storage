@@ -40,6 +40,7 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [password, setpassword] = useState("");
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
@@ -98,37 +99,24 @@ const Dashboard = () => {
     }
   };
 
-  const handleAddBarang = () => {
+  const handleAddBarang = async () => {
     const newBarang = {
-      kategori: kategoriBarang,
+      email: email,
+      password: password,
       nama: nama,
       no_hp: no_hp,
-      foto: fotoBarang,
-      spesialist: spesialist,
-      id: id,
-      email: email,
     };
 
-    setEmail("");
-    setIDDentist("");
-    setListBarang((prevList) => [...prevList, newBarang]);
-    setShowForm(false);
-    // Reset form input
-    setKategoriBarang("");
-    setnama("");
-    setNohp("");
-    setFotoBarang("");
-    setSpesialist("");
+    try {
+      const response = await axios.post("/admin/register", newBarang);
+      console.log(response.data.data);
+      setStok((prevStok) => [...prevStok, response.data]);
+    } catch (error) {
+      console.error("Gagal menambahkan admin:", error);
+    }
 
-    axios
-      .post("/master/", newBarang)
-      .then((response) => {
-        console.log("Data berhasil ditambahkan:", response.data);
-      })
-      .catch((error) => {
-        console.error("Gagal menambahkan data:", error);
-        // Handle error jika perlu
-      });
+    setShowForm(false);
+    resetForm();
   };
 
   useEffect(() => {
@@ -338,14 +326,6 @@ const Dashboard = () => {
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
               {/* Bagian kategori */}
               <input
-                type="number"
-                value={id}
-                onChange={(e) => setIDDentist(e.target.value)}
-                placeholder="ID Admin"
-                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-              />
-              {/* Bagian kategori */}
-              <input
                 type=""
                 value={nama}
                 onChange={(e) => setnama(e.target.value)}
@@ -355,8 +335,8 @@ const Dashboard = () => {
               {/* Bagian kategori */}
               <input
                 type="number"
-                value={spesialist}
-                onChange={(e) => setSpesialist(e.target.value)}
+                value={no_hp}
+                onChange={(e) => setNohp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
@@ -367,6 +347,14 @@ const Dashboard = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
+                placeholder="Password"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
 
