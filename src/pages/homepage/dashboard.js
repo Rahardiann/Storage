@@ -1,33 +1,37 @@
-import {useEffect, useState} from 'react';
-import Sidebar from '../sidebar/sidebar';
-import axios from '../../config/axiosConfig';
-import React from 'react';
+import { useEffect, useState } from "react";
+import Sidebar from "../sidebar/sidebar";
+import axios from "../../config/axiosConfig";
+import React from "react";
 import EditIcon from "@material-ui/icons/Edit";
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  Rectangle,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import DeleteIcon from "@material-ui/icons/Delete";
-
 
 const Dashboard = () => {
   const [stok, setStok] = useState([
-    {
-      id: 1,
-      NamaDentist: "Herr Muller",
-      spesialist: "0823726372674",
-      email: "hadi@gmail.cok"
-    },
+    
 
     // Tambahkan data dummy sesuai kebutuhan
   ]);
-  const [bjadi, setBjadi] = useState([])
-  const [bmentah, setBmentah] = useState([])
-  const [stat, setStat] = useState([])
-  const [merge, setMerge] = useState([])
+  const [bjadi, setBjadi] = useState([]);
+  const [bmentah, setBmentah] = useState([]);
+  const [stat, setStat] = useState([]);
+  const [merge, setMerge] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namadentist, setNamaDentist] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
+  const [nama, setnama] = useState("");
+  const [no_hp, setNohp] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [kodebarang, setKodebarang] = useState("");
@@ -35,17 +39,50 @@ const Dashboard = () => {
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
-  
+  const [editingId, setEditingId] = useState(null);
+
+  const handleCloseFormEdit = () => {
+    setShowFormedit(false);
+  };
+
+  const handleUpdateBarang = async () => {
+    const updatedBarang = {
+      nama: nama,
+      no_hp: no_hp,
+      email: email,
+      id: id,
+    };
+
+    try {
+      const response = await axios.put(`/admin/${editingId}`, updatedBarang); // Use editingId
+      console.log(response.data.data);
+      setStok((prevStok) =>
+        prevStok.map((item) => (item.id === editingId ? response.data : item))
+      );
+    } catch (error) {
+      console.error("Gagal mengupdate barang:", error);
+    }
+
+    setShowFormedit(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setnama("");
+    setNohp("");
+    setEmail("");
+    setEditingId(null); // Reset the editing ID
+  };
 
   const handleEditBarang = async (id) => {
     try {
-      const response = await axios.get(`/user/${id}`);
+      const response = await axios.get(`/admin/${id}`);
       const barang = response.data.data[0];
 
       setEmail(barang.email);
-      setNamaDentist(barang.nama);
-      setJumlahBarang(barang.no_hp);
-       // Set the editing ID
+      setnama(barang.nama);
+      setNohp(barang.no_hp);
+      setEditingId(id); 
       setShowFormedit(true);
     } catch (error) {
       console.error("Gagal mengambil barang:", error);
@@ -61,16 +98,15 @@ const Dashboard = () => {
     }
   };
 
-
   const handleAddBarang = () => {
     const newBarang = {
       kategori: kategoriBarang,
-      nama: namadentist,
-      no_hp: jumlahBarang,
+      nama: nama,
+      no_hp: no_hp,
       foto: fotoBarang,
       spesialist: spesialist,
       id: id,
-      email: email
+      email: email,
     };
 
     setEmail("");
@@ -79,8 +115,8 @@ const Dashboard = () => {
     setShowForm(false);
     // Reset form input
     setKategoriBarang("");
-    setNamaDentist("");
-    setJumlahBarang("");
+    setnama("");
+    setNohp("");
     setFotoBarang("");
     setSpesialist("");
 
@@ -95,19 +131,17 @@ const Dashboard = () => {
       });
   };
 
-   useEffect(() => {
-     const fetch = async () => {
-       try {
-         const response = await axios.get("/admin/");
-         setStok(response.data.data);
-       } catch (err) {
-         console.log(err);
-       }
-     };
-     fetch();
-   }, []);
-
-  
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get("/admin/");
+        setStok(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -173,7 +207,8 @@ const Dashboard = () => {
                 <th className=" border-gray-500 px-4 py-2">Nama Admin</th>
                 <th className=" border-gray-500 px-4 py-2">Phone Number</th>
                 <th className=" border-gray-500 px-4 py-2">Email</th>
-                <th className=" border-gray-500 px-4 py-2">Aksi</th>
+                <th className=" border-gray-500 px-4 py-2">edit</th>
+                <th className=" border-gray-500 px-4 py-2">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -198,12 +233,14 @@ const Dashboard = () => {
                     >
                       <EditIcon />
                     </button>
+                  </td>
+                  <td className=" border-gray-500 text-center py-2">
                     <button
                       onClick={() => handleDeleteBarang(item.id)}
                       className="text-red-500 ml-2"
                     >
                       <DeleteIcon />
-                    </button>
+                    </button>{" "}
                   </td>
                 </tr>
               ))}
@@ -216,9 +253,9 @@ const Dashboard = () => {
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
             {/* Header Form */}
             <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-              Add Admin
+              Edit Admin
               <button
-                onClick={() => setShowForm(false)}
+                onClick={handleCloseFormEdit}
                 className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
               >
                 <svg
@@ -239,25 +276,17 @@ const Dashboard = () => {
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
               {/* Bagian kategori */}
               <input
-                type="number"
-                value={id}
-                onChange={(e) => setIDDentist(e.target.value)}
-                placeholder="ID Admin"
-                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-              />
-              {/* Bagian kategori */}
-              <input
                 type=""
-                value={namadentist}
-                onChange={(e) => setNamaDentist(e.target.value)}
+                value={nama}
+                onChange={(e) => setnama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               {/* Bagian kategori */}
               <input
                 type="number"
-                value={spesialist}
-                onChange={(e) => setSpesialist(e.target.value)}
+                value={no_hp}
+                onChange={(e) => setNohp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
@@ -272,10 +301,10 @@ const Dashboard = () => {
               />
 
               <button
-                onClick={handleAddBarang}
+                onClick={handleUpdateBarang}
                 className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
               >
-                Tambah Barang
+                Update
               </button>
             </div>
           </div>
@@ -318,8 +347,8 @@ const Dashboard = () => {
               {/* Bagian kategori */}
               <input
                 type=""
-                value={namadentist}
-                onChange={(e) => setNamaDentist(e.target.value)}
+                value={nama}
+                onChange={(e) => setnama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
