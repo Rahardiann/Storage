@@ -1,83 +1,135 @@
-import {useEffect, useState} from 'react';
-import Sidebar from '../sidebar/sidebar';
-import axios from '../../config/axiosConfig';
-import React from 'react';
+import { useEffect, useState } from "react";
+import Sidebar from "../sidebar/sidebar";
+import axios from "../../config/axiosConfig";
+import React from "react";
 import EditIcon from "@material-ui/icons/Edit";
+import {
+  BarChart,
+  Bar,
+  Rectangle,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const Dashboard = () => {
   const [stok, setStok] = useState([
-    {
-      id: 1,
-      NamaDentist: "Herr Muller",
-      spesialist: "0823726372674",
-      email: "hadi@gmail.cok"
-    },
+    
 
     // Tambahkan data dummy sesuai kebutuhan
   ]);
-  const [bjadi, setBjadi] = useState([])
-  const [bmentah, setBmentah] = useState([])
-  const [stat, setStat] = useState([])
-  const [merge, setMerge] = useState([])
+  const [bjadi, setBjadi] = useState([]);
+  const [bmentah, setBmentah] = useState([]);
+  const [stat, setStat] = useState([]);
+  const [merge, setMerge] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namadentist, setNamaDentist] = useState("");
-  const [jumlahBarang, setJumlahBarang] = useState("");
+  const [nama, setnama] = useState("");
+  const [no_hp, setNohp] = useState("");
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [kodebarang, setKodebarang] = useState("");
   const [spesialist, setSpesialist] = useState("");
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
+  const [showFormedit, setShowFormedit] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [password, setpassword] = useState("");
 
-  const handleAddBarang = () => {
-    const newBarang = {
-      kategori: kategoriBarang,
-      nama: namadentist,
-      no_hp: jumlahBarang,
-      foto: fotoBarang,
-      spesialist: spesialist,
-      id: id,
-      email: email
-    };
-
-    setEmail("");
-    setIDDentist("");
-    setListBarang((prevList) => [...prevList, newBarang]);
-    setShowForm(false);
-    // Reset form input
-    setKategoriBarang("");
-    setNamaDentist("");
-    setJumlahBarang("");
-    setFotoBarang("");
-    setSpesialist("");
-
-    axios
-      .post("/master/", newBarang)
-      .then((response) => {
-        console.log("Data berhasil ditambahkan:", response.data);
-      })
-      .catch((error) => {
-        console.error("Gagal menambahkan data:", error);
-        // Handle error jika perlu
-      });
+  const handleCloseFormEdit = () => {
+    setShowFormedit(false);
   };
 
-   useEffect(() => {
-     const fetch = async () => {
-       try {
-         const response = await axios.get("/admin/");
-         setStok(response.data.data);
-       } catch (err) {
-         console.log(err);
-       }
-     };
-     fetch();
-   }, []);
+  const handleUpdateBarang = async () => {
+    const updatedBarang = {
+      nama: nama,
+      no_hp: no_hp,
+      email: email,
+      id: id,
+    };
 
-  
+    try {
+      const response = await axios.put(`/admin/${editingId}`, updatedBarang); // Use editingId
+      console.log(response.data.data);
+      setStok((prevStok) =>
+        prevStok.map((item) => (item.id === editingId ? response.data : item))
+      );
+    } catch (error) {
+      console.error("Gagal mengupdate barang:", error);
+    }
+
+    setShowFormedit(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setnama("");
+    setNohp("");
+    setEmail("");
+    setEditingId(null); // Reset the editing ID
+  };
+
+  const handleEditBarang = async (id) => {
+    try {
+      const response = await axios.get(`/admin/${id}`);
+      const barang = response.data.data[0];
+
+      setEmail(barang.email);
+      setnama(barang.nama);
+      setNohp(barang.no_hp);
+      setEditingId(id); 
+      setShowFormedit(true);
+    } catch (error) {
+      console.error("Gagal mengambil barang:", error);
+    }
+  };
+
+  const handleDeleteBarang = async (id) => {
+    try {
+      await axios.delete(`/user/${id}`);
+      setStok((prevStok) => prevStok.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Gagal menghapus barang:", error);
+    }
+  };
+
+  const handleAddBarang = async () => {
+    const newBarang = {
+      email: email,
+      password: password,
+      nama: nama,
+      no_hp: no_hp,
+    };
+
+    try {
+      const response = await axios.post("/admin/register", newBarang);
+      console.log(response.data.data);
+      setStok((prevStok) => [...prevStok, response.data]);
+    } catch (error) {
+      console.error("Gagal menambahkan admin:", error);
+    }
+
+    setShowForm(false);
+    resetForm();
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get("/admin/");
+        setStok(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -143,6 +195,8 @@ const Dashboard = () => {
                 <th className=" border-gray-500 px-4 py-2">Nama Admin</th>
                 <th className=" border-gray-500 px-4 py-2">Phone Number</th>
                 <th className=" border-gray-500 px-4 py-2">Email</th>
+                <th className=" border-gray-500 px-4 py-2">edit</th>
+                <th className=" border-gray-500 px-4 py-2">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -160,11 +214,90 @@ const Dashboard = () => {
                   <td className=" text-center border-gray-500 px-4 py-2">
                     {item.email}
                   </td>
+                  <td className=" border-gray-500 text-center py-2">
+                    <button
+                      onClick={() => handleEditBarang(item.id)}
+                      className="text-blue-500"
+                    >
+                      <EditIcon />
+                    </button>
+                  </td>
+                  <td className=" border-gray-500 text-center py-2">
+                    <button
+                      onClick={() => handleDeleteBarang(item.id)}
+                      className="text-red-500 ml-2"
+                    >
+                      <DeleteIcon />
+                    </button>{" "}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {/* Form edit */}
+        {showFormedit && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
+            {/* Header Form */}
+            <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
+              Edit Admin
+              <button
+                onClick={handleCloseFormEdit}
+                className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* Body Form */}
+            <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={nama}
+                onChange={(e) => setnama(e.target.value)}
+                placeholder="Nama Admin"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+              {/* Bagian kategori */}
+              <input
+                type="number"
+                value={no_hp}
+                onChange={(e) => setNohp(e.target.value)}
+                placeholder="Phone Number"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+
+              <button
+                onClick={handleUpdateBarang}
+                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Form Input */}
         {showForm && (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
@@ -193,25 +326,17 @@ const Dashboard = () => {
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
               {/* Bagian kategori */}
               <input
-                type="number"
-                value={id}
-                onChange={(e) => setIDDentist(e.target.value)}
-                placeholder="ID Admin"
-                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-              />
-              {/* Bagian kategori */}
-              <input
                 type=""
-                value={namadentist}
-                onChange={(e) => setNamaDentist(e.target.value)}
+                value={nama}
+                onChange={(e) => setnama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               {/* Bagian kategori */}
               <input
                 type="number"
-                value={spesialist}
-                onChange={(e) => setSpesialist(e.target.value)}
+                value={no_hp}
+                onChange={(e) => setNohp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
@@ -222,6 +347,14 @@ const Dashboard = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+              />
+              {/* Bagian kategori */}
+              <input
+                type=""
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
+                placeholder="Password"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
 

@@ -20,6 +20,7 @@ function Stokbarangjadi() {
   const [listBarang, setListBarang] = useState([]);
   const [nohp, setnohp] = useState("");
   const [alamat, setalamat] = useState("");
+  const [editingId, setEditingId] = useState(null); // Add state for the editing ID
 
   const handleAddBarang = async () => {
     const newBarang = {
@@ -29,22 +30,49 @@ function Stokbarangjadi() {
       no_hp: nohp,
       alamat: alamat,
       no_ktp: noktp,
-      no_rekam_medis: nomr, 
+      no_rekam_medis: nomr,
       gender: gender,
     };
 
     try {
       const response = await axios.post("/user/register", newBarang);
       console.log(response.data.data);
-      // Update state stok barang jika diperlukan
       setStok((prevStok) => [...prevStok, response.data]);
     } catch (error) {
       console.error("Gagal menambahkan barang:", error);
     }
 
     setShowForm(false);
+    resetForm();
+  };
+
+  const handleUpdateBarang = async () => {
+    const updatedBarang = {
+      email: email,
+      password: password,
+      nama: nama,
+      no_hp: nohp,
+      alamat: alamat,
+      no_ktp: noktp,
+      no_rekam_medis: nomr,
+      gender: gender,
+    };
+
+    try {
+      const response = await axios.put(`/user/${editingId}`, updatedBarang); // Use editingId
+      console.log(response.data.data);
+      setStok((prevStok) =>
+        prevStok.map((item) => (item.id === editingId ? response.data : item))
+      );
+    } catch (error) {
+      console.error("Gagal mengupdate barang:", error);
+    }
+
     setShowFormedit(false);
-    // Reset form input
+    resetForm();
+  };
+
+  const resetForm = () => {
     setemail("");
     setpassword("");
     setnama("");
@@ -53,6 +81,7 @@ function Stokbarangjadi() {
     setnoktp("");
     setnomr("");
     setgender("");
+    setEditingId(null); // Reset the editing ID
   };
 
   const handleImageUpload = (e) => {
@@ -82,10 +111,8 @@ function Stokbarangjadi() {
 
   const handleEditBarang = async (id) => {
     try {
-      const response = await axios.get(`/user/${id}`); // Ganti '/user' dengan endpoint yang sesuai untuk mengambil data barang berdasarkan ID
+      const response = await axios.get(`/user/${id}`);
       const barang = response.data.data[0];
-
-      console.log(barang)
 
       setemail(barang.email);
       setpassword(barang.password);
@@ -95,22 +122,26 @@ function Stokbarangjadi() {
       setnoktp(barang.no_ktp);
       setnomr(barang.no_rekam_medis);
       setgender(barang.gender);
+      setEditingId(id); // Set the editing ID
       setShowFormedit(true);
-    } catch (error) { 
+    } catch (error) {
       console.error("Gagal mengambil barang:", error);
     }
   };
 
-  const handleDeleteBarang = (index) => {
-    // Implementasi logika untuk menghapus barang
-    console.log("Hapus barang dengan index:", index);
+  const handleDeleteBarang = async (id) => {
+    try {
+      await axios.delete(`/user/${id}`);
+      setStok((prevStok) => prevStok.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Gagal menghapus barang:", error);
+    }
   };
 
   return (
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
-        {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-third text-2xl font-bold mb-20">
             Patient
@@ -123,16 +154,14 @@ function Stokbarangjadi() {
               ADD
             </button>
             <input
-              alamat="text"
+              type="text"
               placeholder="Cari barang..."
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
 
-          {/* Form edit */}
           {showFormedit && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Edit Patient
                 <button
@@ -153,9 +182,7 @@ function Stokbarangjadi() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={email}
@@ -163,8 +190,6 @@ function Stokbarangjadi() {
                   placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={nama}
@@ -172,15 +197,13 @@ function Stokbarangjadi() {
                   placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-
-                {/* Dropdown Nama Barang */}
                 <input
                   type="text"
+                  value={password}
                   onChange={(e) => setpassword(e.target.value)}
                   placeholder="Password"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Nama Barang */}
                 <input
                   type="number"
                   value={nohp}
@@ -188,7 +211,6 @@ function Stokbarangjadi() {
                   placeholder="No HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={alamat}
@@ -196,7 +218,6 @@ function Stokbarangjadi() {
                   placeholder="Alamat"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="number"
                   value={noktp}
@@ -204,7 +225,6 @@ function Stokbarangjadi() {
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="number"
                   value={nomr}
@@ -212,7 +232,6 @@ function Stokbarangjadi() {
                   placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={gender}
@@ -221,7 +240,7 @@ function Stokbarangjadi() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <button
-                  onClick={handleEditBarang}
+                  onClick={handleUpdateBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   Save
@@ -230,10 +249,8 @@ function Stokbarangjadi() {
             </div>
           )}
 
-          {/* Form Input */}
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Tambah Patient
                 <button
@@ -254,9 +271,7 @@ function Stokbarangjadi() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={email}
@@ -264,8 +279,6 @@ function Stokbarangjadi() {
                   placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={nama}
@@ -273,8 +286,6 @@ function Stokbarangjadi() {
                   placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-
-                {/* Dropdown Nama Barang */}
                 <input
                   type="text"
                   value={password}
@@ -282,7 +293,6 @@ function Stokbarangjadi() {
                   placeholder="Password"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Nama Barang */}
                 <input
                   type="number"
                   value={nohp}
@@ -290,7 +300,6 @@ function Stokbarangjadi() {
                   placeholder="No HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={alamat}
@@ -298,7 +307,6 @@ function Stokbarangjadi() {
                   placeholder="Alamat"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="number"
                   value={noktp}
@@ -306,7 +314,6 @@ function Stokbarangjadi() {
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="number"
                   value={nomr}
@@ -314,7 +321,6 @@ function Stokbarangjadi() {
                   placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* Dropdown Kategori Barang */}
                 <input
                   type="text"
                   value={gender}
@@ -332,7 +338,6 @@ function Stokbarangjadi() {
             </div>
           )}
 
-          {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
             <table className="table-auto border-none  bg-second w-full">
               <thead className="bg-second text-gray-500">
@@ -373,7 +378,7 @@ function Stokbarangjadi() {
                         <EditIcon />
                       </button>
                       <button
-                        onClick={() => handleDeleteBarang(index)}
+                        onClick={() => handleDeleteBarang(item.id)}
                         className="text-red-500 ml-2"
                       >
                         <DeleteIcon />

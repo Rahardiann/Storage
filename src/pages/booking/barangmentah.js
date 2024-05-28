@@ -3,6 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function Stokbarangmentah() {
   const [stok, setStok] = useState([]);
@@ -17,6 +18,11 @@ function Stokbarangmentah() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [dentist, setDentist] = useState("");
+
+  const handleDeleteBarang = (index) => {
+    // Implementasi logika untuk menghapus barang
+    console.log("Hapus barang dengan index:", index);
+  };
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -175,7 +181,7 @@ function Stokbarangmentah() {
                   <option value="barang2">Frau Welder</option>
                   <option value="barang3">Frau Ritter</option>
                 </select>
-                
+
                 <button
                   onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
@@ -204,7 +210,7 @@ function Stokbarangmentah() {
                 {stok.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
-                      {item.id_user} 
+                      {item.id_user}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.user.nama}
@@ -220,14 +226,14 @@ function Stokbarangmentah() {
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.dokter.nama}
-                    </td> 
+                    </td>
 
                     <td className=" border-gray-500 text-center py-2">
                       <button
-                        onClick={() => setShowForm(true)}
-                        className="text-blue-500"
+                        onClick={() => handleDeleteBarang(index)}
+                        className="text-red-500 ml-2"
                       >
-                        <EditIcon />
+                        <DeleteIcon />
                       </button>
                     </td>
                   </tr>

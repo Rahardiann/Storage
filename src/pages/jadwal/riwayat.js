@@ -3,7 +3,8 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import { FaTrash } from "react-icons/fa";
 import EditIcon from "@material-ui/icons/Edit";
-
+import Select, { components } from "react-select";
+const { MenuPortal } = components;
 
 
 function Riwayat() {
@@ -19,6 +20,13 @@ function Riwayat() {
   const [kodebarang, setKodebarang] = useState("");
   const [spesialist, setSpesialist] = useState("");
   const [id, setIDDentist] = useState("");
+
+
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
 
   const handleAddBarang = () => {
     const newBarang = {
@@ -43,19 +51,7 @@ function Riwayat() {
 
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get("/jadwal");
-        setStok(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetch();
-  }, []);
-
-
+  
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -72,7 +68,7 @@ function Riwayat() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/jadwal/");
+        const response = await axios.get("/jadwal/all");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -179,9 +175,7 @@ function Riwayat() {
            <table className="table-auto  border-gray-500 w-full">
              <thead className="bg-second text-gray-500">
                <tr>
-                 <th className=" border-gray-500 px-4 py-2 w-32 ">
-                   Dentist
-                 </th>
+                 <th className=" border-gray-500 px-4 py-2 w-32 ">Dentist</th>
                  <th className=" border-gray-500 px-4 py-2">Date</th>
                  <th className=" border-gray-500 px-4 py-2">Time</th>
                  <th className=" border-gray-500 px-4 py-2">Edit</th>
@@ -197,7 +191,21 @@ function Riwayat() {
                      {item.jadwal}
                    </td>
                    <td className=" text-center border-gray-500 px-4 py-2">
-                     {item.jam}
+                     <Select
+                       isMulti
+                       options={options}
+                       menuPosition="fixed"
+                       className="basic-multi-select"
+                       classNamePrefix="select"
+                       styles={{
+                         control: (provided) => ({
+                           ...provided,
+                           width: "200px", // Atur lebar kontrol (input) sesuai keinginan Anda
+                           margin: "0 auto", // Meletakkan input di tengah
+                         }),
+                         // Gaya CSS tambahan
+                       }}
+                     />
                    </td>
                    <td className=" border-gray-500 text-center py-2">
                      <button
