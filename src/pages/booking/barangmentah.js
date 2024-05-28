@@ -55,7 +55,7 @@ function Stokbarangmentah() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/booking/");
+        const response = await axios.get("/booking/all");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
