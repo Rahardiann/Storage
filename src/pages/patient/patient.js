@@ -129,15 +129,6 @@ function Stokbarangjadi() {
     }
   };
 
-  const handleDeleteBarang = async (id) => {
-    try {
-      await axios.delete(`/user/${id}`);
-      setStok((prevStok) => prevStok.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Gagal menghapus barang:", error);
-    }
-  };
-
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -345,10 +336,11 @@ function Stokbarangjadi() {
                   <th className=" border-gray-500 px-4 py-2 w-32">ID User</th>
                   <th className=" border-gray-500 px-4 py-2">Username</th>
                   <th className=" border-gray-500 px-4 py-2">No MR</th>
-                  <th className=" border-gray-500 px-4 py-2">
-                    alamat of patient
-                  </th>
+                  <th className=" border-gray-500 px-4 py-2">Usia</th>
+                  <th className=" border-gray-500 px-4 py-2">Alamat</th>
                   <th className=" border-gray-500 px-4 py-2">Phone number</th>
+                  <th className=" border-gray-500 px-4 py-2">Email</th>
+                  <th className=" border-gray-500 px-4 py-2">T.O.P</th>
                   <th className=" border-gray-500 px-4 py-2 w-20">Action</th>
                 </tr>
               </thead>
@@ -365,10 +357,19 @@ function Stokbarangjadi() {
                       {item.no_rekam_medis}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      Digital User
+                      Usia
+                    </td>
+                    <td className=" border-gray-500 text-center py-2">
+                      {item.alamat}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       {item.no_hp}
+                    </td>
+                    <td className=" border-gray-500 text-center py-2">
+                      {item.email}
+                    </td>
+                    <td className=" border-gray-500 text-center py-2">
+                      Digital
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       <button
@@ -376,12 +377,6 @@ function Stokbarangjadi() {
                         className="text-blue-500"
                       >
                         <EditIcon />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteBarang(item.id)}
-                        className="text-red-500 ml-2"
-                      >
-                        <DeleteIcon />
                       </button>
                     </td>
                   </tr>

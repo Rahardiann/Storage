@@ -16,7 +16,6 @@ import { FaPerson } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [minimized, setMinimized] = useState(window.innerWidth <= 768);
-  const [masterOpen, setMasterOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,10 +28,6 @@ const Sidebar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const toggleMaster = () => {
-    setMasterOpen(!masterOpen);
-  };
 
   return (
     <div
@@ -88,45 +83,29 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="my-10">
-          <div className="relative">
-            <button
-              className={`flex items-center text-main text-base sidebar-item ${
-                minimized ? "pl-2" : "pl-4"
-              } hover:text-gray-400`}
-              onClick={toggleMaster}
-            >
-              <FaBox className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />
-              {!minimized && <span>Dentist & Promo</span>}
-              <span className="absolute right-0 top-0 bottom-0 flex items-center pr-4">
-                {masterOpen ? <FaChevronUp /> : <FaChevronDown />}
-              </span>
-            </button>
-            <ul
-              className={`absolute left-full top-0 mt-1 ml-4 bg-gray-200 shadow-lg rounded-md ${
-                masterOpen ? "block" : "hidden"
-              }`}
-            >
-              
-              <li>
-                <Link
-                  to="/Master/MasterBarangjadi"
-                  className="block px-4 py-4 text-sm text-main hover:bg-gray-100"
-                >
-                  Dentist
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/Master/MasterBarangmentah"
-                  className="block px-4 py-4 text-sm text-main hover:bg-gray-100"
-                >
-                  Promo
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Link
+            to="/Master/MasterBarangjadi"
+            className={`flex items-center text-main text-base sidebar-item ${
+              minimized ? "pl-2" : "pl-4"
+            } hover:text-gray-400`}
+            onClick={() => setMinimized(window.innerWidth <= 768)}
+          >
+            <FaBox className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Dentist</span>}
+          </Link>
         </li>
-
+        <li className="my-10">
+          <Link
+            to="/Master/MasterBarangmentah"
+            className={`flex items-center text-main text-base sidebar-item ${
+              minimized ? "pl-2" : "pl-4"
+            } hover:text-gray-400`}
+            onClick={() => setMinimized(window.innerWidth <= 768)}
+          >
+            <FaCubes className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Promo</span>}
+          </Link>
+        </li>
         <li className="my-10">
           <Link
             to="/riwayat"

@@ -6,7 +6,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 function Stokbarangmentah() {
-  const [stok, setStok] = useState([]);
+  const [booking, setBooking] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -62,15 +62,14 @@ function Stokbarangmentah() {
     const fetch = async () => {
       try {
         const response = await axios.get("/booking/all");
-        setStok(response.data.data);
+        setBooking(response.data.data);
       } catch (err) {
         console.log(err);
       }
     };
     fetch();
-  }, []); 
+  }, []);
 
-  
   const handleShowImagePopup = (imageSrc) => {
     setPopupImageSrc(imageSrc);
     setShowImagePopup(true);
@@ -200,32 +199,32 @@ function Stokbarangmentah() {
                   <th className=" border-gray-500 px-4 py-2 w-32">ID User</th>
                   <th className=" border-gray-500 px-4 py-2 w-38">Username</th>
                   <th className=" border-gray-500 px-4 py-2 w-32">No MR</th>
-                  <th className=" border-gray-500 px-4 py-2 ">Time</th>
-                  <th className=" border-gray-500 px-4 py-2">Date</th>
+                  <th className=" border-gray-500 px-4 py-2 ">Date</th>
+                  <th className=" border-gray-500 px-4 py-2">Time</th>
                   <th className=" border-gray-500 px-4 py-2">Dentist</th>
                   <th className=" border-gray-500 px-4 py-2 w-24">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {stok.map((item, index) => (
+                {booking.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
                       {item.id_user}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.user.nama}
+                      {item.user?.nama}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.user.no_rekam_medis}
+                      {item.user?.no_rekam_medis}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.date}
+                      {item.jadwal.jadwal}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.tanggal_pemesanan}
+                      {item.jadwal.jam}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.dokter.nama}
+                      {item.dokter?.nama}
                     </td>
 
                     <td className=" border-gray-500 text-center py-2">

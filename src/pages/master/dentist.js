@@ -3,9 +3,11 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TimeButtonList from './timelist';
 
 function Masterbarangjadi() {
   const [stok, setStok] = useState([]);
+  const [timeAvailability, setTimeAvailability] = useState({});
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -23,7 +25,7 @@ function Masterbarangjadi() {
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
   };
-  
+
   const handleAddBarang = () => {
     const newBarang = {
       kategori: kategoriBarang,
@@ -109,6 +111,10 @@ function Masterbarangjadi() {
       try {
         const response = await axios.get("/dokter/");
         setStok(response.data.data);
+
+        // Fetch time availability for each dentist
+        const availabilityResponse = await axios.get("/jadwal/all");
+        setTimeAvailability(availabilityResponse.data);
       } catch (err) {
         console.log(err);
       }
@@ -123,6 +129,10 @@ function Masterbarangjadi() {
 
   const handleCloseImagePopup = () => {
     setShowImagePopup(false);
+  };
+
+  const handleTimeSelect = (time) => {
+    console.log("Selected time:", time);
   };
 
   return (
@@ -226,24 +236,24 @@ function Masterbarangjadi() {
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
+                  type="number"
+                  value={id}
+                  onChange={(e) => setIDDentist(e.target.value)}
+                  placeholder="ID Dentist"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                <input
                   type=""
-                  value={fotoBarang}
+                  value={namadentist}
                   onChange={(e) => setNamaDentist(e.target.value)}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
                   type=""
-                  value={jumlahBarang}
+                  value={spesialist}
                   onChange={(e) => setSpesialist(e.target.value)}
-                  placeholder="No Hp"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
-                <input
-                  type=""
-                  value={namadentist}
-                  onChange={(e) => setSpesialist(e.target.value)}
-                  placeholder="Email"
+                  placeholder="Spesialist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
 
@@ -265,6 +275,7 @@ function Masterbarangjadi() {
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
                   <th className="border-gray-500 px-4 py-2">Email</th>
+                  <th className="border-gray-500 px-4 py-2">Time Selection</th> {/* New column header */}
                   <th className="border-gray-500 px-4 py-2">Edit</th>
                   <th className="border-gray-500 px-4 py-2">Delete</th>
                 </tr>
@@ -283,6 +294,12 @@ function Masterbarangjadi() {
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.email}
+                    </td>
+                    <td className="border-gray-500 text-center py-2">
+                      <TimeButtonList 
+                        onTimeSelect={handleTimeSelect} 
+                        availability={timeAvailability[item.id] || {}} 
+                      /> {/* New column content */}
                     </td>
                     <td className="border-gray-500 text-center py-2">
                       <button
