@@ -22,25 +22,16 @@ const Dashboard = () => {
 
     // Tambahkan data dummy sesuai kebutuhan
   ]);
-  const [bjadi, setBjadi] = useState([]);
-  const [bmentah, setBmentah] = useState([]);
-  const [stat, setStat] = useState([]);
-  const [merge, setMerge] = useState([]);
-  const [showImagePopup, setShowImagePopup] = useState(false);
-  const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [kategoriBarang, setKategoriBarang] = useState("");
   const [nama, setnama] = useState("");
   const [no_hp, setNohp] = useState("");
-  const [fotoBarang, setFotoBarang] = useState("");
-  const [listBarang, setListBarang] = useState([]);
-  const [kodebarang, setKodebarang] = useState("");
-  const [spesialist, setSpesialist] = useState("");
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [password, setpassword] = useState("");
+  const [manualUserCount, setManualUserCount] = useState(0);
+  const [digitalUserCount, setDigitalUserCount] = useState(0);
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
@@ -77,7 +68,7 @@ const Dashboard = () => {
 
   const handleEditBarang = async (id) => {
     try {
-      const response = await axios.get(`/admin/${id}`);
+      const response = await axios.get(`/admin/2/${id}`);
       const barang = response.data.data[0];
 
       setEmail(barang.email);
@@ -120,15 +111,19 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("/admin/");
-        setStok(response.data.data);
-      } catch (err) {
-        console.log(err);
+        const responseUser = await axios.get("/user/");
+        const responseAdmin = await axios.get("/admin/");
+        setManualUserCount(responseUser.data.data.length);
+        setDigitalUserCount(responseAdmin.data.data.length);
+        setStok(responseAdmin.data.data);
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
       }
     };
-    fetch();
+
+    fetchData();
   }, []);
 
   return (
@@ -155,25 +150,15 @@ const Dashboard = () => {
         <div className="ml-16 mt-8 flex flex-wrap">
           <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
             <h1 className="text-lg font-semibold text-white mb-4">
-              ManualUser
+              User
             </h1>
-            <h1 className="text-5xl font-bold text-white">190</h1>
+            <h1 className="text-5xl font-bold text-white">{manualUserCount}</h1>
           </div>
           <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
             <h1 className="text-lg font-semibold text-white mb-4">
-              ModernUser
+              Admin
             </h1>
-            <h1 className="text-5xl font-bold text-white">45</h1>
-          </div>
-          <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
-            <h1 className="text-lg font-semibold text-white mb-4">
-              DigitalUser
-            </h1>
-            <h1 className="text-5xl font-bold text-white">59</h1>
-          </div>
-          <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
-            <h1 className="text-lg font-semibold text-white mb-4">Admin</h1>
-            <h1 className="text-5xl font-bold text-white">12</h1>
+            <h1 className="text-5xl font-bold text-white">{digitalUserCount}</h1>
           </div>
         </div>
 

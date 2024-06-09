@@ -3,7 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import TimeButtonList from './timelist';
+import TimeButtonList from "./timelist";
 
 function Masterbarangjadi() {
   const [stok, setStok] = useState([]);
@@ -41,21 +41,23 @@ function Masterbarangjadi() {
       updatedList[editingIndex] = newBarang;
       setListBarang(updatedList);
       setEditingIndex(null);
-      axios.put(`/dokter/${id}`, newBarang)
-        .then(response => {
-          console.log('Data berhasil diupdate:', response.data);
+      axios
+        .put(`/dokter/${id}`, newBarang)
+        .then((response) => {
+          console.log("Data berhasil diupdate:", response.data);
         })
-        .catch(error => {
-          console.error('Gagal mengupdate data:', error);
+        .catch((error) => {
+          console.error("Gagal mengupdate data:", error);
         });
     } else {
       setListBarang((prevList) => [...prevList, newBarang]);
-      axios.post('/master/', newBarang)
-        .then(response => {
-          console.log('Data berhasil ditambahkan:', response.data);
+      axios
+        .post("/master/", newBarang)
+        .then((response) => {
+          console.log("Data berhasil ditambahkan:", response.data);
         })
-        .catch(error => {
-          console.error('Gagal menambahkan data:', error);
+        .catch((error) => {
+          console.error("Gagal menambahkan data:", error);
         });
     }
 
@@ -83,13 +85,14 @@ function Masterbarangjadi() {
 
   const handleDeleteBarang = (index) => {
     const barang = stok[index];
-    axios.delete(`/dokter/${barang.id}`)
-      .then(response => {
-        console.log('Data berhasil dihapus:', response.data);
+    axios
+      .delete(`/dokter/${barang.id}`)
+      .then((response) => {
+        console.log("Data berhasil dihapus:", response.data);
         setStok(stok.filter((_, i) => i !== index));
       })
-      .catch(error => {
-        console.error('Gagal menghapus data:', error);
+      .catch((error) => {
+        console.error("Gagal menghapus data:", error);
       });
   };
 
@@ -272,10 +275,14 @@ function Masterbarangjadi() {
               <thead className="bg-second text-gray-500">
                 <tr>
                   <th className="border-gray-500 px-4 py-2 w-32">ID Dentist</th>
+                  <th className="border-gray-500 px-4 py-2 w-32">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
                   <th className="border-gray-500 px-4 py-2">Email</th>
-                  <th className="border-gray-500 px-4 py-2">Time Selection</th> {/* New column header */}
+                  <th className="border-gray-500 px-4 py-2">
+                    Time Selection
+                  </th>{" "}
+                  {/* New column header */}
                   <th className="border-gray-500 px-4 py-2">Edit</th>
                   <th className="border-gray-500 px-4 py-2">Delete</th>
                 </tr>
@@ -284,7 +291,14 @@ function Masterbarangjadi() {
                 {stok.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
-                      {item.id}
+                      DG00{item.id}
+                    </td>
+                    <td className="text-center border-gray-500 px-4 py-2">
+                      <img
+                        className="w-80 h-60 p-8 rounded-t-lg"
+                        src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
+                        alt="product"
+                      />
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.nama}
@@ -296,10 +310,12 @@ function Masterbarangjadi() {
                       {item.email}
                     </td>
                     <td className="border-gray-500 text-center py-2">
-                      <TimeButtonList 
-                        onTimeSelect={handleTimeSelect} 
-                        availability={timeAvailability[item.id] || {}} 
-                      /> {/* New column content */}
+                      <TimeButtonList
+                        id={item.id}
+                        onTimeSelect={handleTimeSelect}
+                        availability={timeAvailability[item.id] || {}}
+                      />{" "}
+                      {/* New column content */}
                     </td>
                     <td className="border-gray-500 text-center py-2">
                       <button

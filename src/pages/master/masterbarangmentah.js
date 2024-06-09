@@ -168,20 +168,6 @@ function MasterBarangMentah() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                <div className="flex">
-                  <select
-                    value={kategoriBarang}
-                    onChange={(e) => setKategoriBarang(e.target.value)}
-                    className="border border-gray-400 p-2 rounded mb-2 w-full"
-                  >
-                    <option value="" disabled>
-                      Pilih Kategori Barang
-                    </option>
-                    <option value="kategori1">Kategori 1</option>
-                    <option value="kategori2">Kategori 2</option>
-                    <option value="kategori3">Kategori 3</option>
-                  </select>
-                </div>
                 <input
                   type="text"
                   value={judul}
@@ -193,7 +179,7 @@ function MasterBarangMentah() {
                   type="text"
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
-                  placeholder="Sub Title"
+                  placeholder="Subtitle"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input
@@ -233,6 +219,7 @@ function MasterBarangMentah() {
                   <th className="border-gray-500 px-4 py-2">Sub Title</th>
                   <th className="border-gray-500 px-4 py-2">Deskripsi 1</th>
                   <th className="border-gray-500 px-4 py-2">Deskripsi 2</th>
+                  <th className="border-gray-500 px-4 py-2">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Actions</th>
                 </tr>
               </thead>
@@ -243,6 +230,13 @@ function MasterBarangMentah() {
                     <td className="border text-center border-gray-500 px-4 py-2">{item.subtitle}</td>
                     <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_1}</td>
                     <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_2}</td>
+                    <td className="border text-center border-gray-500 px-4 py-2">
+                    <img
+                        className="w-80 h-60 p-8 rounded-t-lg"
+                        src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
+                        alt="product"
+                      />
+                    </td>
                     <td className="border text-center border-gray-500 px-4 py-2">
                       <button
                         onClick={() => handleEditBarang(index)}

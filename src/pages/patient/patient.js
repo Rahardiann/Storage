@@ -35,7 +35,7 @@ function Stokbarangjadi() {
     };
 
     try {
-      const response = await axios.post("/user/register", newBarang);
+      const response = await axios.post("/user/registeruser", newBarang);
       console.log(response.data.data);
       setStok((prevStok) => [...prevStok, response.data]);
     } catch (error) {
@@ -97,6 +97,31 @@ function Stokbarangjadi() {
     }
   };
 
+  function hitungUsia(tglLahir) {
+    // Jika tanggal lahir kosong, return string kosong
+    if (!tglLahir) return "";
+  
+    const hariIni = new Date(); // Tanggal hari ini
+    const lahir = new Date(tglLahir); // Tanggal lahir pasien
+  
+    // Pastikan bahwa input tanggal lahir adalah valid
+    if (isNaN(lahir.getTime())) return "";
+  
+    const tahunLahir = lahir.getFullYear();
+    const bulanLahir = lahir.getMonth();
+    const tanggalLahir = lahir.getDate();
+  
+    let usia = hariIni.getFullYear() - tahunLahir; // Hitung selisih tahun
+    // Periksa apakah ulang tahun sudah lewat atau belum
+    if (
+      hariIni.getMonth() < bulanLahir ||
+      (hariIni.getMonth() === bulanLahir && hariIni.getDate() < tanggalLahir)
+    ) {
+      usia--; // Kurangi satu tahun jika belum lewat ulang tahun
+    }
+    return usia;
+  }
+
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -111,7 +136,7 @@ function Stokbarangjadi() {
 
   const handleEditBarang = async (id) => {
     try {
-      const response = await axios.get(`/user/${id}`);
+      const response = await axios.get(`/user/2/${id}`);
       const barang = response.data.data[0];
 
       setemail(barang.email);
@@ -188,13 +213,13 @@ function Stokbarangjadi() {
                   placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
+                {/* <input
                   type="text"
                   value={password}
                   onChange={(e) => setpassword(e.target.value)}
                   placeholder="Password"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                /> */}
                 <input
                   type="number"
                   value={nohp}
@@ -357,7 +382,7 @@ function Stokbarangjadi() {
                       {item.no_rekam_medis}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
-                      Usia
+                      {hitungUsia(item.tanggal_lahir)}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       {item.alamat}
