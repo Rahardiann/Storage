@@ -212,32 +212,40 @@ function MasterBarangMentah() {
           )}
 
           <div className="overflow-x-auto">
-            <table className="table-auto border-collapse border-gray-500 w-full">
-              <thead className="bg-second text-white">
+            <table className="table-auto border-collapse bg-second border-gray-500 w-full">
+              <thead className="bg-second text-gray-500">
                 <tr>
                   <th className="border-gray-500 px-4 py-2">Title</th>
                   <th className="border-gray-500 px-4 py-2">Sub Title</th>
                   <th className="border-gray-500 px-4 py-2">Deskripsi 1</th>
                   <th className="border-gray-500 px-4 py-2">Deskripsi 2</th>
-                  <th className="border-gray-500 px-4 py-2">Picture</th>
+                  <th className="border-gray-500 px-4 py-2 w-96">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {stok.map((item, index) => (
                   <tr key={index}>
-                    <td className="border text-center border-gray-500 px-4 py-2">{item.judul}</td>
-                    <td className="border text-center border-gray-500 px-4 py-2">{item.subtitle}</td>
-                    <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_1}</td>
-                    <td className="border text-center border-gray-500 px-4 py-2">{item.deskripsi_2}</td>
-                    <td className="border text-center border-gray-500 px-4 py-2">
-                    <img
-                        className="w-80 h-60 p-8 rounded-t-lg"
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.judul}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.subtitle}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.deskripsi_1}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      {item.deskripsi_2}
+                    </td>
+                    <td className=" text-center border-gray-500 px-4 py-2">
+                      <img
+                        className="w-80 h-52 p-8 rounded-t-lg"
                         src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
                         alt="product"
                       />
                     </td>
-                    <td className="border text-center border-gray-500 px-4 py-2">
+                    <td className=" text-center border-gray-500 px-4 py-2">
                       <button
                         onClick={() => handleEditBarang(index)}
                         className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"

@@ -144,7 +144,7 @@ function Gallery() {
       <div className="p-8 w-screen overflow-auto">
         <div>
           <h1 className="font-sans text-2xl text-third font-bold mb-20">
-            Dentist
+            Galerry
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -277,8 +277,8 @@ function Gallery() {
                   <th className="border-gray-500 px-4 py-2 ">Picture</th>
 
                   {/* New column header */}
-                  <th className="border-gray-500 px-4 py-2">Edit</th>
-                  <th className="border-gray-500 px-4 py-2">Delete</th>
+                  <th className="border-gray-500 px-4 py-2 ">Action</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -287,26 +287,24 @@ function Gallery() {
                     <td className="border-gray-500 px-4 py-2 w-96">
                       <div className="flex justify-center items-center">
                         <img
-                          className="max-w-full h-auto p-4 rounded-t-lg"
+                          className="w-80 h-52 p-4 rounded-t-lg"
                           src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
                           alt="product"
                         />
                       </div>
                     </td>
-                    <td className="border-gray-500 text-center py-2">
+                    <td className=" text-center border-gray-500 px-4 py-2">
                       <button
                         onClick={() => handleEditBarang(index)}
-                        className="text-blue-500"
+                        className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
                       >
-                        <EditIcon />
+                        Edit
                       </button>
-                    </td>
-                    <td className="border-gray-500 text-center py-2">
                       <button
                         onClick={() => handleDeleteBarang(index)}
-                        className="text-red-500"
+                        className="bg-red-500 text-white font-bold py-1 px-2 rounded"
                       >
-                        <DeleteIcon />
+                        Delete
                       </button>
                     </td>
                   </tr>

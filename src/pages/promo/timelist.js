@@ -79,8 +79,8 @@ const TimeButtonList = ({ id }) => {
           onClick={() => handleTimeClick(time)}
           className={`m-1 p-2 rounded ${
             selectedTimes.includes(time)
-              ? "bg-blue-500 text-white hover:bg-blue-700"
-              : "bg-gray-300 hover:bg-gray-400 cursor-pointer"
+              ? "bg-main text-white hover:bg-main"
+              : "bg-second border border-main hover:bg-main cursor-pointer"
           }`}
         >
           {time}
@@ -88,7 +88,7 @@ const TimeButtonList = ({ id }) => {
       ))}
       <button
         onClick={handleSave}
-        className="bg-green-500 text-white p-2 mt-2 rounded"
+        className="bg-green-500 text-white p-2 m-2 rounded"
       >
         Save
       </button>

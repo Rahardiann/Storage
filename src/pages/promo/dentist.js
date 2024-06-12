@@ -275,7 +275,7 @@ function Masterbarangjadi() {
               <thead className="bg-second text-gray-500">
                 <tr>
                   <th className="border-gray-500 px-4 py-2 w-32">ID Dentist</th>
-                  <th className="border-gray-500 px-4 py-2 w-32">Picture</th>
+                  <th className="border-gray-500 px-4 py-2 w-96">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
                   <th className="border-gray-500 px-4 py-2">Email</th>
@@ -293,9 +293,11 @@ function Masterbarangjadi() {
                     <td className="text-center border-gray-500 px-2 py-2">
                       DG00{item.id}
                     </td>
-                    <td className="text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2 flex justify-center items-center">
+                      {" "}
+                      {/* Pusatkan gambar */}
                       <img
-                        className="w-80 h-60 p-8 rounded-t-lg"
+                        className="w-20 h-20 rounded-full object-cover" // Kelas Tailwind untuk gambar lingkaran
                         src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
                         alt="product"
                       />
@@ -320,17 +322,17 @@ function Masterbarangjadi() {
                     <td className="border-gray-500 text-center py-2">
                       <button
                         onClick={() => handleEditBarang(index)}
-                        className="text-blue-500"
+                        className="bg-green-500 text-white font-bold py-1 px-2 rounded mr-2"
                       >
-                        <EditIcon />
+                        Edit
                       </button>
                     </td>
                     <td className="border-gray-500 text-center py-2">
                       <button
                         onClick={() => handleDeleteBarang(index)}
-                        className="text-red-500"
+                        className="bg-red-500 text-white font-bold py-1 px-2 rounded"
                       >
-                        <DeleteIcon />
+                        Delete
                       </button>
                     </td>
                   </tr>
