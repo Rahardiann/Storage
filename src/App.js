@@ -4,9 +4,10 @@ import { Dashboard, LoginForm } from './pages'; // import halaman-halaman yang d
 import Patient from './pages/patient/patient';
 import Stokbarangmentah from './pages/booking/barangmentah';
 import Riwayat from './pages/jadwal/riwayat';
-import Kategori from './pages/master/kategori';
-import Masterbarangjadi from './pages/master/dentist';
-import MasterBarangMentah from './pages/master/masterbarangmentah';
+import Kategori from './pages/promo/kategori';
+import Masterbarangjadi from './pages/promo/dentist';
+import MasterBarangMentah from './pages/promo/masterbarangmentah';
+import Gallery from './pages/galery/galery';
 
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/master/kategoriBarang" element={<Kategori/>} />
         <Route path="/master/masterBarangjadi" element={<Masterbarangjadi/>} />
         <Route path="/master/masterbarangmentah" element={<MasterBarangMentah/>} />
+        <Route path="/master/galery" element={<Gallery/>} />
       </Routes>
     </Router>
   );

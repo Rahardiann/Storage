@@ -10,6 +10,7 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaAddressBook,
+  FaImage,
 } from "react-icons/fa";
 import Logosidebar from "../../assets/logo.png";
 import { FaPerson } from "react-icons/fa6";
@@ -104,6 +105,18 @@ const Sidebar = () => {
           >
             <FaCubes className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
             {!minimized && <span>Promo</span>}
+          </Link>
+        </li>
+        <li className="my-10">
+          <Link
+            to="/Master/galery"
+            className={`flex items-center text-main text-base sidebar-item ${
+              minimized ? "pl-2" : "pl-4"
+            } hover:text-gray-400`}
+            onClick={() => setMinimized(window.innerWidth <= 768)}
+          >
+            <FaImage className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Galery</span>}
           </Link>
         </li>
         {/* <li className="my-10">
