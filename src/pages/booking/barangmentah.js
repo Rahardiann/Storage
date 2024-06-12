@@ -79,6 +79,12 @@ function Stokbarangmentah() {
     setShowImagePopup(false);
   };
 
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]; // Hanya ambil bagian tanggalnya saja
+  }
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -218,7 +224,7 @@ function Stokbarangmentah() {
                       {item.user?.no_rekam_medis}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.jadwal.jadwal}
+                      {formatDate(item.jadwal.jadwal)}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.jadwal.jam}
