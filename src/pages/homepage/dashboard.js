@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [nama, setnama] = useState("");
   const [no_hp, setNohp] = useState("");
+  const [gender, setGender] = useState("");
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
@@ -42,7 +43,8 @@ const Dashboard = () => {
       nama: nama,
       no_hp: no_hp,
       email: email,
-      id: id,
+      password: password,
+      gender: gender,
     };
 
     try {
