@@ -19,8 +19,10 @@ function Masterbarangjadi() {
   const [kodebarang, setKodebarang] = useState("");
   const [spesialist, setSpesialist] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
+  const [ShowFormjadwal, setShowFormjadwal] = useState(false);
   const [id, setIDDentist] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
+  
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
@@ -61,7 +63,56 @@ function Masterbarangjadi() {
         });
     }
 
+    
+
     setShowForm(false);
+    // Reset form input
+    setIDDentist("");
+    setKategoriBarang("");
+    setNamaDentist("");
+    setJumlahBarang("");
+    setFotoBarang("");
+    setSpesialist("");
+  };
+
+  const handleAddjadwal = () => {
+    const newBarang = {
+      kategori: kategoriBarang,
+      nama: namadentist,
+      no_hp: jumlahBarang,
+      email: fotoBarang,
+      spesialist: spesialist,
+      id: id,
+    };
+
+    if (editingIndex !== null) {
+      const updatedList = [...listBarang];
+      updatedList[editingIndex] = newBarang;
+      setListBarang(updatedList);
+      setEditingIndex(null);
+      axios
+        .put(`/dokter/${id}`, newBarang)
+        .then((response) => {
+          console.log("Data berhasil diupdate:", response.data);
+        })
+        .catch((error) => {
+          console.error("Gagal mengupdate data:", error);
+        });
+    } else {
+      setListBarang((prevList) => [...prevList, newBarang]);
+      axios
+        .post("/master/", newBarang)
+        .then((response) => {
+          console.log("Data berhasil ditambahkan:", response.data);
+        })
+        .catch((error) => {
+          console.error("Gagal menambahkan data:", error);
+        });
+    }
+
+    
+
+    setShowFormjadwal(false);
     // Reset form input
     setIDDentist("");
     setKategoriBarang("");
@@ -147,12 +198,18 @@ function Masterbarangjadi() {
             Dentist
           </h1>
           <div className="flex justify-between mb-4">
-            <button
+            {/* <button
               onClick={() => setShowForm(true)}
-              className="bg-main hover:bg-blue-200 text-white font-bold rounded-3xl mr-4 w-40 h-10"
+              className="bg-main hover:bg-second text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
-              ADD
+              Add Dentist
             </button>
+            <button
+              onClick={() => setShowFormjadwal(true)}
+              className="bg-main hover:bg-second text-white font-bold rounded-3xl  w-40 h-10"
+            >
+              Add Jadwal
+            </button> */}
             <input
               type="text"
               placeholder="Cari barang..."
@@ -184,9 +241,9 @@ function Masterbarangjadi() {
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
-                  type="number"
-                  value={id}
-                  onChange={(e) => setIDDentist(e.target.value)}
+                  type="file"
+                  value={kategoriBarang}
+                  onChange={(e) => setKategoriBarang(e.target.value)}
                   placeholder="ID Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
@@ -199,11 +256,12 @@ function Masterbarangjadi() {
                 />
                 <input
                   type=""
-                  value={spesialist}
-                  onChange={(e) => setSpesialist(e.target.value)}
+                  value={jumlahBarang}
+                  onChange={(e) => setJumlahBarang(e.target.value)}
                   placeholder="Spesialist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
+                
 
                 <button
                   onClick={handleAddBarang}
@@ -239,7 +297,7 @@ function Masterbarangjadi() {
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
-                  type="number"
+                  type="file"
                   value={id}
                   onChange={(e) => setIDDentist(e.target.value)}
                   placeholder="ID Dentist"
@@ -253,10 +311,17 @@ function Masterbarangjadi() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
-                  type=""
-                  value={spesialist}
-                  onChange={(e) => setSpesialist(e.target.value)}
-                  placeholder="Spesialist"
+                  type="number"
+                  value={jumlahBarang}
+                  onChange={(e) => setJumlahBarang(e.target.value)}
+                  placeholder="NO HP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                <input
+                  type="email"
+                  value={fotoBarang}
+                  onChange={(e) => setFotoBarang(e.target.value)}
+                  placeholder="email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
 
@@ -264,11 +329,63 @@ function Masterbarangjadi() {
                   onClick={handleAddBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                 Tambah dentist
                 </button>
               </div>
             </div>
           )}
+
+
+        
+        {ShowFormjadwal && (
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
+              <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
+                Add Jadwal
+                <button
+                  onClick={() => setShowFormjadwal(false)}
+                  className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                
+                <input
+                  type="date"
+                  value={namadentist}
+                  onChange={(e) => setNamaDentist(e.target.value)}
+                  placeholder="Nama Dentist"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                <input
+                  type="number"
+                  value={jumlahBarang}
+                  onChange={(e) => setJumlahBarang(e.target.value)}
+                  placeholder="NO HP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+
+                <button
+                  onClick={handleAddBarang}
+                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                >
+                 Tambah dentist
+                </button>
+              </div>
+            </div>
+          )}
+
 
           <div className="overflow-x-auto">
             <table className="table-auto border-gray-500 w-full">
@@ -278,7 +395,7 @@ function Masterbarangjadi() {
                   <th className="border-gray-500 px-4 py-2 w-96">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
-                  <th className="border-gray-500 px-4 py-2">Email</th>
+                  {/* <th className="border-gray-500 px-4 py-2">Email</th> */}
                   <th className="border-gray-500 px-4 py-2">
                     Time Selection
                   </th>{" "}
@@ -308,9 +425,9 @@ function Masterbarangjadi() {
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.no_hp}
                     </td>
-                    <td className="text-center border-gray-500 px-4 py-2">
+                    {/* <td className="text-center border-gray-500 px-4 py-2">
                       {item.email}
-                    </td>
+                    </td> */}
                     <td className="border-gray-500 text-center py-2">
                       <TimeButtonList
                         id={item.id}

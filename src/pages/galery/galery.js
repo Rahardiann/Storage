@@ -28,7 +28,7 @@ function Gallery() {
 
   const handleAddBarang = () => {
     const newBarang = {
-      kategori: kategoriBarang,
+      gambar: kategoriBarang,
       nama: namadentist,
       no_hp: jumlahBarang,
       email: fotoBarang,
@@ -183,27 +183,15 @@ function Gallery() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                
                 <input
-                  type="number"
-                  value={id}
-                  onChange={(e) => setIDDentist(e.target.value)}
-                  placeholder="ID Dentist"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
-                <input
-                  type=""
-                  value={namadentist}
-                  onChange={(e) => setNamaDentist(e.target.value)}
+                  type="file"
+                  value={kategoriBarang}
+                  onChange={(e) => setKategoriBarang(e.target.value)}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                <input
-                  type=""
-                  value={spesialist}
-                  onChange={(e) => setSpesialist(e.target.value)}
-                  placeholder="Spesialist"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
+                
 
                 <button
                   onClick={handleAddBarang}
@@ -238,27 +226,15 @@ function Gallery() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                
                 <input
-                  type="number"
-                  value={id}
-                  onChange={(e) => setIDDentist(e.target.value)}
-                  placeholder="ID Dentist"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
-                <input
-                  type=""
-                  value={namadentist}
-                  onChange={(e) => setNamaDentist(e.target.value)}
+                  type="file"
+                  value={kategoriBarang}
+                  onChange={(e) => setKategoriBarang(e.target.value)}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                <input
-                  type=""
-                  value={spesialist}
-                  onChange={(e) => setSpesialist(e.target.value)}
-                  placeholder="Spesialist"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
+               
 
                 <button
                   onClick={handleAddBarang}
