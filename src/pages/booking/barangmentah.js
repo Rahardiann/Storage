@@ -224,10 +224,10 @@ function Stokbarangmentah() {
                       {item.user?.no_rekam_medis}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {formatDate(item.jadwal.jadwal)}
+                      {item.tanggal_pemesanan}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
-                      {item.jadwal.jam}
+                      {item.jadwal}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.dokter?.nama}

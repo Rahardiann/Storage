@@ -27,22 +27,22 @@ function Gallery() {
   };
 
   const handleAddBarang = () => {
-    const newBarang = {
-      gambar: kategoriBarang,
-      nama: namadentist,
-      no_hp: jumlahBarang,
-      email: fotoBarang,
-      spesialist: spesialist,
-      id: id,
-    };
-
+    // Buat form data
+    const formData = new FormData();
+    formData.append('gambar', kategoriBarang);
+  
+    // Jika sedang mengedit, perbarui data yang ada
     if (editingIndex !== null) {
       const updatedList = [...listBarang];
+      const newBarang = {
+        gambar: kategoriBarang,
+      };
       updatedList[editingIndex] = newBarang;
       setListBarang(updatedList);
       setEditingIndex(null);
+  
       axios
-        .put(`/dokter/${id}`, newBarang)
+        .put(`/dokter/${id}`, formData)
         .then((response) => {
           console.log("Data berhasil diupdate:", response.data);
         })
@@ -50,9 +50,11 @@ function Gallery() {
           console.error("Gagal mengupdate data:", error);
         });
     } else {
-      setListBarang((prevList) => [...prevList, newBarang]);
+      // Jika menambahkan data baru
+      setListBarang((prevList) => [...prevList, { gambar: kategoriBarang }]);
+  
       axios
-        .post("/master/", newBarang)
+        .post("/gallery/", formData)
         .then((response) => {
           console.log("Data berhasil ditambahkan:", response.data);
         })
@@ -60,9 +62,9 @@ function Gallery() {
           console.error("Gagal menambahkan data:", error);
         });
     }
-
+  
+    // Reset form dan sembunyikan form
     setShowForm(false);
-    // Reset form input
     setIDDentist("");
     setKategoriBarang("");
     setNamaDentist("");
@@ -70,6 +72,8 @@ function Gallery() {
     setFotoBarang("");
     setSpesialist("");
   };
+  
+  
 
   const handleEditBarang = (index) => {
     const barang = stok[index];
@@ -112,7 +116,7 @@ function Gallery() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/dokter/");
+        const response = await axios.get("/gallery/");
         setStok(response.data.data);
 
         // Fetch time availability for each dentist
