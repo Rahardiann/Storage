@@ -43,8 +43,8 @@ const Dashboard = () => {
       nama: nama,
       no_hp: no_hp,
       email: email,
-      password: password,
-      gender: gender,
+      // password: password,
+      // gender: gender,
     };
 
     try {
