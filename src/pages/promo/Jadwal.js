@@ -22,11 +22,16 @@ function Jadwal() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [jadwalResponse, dokterResponse] = await Promise.all([
+        const jadwalResponse = await Promise.all([
           axios.get("/jadwal/all"),
         ]);
-        setStok(jadwalResponse.data.data);
-        setDokterOptions(jadwalResponse.data.data || []);
+        const dokterResponse = await Promise.all([
+          axios.get("/dokter/"),
+        ]);
+        setStok(jadwalResponse[0].data.data);
+        // console.log(jadwalResponse[0].data.data)
+        setDokterOptions(dokterResponse[0].data.data || []);
+        // console.log(dokterResponse)
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -221,9 +226,9 @@ function Jadwal() {
                     className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                   >
                     <option value="">Pilih Dokter</option>
-                    {dokterOptions.map((jadwal) => (
-                      <option key={jadwal.id} value={jadwal.id}>
-                        {jadwal.id_dokter}
+                    {dokterOptions.map((dokter) => (
+                      <option key={dokter.id} value={dokter.id}>
+                        {dokter.nama}
                       </option>
                     ))}
                   </select>
@@ -251,7 +256,7 @@ function Jadwal() {
               <table className="table-auto border-gray-500 w-full">
                 <thead className="bg-second items-center text-gray-500">
                   <tr>
-                    <th className="border-gray-500 px-4 py-2">Id dokter</th>
+                    <th className="border-gray-500 px-4 py-2">ID dokter</th>
                     <th className="border-gray-500 px-4 py-2">Date</th>
 
                     {/* New column header */}
@@ -264,7 +269,6 @@ function Jadwal() {
                       <tr key={index} className="bg-second">
                         <td className="text-center border-gray-500 px-4 py-2 w-96">
                           DG00{item.id_dokter}{" "}
-                          {/* Assuming id_dokter is available in item */}
                         </td>
                         <td className="text-center border-gray-500 px-4 py-2 w-96">
                           {item.jadwal}
