@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
-import PopupImage from "../../assets/login.png";
 
 function MasterBarangMentah() {
   const [stok, setStok] = useState([]);
@@ -11,41 +10,50 @@ function MasterBarangMentah() {
   const [kategoriBarang, setKategoriBarang] = useState("");
   const [judul, setJudul] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [gambar, setGambar] = useState("");
+  const [gambar, setGambar] = useState(null); // Changed to null for file input
   const [deskripsi_1, setDeskripsi1] = useState("");
   const [deskripsi_2, setDeskripsi2] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [id, setId] = useState(null);
 
   const handleAddBarang = () => {
-    const newBarang = {
-      kategori: kategoriBarang,
-      judul: judul,
-      subtitle: subtitle,
-      gambar: gambar,
-      deskripsi_1: deskripsi_1,
-      deskripsi_2: deskripsi_2,
-    };
+    const formData = new FormData();
+    formData.append("kategori", kategoriBarang);
+    formData.append("judul", judul);
+    formData.append("subtitle", subtitle);
+    formData.append("gambar", gambar); // Append the file
+    formData.append("deskripsi_1", deskripsi_1);
+    formData.append("deskripsi_2", deskripsi_2);
 
     if (editingIndex !== null) {
-      const updatedList = [...stok];
-      updatedList[editingIndex] = newBarang;
-      setStok(updatedList);
-      axios.put(`/promo/${id}`, newBarang)
-        .then(response => {
-          console.log('Data berhasil diupdate:', response.data);
+      axios
+        .put(`/promo/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .catch(error => {
-          console.error('Gagal mengupdate data:', error);
+        .then((response) => {
+          const updatedList = [...stok];
+          updatedList[editingIndex] = response.data;
+          setStok(updatedList);
+          console.log("Data berhasil diupdate:", response.data);
+        })
+        .catch((error) => {
+          console.error("Gagal mengupdate data:", error);
         });
     } else {
-      axios.post('/promo/', newBarang)
-        .then(response => {
-          console.log('Data berhasil ditambahkan:', response.data);
-          setStok(prevList => [...prevList, response.data]);
+      axios
+        .post("/promo/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .catch(error => {
-          console.error('Gagal menambahkan data:', error);
+        .then((response) => {
+          console.log("Data berhasil ditambahkan:", response.data);
+          setStok((prevList) => [...prevList, response.data]);
+        })
+        .catch((error) => {
+          console.error("Gagal menambahkan data:", error);
         });
     }
 
@@ -59,7 +67,7 @@ function MasterBarangMentah() {
     setKategoriBarang(barang.kategori);
     setJudul(barang.judul);
     setSubtitle(barang.subtitle);
-    setGambar(barang.gambar);
+    setGambar(null); // Reset the file input
     setDeskripsi1(barang.deskripsi_1);
     setDeskripsi2(barang.deskripsi_2);
     setEditingIndex(index);
@@ -68,34 +76,27 @@ function MasterBarangMentah() {
 
   const handleDeleteBarang = (index) => {
     const barang = stok[index];
-    axios.delete(`/promo/${barang.id}`)
-      .then(response => {
-        console.log('Data berhasil dihapus:', response.data);
+    axios
+      .delete(`/promo/${barang.id}`)
+      .then((response) => {
+        console.log("Data berhasil dihapus:", response.data);
         setStok(stok.filter((_, i) => i !== index));
       })
-      .catch(error => {
-        console.error('Gagal menghapus data:', error);
+      .catch((error) => {
+        console.error("Gagal menghapus data:", error);
       });
   };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setGambar(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    setGambar(file); // Directly set the file
   };
 
   const resetForm = () => {
     setKategoriBarang("");
     setJudul("");
     setSubtitle("");
-    setGambar("");
+    setGambar(null); // Reset to null
     setDeskripsi1("");
     setDeskripsi2("");
     setEditingIndex(null);
@@ -226,26 +227,26 @@ function MasterBarangMentah() {
               <tbody>
                 {stok.map((item, index) => (
                   <tr key={index}>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       {item.judul}
                     </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       {item.subtitle}
                     </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       {item.deskripsi_1}
                     </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       {item.deskripsi_2}
                     </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       <img
                         className="w-80 h-52 p-8 rounded-t-lg"
                         src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
                         alt="product"
                       />
                     </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
+                    <td className="text-center border-gray-500 px-4 py-2">
                       <button
                         onClick={() => handleEditBarang(index)}
                         className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"

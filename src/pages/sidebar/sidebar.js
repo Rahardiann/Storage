@@ -11,9 +11,11 @@ import {
   FaChevronUp,
   FaAddressBook,
   FaImage,
+  FaTimes,
+  FaClock,
 } from "react-icons/fa";
 import Logosidebar from "../../assets/logo.png";
-import { FaPerson } from "react-icons/fa6";
+import { FaPerson, FaTimeline } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [minimized, setMinimized] = useState(window.innerWidth <= 768);
@@ -97,6 +99,18 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
+            to="/jadwal"
+            className={`flex items-center text-main text-base sidebar-item ${
+              minimized ? "pl-2" : "pl-4"
+            } hover:text-gray-400`}
+            onClick={() => setMinimized(window.innerWidth <= 768)}
+          >
+            <FaClock className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
+            {!minimized && <span>Jadwal</span>}
+          </Link>
+        </li>
+        <li className="my-10">
+          <Link
             to="/Master/MasterBarangmentah"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
@@ -119,6 +133,7 @@ const Sidebar = () => {
             {!minimized && <span>Galery</span>}
           </Link>
         </li>
+
         {/* <li className="my-10">
           <Link
             to="/riwayat"

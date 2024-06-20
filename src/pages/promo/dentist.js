@@ -54,7 +54,7 @@ function Masterbarangjadi() {
     } else {
       setListBarang((prevList) => [...prevList, newBarang]);
       axios
-        .post("/master/", newBarang)
+        .post("/dokter/", newBarang)
         .then((response) => {
           console.log("Data berhasil ditambahkan:", response.data);
         })
@@ -75,52 +75,7 @@ function Masterbarangjadi() {
     setSpesialist("");
   };
 
-  const handleAddjadwal = () => {
-    const newBarang = {
-      kategori: kategoriBarang,
-      nama: namadentist,
-      no_hp: jumlahBarang,
-      email: fotoBarang,
-      spesialist: spesialist,
-      id: id,
-    };
-
-    if (editingIndex !== null) {
-      const updatedList = [...listBarang];
-      updatedList[editingIndex] = newBarang;
-      setListBarang(updatedList);
-      setEditingIndex(null);
-      axios
-        .put(`/dokter/${id}`, newBarang)
-        .then((response) => {
-          console.log("Data berhasil diupdate:", response.data);
-        })
-        .catch((error) => {
-          console.error("Gagal mengupdate data:", error);
-        });
-    } else {
-      setListBarang((prevList) => [...prevList, newBarang]);
-      axios
-        .post("/master/", newBarang)
-        .then((response) => {
-          console.log("Data berhasil ditambahkan:", response.data);
-        })
-        .catch((error) => {
-          console.error("Gagal menambahkan data:", error);
-        });
-    }
-
-    
-
-    setShowFormjadwal(false);
-    // Reset form input
-    setIDDentist("");
-    setKategoriBarang("");
-    setNamaDentist("");
-    setJumlahBarang("");
-    setFotoBarang("");
-    setSpesialist("");
-  };
+  
 
   const handleEditBarang = (index) => {
     const barang = stok[index];
@@ -198,18 +153,13 @@ function Masterbarangjadi() {
             Dentist
           </h1>
           <div className="flex justify-between mb-4">
-            {/* <button
+            <button
               onClick={() => setShowForm(true)}
               className="bg-main hover:bg-second text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
               Add Dentist
             </button>
-            <button
-              onClick={() => setShowFormjadwal(true)}
-              className="bg-main hover:bg-second text-white font-bold rounded-3xl  w-40 h-10"
-            >
-              Add Jadwal
-            </button> */}
+           
             <input
               type="text"
               placeholder="Cari barang..."
@@ -242,9 +192,8 @@ function Masterbarangjadi() {
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
                   type="file"
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  placeholder="ID Dentist"
+                  onChange={handleImageUpload}
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
@@ -298,9 +247,8 @@ function Masterbarangjadi() {
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
                   type="file"
-                  value={id}
-                  onChange={(e) => setIDDentist(e.target.value)}
-                  placeholder="ID Dentist"
+                  onChange={handleImageUpload}
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
@@ -317,13 +265,7 @@ function Masterbarangjadi() {
                   placeholder="NO HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                <input
-                  type="email"
-                  value={fotoBarang}
-                  onChange={(e) => setFotoBarang(e.target.value)}
-                  placeholder="email"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
+               
 
                 <button
                   onClick={handleAddBarang}
