@@ -4,12 +4,14 @@ import axios from "../../config/axiosConfig";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-function Gallery() {
+
+function Jadwal() {
   const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [fotoBarang, setFotoBarang] = useState(null);
+  const [seleectedDate, setSelectedDate] = useState(null);
   const [showFormedit, setShowFormedit] = useState(false);
   const [id, setIDDentist] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
@@ -20,7 +22,7 @@ function Gallery() {
 
   const handleAddBarang = () => {
     const formData = new FormData();
-    formData.append("gambar", fotoBarang);
+    formData.append("jadwal", seleectedDate);
 
     if (editingIndex !== null) {
       axios
@@ -85,7 +87,7 @@ function Gallery() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("/gallery/");
+        const response = await axios.get("/jadwal/all");
         setStok(response.data.data);
       } catch (err) {
         console.log(err);
@@ -109,7 +111,7 @@ function Gallery() {
       <div className="p-8 w-screen overflow-auto">
         <div>
           <h1 className="font-sans text-2xl text-third font-bold mb-20">
-            Galerry
+            Jadwal
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -168,7 +170,7 @@ function Gallery() {
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-                Add Dentist
+                Add Jadwal
                 <button
                   onClick={() => setShowForm(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
@@ -189,10 +191,12 @@ function Gallery() {
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
-                  type="file"
-                  onChange={handleImageUpload} // Updated
-                  placeholder="Nama Dentist"
+                  type="date"
+                  placeholder="Tanggal Jadwal"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                  // You might want to bind this value to a state variable
+                  // Example: value={selectedDate}
+                  // onChange={(e) => setSelectedDate(e.target.value)}
                 />
 
                 <button
@@ -209,7 +213,9 @@ function Gallery() {
             <table className="table-auto border-gray-500 w-full">
               <thead className="bg-second items-center text-gray-500">
                 <tr>
-                  <th className="border-gray-500 px-4 py-2 ">Picture</th>
+                  <th className="border-gray-500 px-4 py-2 ">Id dokter</th>
+                  <th className="border-gray-500 px-4 py-2 ">Date</th>
+            
 
                   {/* New column header */}
                   <th className="border-gray-500 px-4 py-2 ">Action</th>
@@ -218,14 +224,11 @@ function Gallery() {
               <tbody>
                 {stok.map((item, index) => (
                   <tr key={index} className="bg-second">
-                    <td className="border-gray-500 px-4 py-2 w-96">
-                      <div className="flex justify-center items-center">
-                        <img
-                          className="w-80 h-52 p-4 rounded-t-lg"
-                          src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
-                          alt="product"
-                        />
-                      </div>
+                    <td className="text-center border-gray-500 px-4 py-2 w-96">
+                      DG00{item.id_dokter}
+                    </td>
+                    <td className="text-center border-gray-500 px-4 py-2 w-96">
+                      {item.jadwal}
                     </td>
                     <td className=" text-center border-gray-500 px-4 py-2">
                       <button
@@ -252,4 +255,4 @@ function Gallery() {
   );
 }
 
-export default Gallery;
+export default Jadwal;
