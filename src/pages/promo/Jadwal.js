@@ -10,7 +10,7 @@ function Jadwal() {
   const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [fotoBarang, setFotoBarang] = useState(null);
-  const [seleectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showFormedit, setShowFormedit] = useState(false);
   const [id, setIDDentist] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
@@ -24,7 +24,7 @@ function Jadwal() {
           axios.get("/jadwal/all"),
         ]);
         setStok(jadwalResponse.data.data);
-       setDokterOptions(jadwalResponse.data.data || []);
+        setDokterOptions(jadwalResponse.data.data || []);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -38,16 +38,14 @@ function Jadwal() {
   };
 
   const handleAddBarang = () => {
-  
-    const formData = new FormData();
-    formData.append("id_dokter", dokterOptions);
-    formData.append("jadwal", seleectedDate);
+    const data = {
+      id_dokter: selectedDokter,
+      jadwal: selectedDate,
+    };
 
     if (editingIndex !== null) {
       axios
-        .put(`/jadwal/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
+        .put(`/jadwal/${id}`, data)
         .then((response) => {
           console.log("Data berhasil diupdate:", response.data);
           const updatedStok = [...stok];
@@ -59,9 +57,7 @@ function Jadwal() {
         });
     } else {
       axios
-        .post("/jadwal/", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
+        .post("/jadwal/", data)
         .then((response) => {
           console.log("Data berhasil ditambahkan:", response.data);
           setStok((prevList) => [...prevList, response.data.data]);
@@ -219,7 +215,7 @@ function Jadwal() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                   // You might want to bind this value to a state variable
                   // Example: value={selectedDate}
-                  // onChange={(e) => setSelectedDate(e.target.value)}
+                  onChange={(e) => setSelectedDate(e.target.value)}
                 />
 
                 <button
@@ -236,11 +232,11 @@ function Jadwal() {
             <table className="table-auto border-gray-500 w-full">
               <thead className="bg-second items-center text-gray-500">
                 <tr>
-                  <th className="border-gray-500 px-4 py-2 ">Id dokter</th>
-                  <th className="border-gray-500 px-4 py-2 ">Date</th>
+                  <th className="border-gray-500 px-4 py-2">Id dokter</th>
+                  <th className="border-gray-500 px-4 py-2">Date</th>
 
                   {/* New column header */}
-                  <th className="border-gray-500 px-4 py-2 ">Action</th>
+                  <th className="border-gray-500 px-4 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -287,3 +283,5 @@ function Jadwal() {
 }
 
 export default Jadwal;
+
+                 
