@@ -19,10 +19,13 @@ function Masterbarangjadi() {
   const [kodebarang, setKodebarang] = useState("");
   const [spesialist, setSpesialist] = useState("");
   const [showFormedit, setShowFormedit] = useState(false);
-  const [ShowFormjadwal, setShowFormjadwal] = useState(false);
+  const [showFormJadwal, setShowFormJadwal] = useState(false);
   const [id, setIDDentist] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
-  
+  const [jadwal, setJadwal] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [searchDropdownValue, setSearchDropdownValue] = useState("");
+  const [jadwalData, setJadwalData] = useState([]);
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
@@ -63,8 +66,6 @@ function Masterbarangjadi() {
         });
     }
 
-    
-
     setShowForm(false);
     // Reset form input
     setIDDentist("");
@@ -75,9 +76,7 @@ function Masterbarangjadi() {
     setSpesialist("");
   };
 
-  
-
-  const handleEditBarang = (index) => {
+  const handleEditBarang = async (index) => {
     const barang = stok[index];
     setIDDentist(barang.id);
     setKategoriBarang(barang.kategori);
@@ -87,6 +86,14 @@ function Masterbarangjadi() {
     setSpesialist(barang.spesialist);
     setEditingIndex(index);
     setShowFormedit(true);
+
+    // Fetch jadwal for the selected dentist
+    try {
+      const response = await axios.get(`/jadwal/${barang.id}`);
+      setJadwal(response.data);
+    } catch (error) {
+      console.error("Error fetching jadwal:", error);
+    }
   };
 
   const handleDeleteBarang = (index) => {
@@ -115,20 +122,50 @@ function Masterbarangjadi() {
     }
   };
 
-  useEffect(() => {
-    const fetch = async () => {
+  const handleDropdownChange = async (e) => {
+    const selectedDate = e.target.value;
+    setSearchDropdownValue(selectedDate);
+
+    if (selectedDate) {
       try {
-        const response = await axios.get("/dokter/");
-        setStok(response.data.data);
+        const response = await axios.post("/jadwal/filter", {
+          jadwal: selectedDate,
+        });
+        if (response.data.success) {
+          setJadwalData(response.data.data);
+        } else {
+          console.error("Failed to filter jadwal:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error filtering jadwal data:", error);
+      }
+    } else {
+      // Jika dropdown kosong, ambil ulang semua jadwal
+      const response = await axios.get("/jadwal/all");
+      setJadwalData(response.data);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch dokter data
+        const dokterResponse = await axios.get("/dokter/");
+        setStok(dokterResponse.data.data);
 
         // Fetch time availability for each dentist
         const availabilityResponse = await axios.get("/jadwal/all");
         setTimeAvailability(availabilityResponse.data);
+
+        // Fetch jadwal data
+        const jadwalResponse = await axios.get("/jadwal/all");
+        setJadwalData(jadwalResponse.data);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching data:", err);
       }
     };
-    fetch();
+
+    fetchData();
   }, []);
 
   const handleShowImagePopup = (imageSrc) => {
@@ -142,6 +179,34 @@ function Masterbarangjadi() {
 
   const handleTimeSelect = (time) => {
     console.log("Selected time:", time);
+  };
+
+  const handleDateChange = async (e) => {
+    const selectedDate = e.target.value;
+    setSelectedDate(selectedDate);
+
+    if (selectedDate) {
+      try {
+        const response = await axios.get("/jadwal/2/filter", {
+          jadwal: selectedDate,
+        });
+        if (response.data.success) {
+          setJadwalData(response.data.data);
+        } else {
+          console.error("Failed to filter jadwal:", response.data.message);
+        }
+      } catch (error) {
+        console.error("Error filtering jadwal data:", error);
+      }
+    } else {
+      // If no date is selected, fetch all jadwal data
+      try {
+        const response = await axios.get("/jadwal/all");
+        setJadwalData(response.data);
+      } catch (error) {
+        console.error("Error fetching jadwal data:", error);
+      }
+    }
   };
 
   return (
@@ -159,10 +224,11 @@ function Masterbarangjadi() {
             >
               Add Dentist
             </button>
-           
+
             <input
-              type="text"
-              placeholder="Cari barang..."
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
@@ -197,20 +263,19 @@ function Masterbarangjadi() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
-                  type=""
+                  type="text"
                   value={namadentist}
                   onChange={(e) => setNamaDentist(e.target.value)}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
-                  type=""
+                  type="number"
                   value={jumlahBarang}
                   onChange={(e) => setJumlahBarang(e.target.value)}
                   placeholder="Spesialist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                
 
                 <button
                   onClick={handleAddBarang}
@@ -252,7 +317,7 @@ function Masterbarangjadi() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
-                  type=""
+                  type="text"
                   value={namadentist}
                   onChange={(e) => setNamaDentist(e.target.value)}
                   placeholder="Nama Dentist"
@@ -265,26 +330,23 @@ function Masterbarangjadi() {
                   placeholder="NO HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-               
 
                 <button
                   onClick={handleAddBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                 Tambah dentist
+                  Tambah dentist
                 </button>
               </div>
             </div>
           )}
 
-
-        
-        {ShowFormjadwal && (
+          {showFormJadwal && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Add Jadwal
                 <button
-                  onClick={() => setShowFormjadwal(false)}
+                  onClick={() => setShowFormJadwal(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
                 >
                   <svg
@@ -302,32 +364,30 @@ function Masterbarangjadi() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                
                 <input
                   type="date"
-                  value={namadentist}
-                  onChange={(e) => setNamaDentist(e.target.value)}
-                  placeholder="Nama Dentist"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  placeholder="Tanggal"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
-                  type="number"
-                  value={jumlahBarang}
+                  type="time"
+                  value={jumlahBarang} // Assuming this is for time input
                   onChange={(e) => setJumlahBarang(e.target.value)}
-                  placeholder="NO HP"
+                  placeholder="Waktu"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
 
                 <button
-                  onClick={handleAddBarang}
+                  onClick={handleAddBarang} // Assuming this should handle adding jadwal
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                 Tambah dentist
+                  Tambah jadwal
                 </button>
               </div>
             </div>
           )}
-
 
           <div className="overflow-x-auto">
             <table className="table-auto border-gray-500 w-full">
@@ -337,11 +397,7 @@ function Masterbarangjadi() {
                   <th className="border-gray-500 px-4 py-2 w-96">Picture</th>
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
-                  {/* <th className="border-gray-500 px-4 py-2">Email</th> */}
-                  <th className="border-gray-500 px-4 py-2">
-                    Time Selection
-                  </th>{" "}
-                  {/* New column header */}
+                  <th className="border-gray-500 px-4 py-2">Time Selection</th>
                   <th className="border-gray-500 px-4 py-2">Edit</th>
                   <th className="border-gray-500 px-4 py-2">Delete</th>
                 </tr>
@@ -353,10 +409,8 @@ function Masterbarangjadi() {
                       DG00{item.id}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2 flex justify-center items-center">
-                      {" "}
-                      {/* Pusatkan gambar */}
                       <img
-                        className="w-20 h-20 rounded-full object-cover" // Kelas Tailwind untuk gambar lingkaran
+                        className="w-20 h-20 rounded-full object-cover"
                         src={`http://82.197.95.108:8003/dokter/gambar/${item.gambar}`}
                         alt="product"
                       />
@@ -367,16 +421,12 @@ function Masterbarangjadi() {
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.no_hp}
                     </td>
-                    {/* <td className="text-center border-gray-500 px-4 py-2">
-                      {item.email}
-                    </td> */}
                     <td className="border-gray-500 text-center py-2">
                       <TimeButtonList
                         id={item.id}
                         onTimeSelect={handleTimeSelect}
                         availability={timeAvailability[item.id] || {}}
-                      />{" "}
-                      {/* New column content */}
+                      />
                     </td>
                     <td className="border-gray-500 text-center py-2">
                       <button
