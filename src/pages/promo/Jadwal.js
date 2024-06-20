@@ -16,6 +16,8 @@ function Jadwal() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [dokterOptions, setDokterOptions] = useState([]);
   const [selectedDokter, setSelectedDokter] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,12 @@ function Jadwal() {
   };
 
   const handleAddBarang = () => {
+    if (!selectedDokter) {
+      setError(true);
+      setErrorMessage("Harap pilih dokter terlebih dahulu!");
+      return;
+    }
+
     const data = {
       id_dokter: selectedDokter,
       jadwal: selectedDate,
@@ -72,6 +80,8 @@ function Jadwal() {
     setIDDentist("");
     setFotoBarang(null);
     setSelectedDokter(""); // Clear selectedDokter after submission
+    setError(false); // Clear error state
+    setErrorMessage(""); // Clear error message
   };
 
   const handleEditBarang = (index) => {
@@ -188,100 +198,107 @@ function Jadwal() {
                     fill="currentColor"
                   >
                     <path
-                      fillRule="evenodd"
-                      d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
+                        fillRule="evenodd"
+                        d="M14.293 5.293a1 1 0 00-1.414 1.414L10 10.414l-2.879-2.88a1 1 0 10-1.414 1.415L8.586 12 5.707 14.879a1 1 0 101.414 1.414L10 13.415l2.879 2.88a1 1 0 001.414-1.415L11.414 12l2.879-2.88a1 1 0 000-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                  {error && (
+                    <div className="bg-red-200 text-red-700 p-2 rounded mb-2">
+                      {errorMessage}
+                    </div>
+                  )}
+
+                  <select
+                    value={selectedDokter}
+                    onChange={(e) => {
+                      setSelectedDokter(e.target.value);
+                      setError(false); // Clear error when selecting a doctor
+                    }}
+                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                  >
+                    <option value="">Pilih Dokter</option>
+                    {dokterOptions.map((jadwal) => (
+                      <option key={jadwal.id} value={jadwal.id}>
+                        {jadwal.id_dokter}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    type="date"
+                    placeholder="Tanggal Jadwal"
+                    className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                    // You might want to bind this value to a state variable
+                    // Example: value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                  />
+
+                  <button
+                    onClick={handleAddBarang}
+                    className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                  >
+                    {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                  </button>
+                </div>
               </div>
-              <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                <select
-                  value={selectedDokter}
-                  onChange={(e) => setSelectedDokter(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                >
-                  <option value="">Pilih Dokter</option>
-                  {dokterOptions.map((jadwal) => (
-                    <option key={jadwal.id} value={jadwal.id}>
-                      {jadwal.id_dokter}
-                    </option>
-                  ))}
-                </select>
+            )}
 
-                <input
-                  type="date"
-                  placeholder="Tanggal Jadwal"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                  // You might want to bind this value to a state variable
-                  // Example: value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                />
+            <div className="overflow-x-auto">
+              <table className="table-auto border-gray-500 w-full">
+                <thead className="bg-second items-center text-gray-500">
+                  <tr>
+                    <th className="border-gray-500 px-4 py-2">Id dokter</th>
+                    <th className="border-gray-500 px-4 py-2">Date</th>
 
-                <button
-                  onClick={handleAddBarang}
-                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
-                >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="overflow-x-auto">
-            <table className="table-auto border-gray-500 w-full">
-              <thead className="bg-second items-center text-gray-500">
-                <tr>
-                  <th className="border-gray-500 px-4 py-2">Id dokter</th>
-                  <th className="border-gray-500 px-4 py-2">Date</th>
-
-                  {/* New column header */}
-                  <th className="border-gray-500 px-4 py-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stok.length > 0 ? (
-                  stok.map((item, index) => (
-                    <tr key={index} className="bg-second">
-                      <td className="text-center border-gray-500 px-4 py-2 w-96">
-                        DG00{item.id_dokter}{" "}
-                        {/* Assuming id_dokter is available in item */}
-                      </td>
-                      <td className="text-center border-gray-500 px-4 py-2 w-96">
-                        {item.jadwal}
-                      </td>
-                      <td className=" text-center border-gray-500 px-4 py-2">
-                        <button
-                          onClick={() => handleEditBarang(index)}
-                          className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteBarang(index)}
-                          className="bg-red-500 text-white font-bold py-1 px-2 rounded"
-                        >
-                          Delete
-                        </button>
+                    {/* New column header */}
+                    <th className="border-gray-500 px-4 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stok.length > 0 ? (
+                    stok.map((item, index) => (
+                      <tr key={index} className="bg-second">
+                        <td className="text-center border-gray-500 px-4 py-2 w-96">
+                          DG00{item.id_dokter}{" "}
+                          {/* Assuming id_dokter is available in item */}
+                        </td>
+                        <td className="text-center border-gray-500 px-4 py-2 w-96">
+                          {item.jadwal}
+                        </td>
+                        <td className=" text-center border-gray-500 px-4 py-2">
+                          <button
+                            onClick={() => handleEditBarang(index)}
+                            className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteBarang(index)}
+                            className="bg-red-500 text-white font-bold py-1 px-2 rounded"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center py-4">
+                        No data available
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="3" className="text-center py-4">
-                      No data available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
 export default Jadwal;
-
-                 
