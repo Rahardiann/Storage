@@ -18,8 +18,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 const Dashboard = () => {
   const [stok, setStok] = useState([
-    
-
     // Tambahkan data dummy sesuai kebutuhan
   ]);
   const [showForm, setShowForm] = useState(false);
@@ -76,7 +74,7 @@ const Dashboard = () => {
       setEmail(barang.email);
       setnama(barang.nama);
       setNohp(barang.no_hp);
-      setEditingId(id); 
+      setEditingId(id);
       setShowFormedit(true);
     } catch (error) {
       console.error("Gagal mengambil barang:", error);
@@ -151,16 +149,14 @@ const Dashboard = () => {
 
         <div className="ml-16 mt-8 flex flex-wrap">
           <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
-            <h1 className="text-lg font-semibold text-white mb-4">
-              User
-            </h1>
+            <h1 className="text-lg font-semibold text-white mb-4">User</h1>
             <h1 className="text-5xl font-bold text-white">{manualUserCount}</h1>
           </div>
           <div className="bg-third w-72 h-36 rounded-lg p-6 flex flex-col items-center justify-center mr-8 mb-8">
-            <h1 className="text-lg font-semibold text-white mb-4">
-              Admin
+            <h1 className="text-lg font-semibold text-white mb-4">Admin</h1>
+            <h1 className="text-5xl font-bold text-white">
+              {digitalUserCount}
             </h1>
-            <h1 className="text-5xl font-bold text-white">{digitalUserCount}</h1>
           </div>
         </div>
 
