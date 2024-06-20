@@ -4,7 +4,6 @@ import axios from "../../config/axiosConfig";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-
 function Jadwal() {
   const [stok, setStok] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
@@ -15,18 +14,38 @@ function Jadwal() {
   const [showFormedit, setShowFormedit] = useState(false);
   const [id, setIDDentist] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
+  const [dokterOptions, setDokterOptions] = useState([]);
+  const [selectedDokter, setSelectedDokter] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [jadwalResponse, dokterResponse] = await Promise.all([
+          axios.get("/jadwal/all"),
+        ]);
+        setStok(jadwalResponse.data.data);
+       setDokterOptions(jadwalResponse.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
   };
 
   const handleAddBarang = () => {
+  
     const formData = new FormData();
+    formData.append("id_dokter", dokterOptions);
     formData.append("jadwal", seleectedDate);
 
     if (editingIndex !== null) {
       axios
-        .put(`/gallery/${id}`, formData, {
+        .put(`/jadwal/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
@@ -40,7 +59,7 @@ function Jadwal() {
         });
     } else {
       axios
-        .post("/gallery/", formData, {
+        .post("/jadwal/", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
@@ -56,11 +75,14 @@ function Jadwal() {
     setShowFormedit(false);
     setIDDentist("");
     setFotoBarang(null);
+    setSelectedDokter(""); // Clear selectedDokter after submission
   };
 
   const handleEditBarang = (index) => {
     const barang = stok[index];
     setIDDentist(barang.id);
+    setSelectedDokter(barang.id_dokter);
+    setSelectedDate(barang.jadwal);
     setFotoBarang(null);
     setEditingIndex(index);
     setShowFormedit(true);
@@ -69,7 +91,7 @@ function Jadwal() {
   const handleDeleteBarang = (index) => {
     const barang = stok[index];
     axios
-      .delete(`/gallery/${barang.id}`)
+      .delete(`/jadwal/${barang.id}`)
       .then((response) => {
         console.log("Data berhasil dihapus:", response.data);
         setStok(stok.filter((_, i) => i !== index));
@@ -83,18 +105,6 @@ function Jadwal() {
     const file = e.target.files[0];
     setFotoBarang(file);
   };
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get("/jadwal/all");
-        setStok(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetch();
-  }, []);
 
   const handleShowImagePopup = (imageSrc) => {
     setPopupImageSrc(imageSrc);
@@ -190,6 +200,19 @@ function Jadwal() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
+                <select
+                  value={selectedDokter}
+                  onChange={(e) => setSelectedDokter(e.target.value)}
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                >
+                  <option value="">Pilih Dokter</option>
+                  {dokterOptions.map((jadwal) => (
+                    <option key={jadwal.id} value={jadwal.id}>
+                      {jadwal.id_dokter}
+                    </option>
+                  ))}
+                </select>
+
                 <input
                   type="date"
                   placeholder="Tanggal Jadwal"
@@ -215,37 +238,45 @@ function Jadwal() {
                 <tr>
                   <th className="border-gray-500 px-4 py-2 ">Id dokter</th>
                   <th className="border-gray-500 px-4 py-2 ">Date</th>
-            
 
                   {/* New column header */}
                   <th className="border-gray-500 px-4 py-2 ">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {stok.map((item, index) => (
-                  <tr key={index} className="bg-second">
-                    <td className="text-center border-gray-500 px-4 py-2 w-96">
-                      DG00{item.id_dokter}
-                    </td>
-                    <td className="text-center border-gray-500 px-4 py-2 w-96">
-                      {item.jadwal}
-                    </td>
-                    <td className=" text-center border-gray-500 px-4 py-2">
-                      <button
-                        onClick={() => handleEditBarang(index)}
-                        className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteBarang(index)}
-                        className="bg-red-500 text-white font-bold py-1 px-2 rounded"
-                      >
-                        Delete
-                      </button>
+                {stok.length > 0 ? (
+                  stok.map((item, index) => (
+                    <tr key={index} className="bg-second">
+                      <td className="text-center border-gray-500 px-4 py-2 w-96">
+                        DG00{item.id_dokter}{" "}
+                        {/* Assuming id_dokter is available in item */}
+                      </td>
+                      <td className="text-center border-gray-500 px-4 py-2 w-96">
+                        {item.jadwal}
+                      </td>
+                      <td className=" text-center border-gray-500 px-4 py-2">
+                        <button
+                          onClick={() => handleEditBarang(index)}
+                          className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBarang(index)}
+                          className="bg-red-500 text-white font-bold py-1 px-2 rounded"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="text-center py-4">
+                      No data available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
