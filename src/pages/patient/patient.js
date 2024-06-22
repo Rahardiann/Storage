@@ -16,11 +16,12 @@ function Stokbarangjadi() {
   const [nama, setnama] = useState("");
   const [noktp, setnoktp] = useState("");
   const [nomr, setnomr] = useState("");
-  const [gender, setgender] = useState("");
+  const [gender, setGender] = useState("");
+  const [userOptions, setuserOptions] = useState([]);
   const [listBarang, setListBarang] = useState([]);
   const [nohp, setnohp] = useState("");
   const [alamat, setalamat] = useState("");
-  const [editingId, setEditingId] = useState(null); // Add state for the editing ID
+  const [editingId, setEditingId] = useState(null);
 
   const handleAddBarang = async () => {
     const newBarang = {
@@ -59,7 +60,7 @@ function Stokbarangjadi() {
     };
 
     try {
-      const response = await axios.put(`/user/${editingId}`, updatedBarang); // Use editingId
+      const response = await axios.put(`/user/${editingId}`, updatedBarang);
       console.log(response.data.data);
       setStok((prevStok) =>
         prevStok.map((item) => (item.id === editingId ? response.data : item))
@@ -80,8 +81,8 @@ function Stokbarangjadi() {
     setalamat("");
     setnoktp("");
     setnomr("");
-    setgender("");
-    setEditingId(null); // Reset the editing ID
+    setGender("");
+    setEditingId(null);
   };
 
   const handleImageUpload = (e) => {
@@ -98,26 +99,23 @@ function Stokbarangjadi() {
   };
 
   function hitungUsia(tglLahir) {
-    // Jika tanggal lahir kosong, return string kosong
     if (!tglLahir) return "";
-  
-    const hariIni = new Date(); // Tanggal hari ini
-    const lahir = new Date(tglLahir); // Tanggal lahir pasien
-  
-    // Pastikan bahwa input tanggal lahir adalah valid
+
+    const hariIni = new Date();
+    const lahir = new Date(tglLahir);
+
     if (isNaN(lahir.getTime())) return "";
-  
+
     const tahunLahir = lahir.getFullYear();
     const bulanLahir = lahir.getMonth();
     const tanggalLahir = lahir.getDate();
-  
-    let usia = hariIni.getFullYear() - tahunLahir; // Hitung selisih tahun
-    // Periksa apakah ulang tahun sudah lewat atau belum
+
+    let usia = hariIni.getFullYear() - tahunLahir;
     if (
       hariIni.getMonth() < bulanLahir ||
       (hariIni.getMonth() === bulanLahir && hariIni.getDate() < tanggalLahir)
     ) {
-      usia--; // Kurangi satu tahun jika belum lewat ulang tahun
+      usia--;
     }
     return usia;
   }
@@ -126,7 +124,16 @@ function Stokbarangjadi() {
     const fetch = async () => {
       try {
         const response = await axios.get("/user");
-        setStok(response.data.data);
+        const data = response.data.data;
+
+        setStok(data);
+
+        // Extract unique gender options
+        const uniqueGenders = [...new Set(data.map((user) => user.gender))]
+          .filter(Boolean)
+          .map((gender) => ({ value: gender, label: gender }));
+
+        setuserOptions(uniqueGenders);
       } catch (err) {
         console.log(err);
       }
@@ -146,8 +153,8 @@ function Stokbarangjadi() {
       setalamat(barang.alamat);
       setnoktp(barang.no_ktp);
       setnomr(barang.no_rekam_medis);
-      setgender(barang.gender);
-      setEditingId(id); // Set the editing ID
+      setGender(barang.gender);
+      setEditingId(id);
       setShowFormedit(true);
     } catch (error) {
       console.error("Gagal mengambil barang:", error);
@@ -213,13 +220,6 @@ function Stokbarangjadi() {
                   placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                {/* <input
-                  type="text"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                  placeholder="Password"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                /> */}
                 <input
                   type="number"
                   value={nohp}
@@ -248,16 +248,21 @@ function Stokbarangjadi() {
                   placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
-                  type="text"
+                <select
                   value={gender}
-                  onChange={(e) => setgender(e.target.value)}
-                  placeholder="Gender"
+                  onChange={(e) => setGender(e.target.value)}
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                >
+                  <option value="">Select Gender</option>
+                  {userOptions.map((g) => (
+                    <option key={g.value} value={g.value}>
+                      {g.label}
+                    </option>
+                  ))}
+                </select>
                 <button
                   onClick={handleUpdateBarang}
-                  className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   Save
                 </button>
@@ -337,13 +342,18 @@ function Stokbarangjadi() {
                   placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
-                  type="text"
+                <select
                   value={gender}
-                  onChange={(e) => setgender(e.target.value)}
-                  placeholder="Gender"
+                  onChange={(e) => setGender(e.target.value)}
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                >
+                  <option value="">Select Gender</option>
+                  {userOptions.map((g) => (
+                    <option key={g.value} value={g.value}>
+                      {g.label}
+                    </option>
+                  ))}
+                </select>
                 <button
                   onClick={handleAddBarang}
                   className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
@@ -358,12 +368,13 @@ function Stokbarangjadi() {
             <table className="table-auto border-none  bg-second w-full">
               <thead className="bg-second text-gray-500">
                 <tr>
-                  <th className=" border-gray-500 px-4 py-2 w-32">ID User</th>
-                  <th className=" border-gray-500 px-4 py-2">Username</th>
-                  <th className=" border-gray-500 px-4 py-2">No MR</th>
+                  <th className=" border-gray-500 px-4 py-2 w-32">ID Pasien</th>
+                  <th className=" border-gray-500 px-4 py-2">Nama Lengkap</th>
+                  <th className=" border-gray-500 px-4 py-2">No RM</th>
                   <th className=" border-gray-500 px-4 py-2">Usia</th>
+                  <th className=" border-gray-500 px-4 py-2">gender</th>
                   <th className=" border-gray-500 px-4 py-2">Alamat</th>
-                  <th className=" border-gray-500 px-4 py-2">Phone number</th>
+                  <th className=" border-gray-500 px-4 py-2">Nomor Telepon</th>
                   <th className=" border-gray-500 px-4 py-2">Email</th>
                   <th className=" border-gray-500 px-4 py-2">T.O.P</th>
                   <th className=" border-gray-500 px-4 py-2 w-20">Action</th>
@@ -383,6 +394,9 @@ function Stokbarangjadi() {
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       {hitungUsia(item.tanggal_lahir)}
+                    </td>
+                    <td className=" border-gray-500 text-center py-2">
+                      {item.gender}
                     </td>
                     <td className=" border-gray-500 text-center py-2">
                       {item.alamat}

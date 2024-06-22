@@ -16,63 +16,80 @@ function MasterBarangMentah() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [id, setId] = useState(null);
 
+  useEffect(() => {
+    const fetchStok = async () => {
+      try {
+        const response = await axios.get("/promo/");
+        setStok(response.data.data);
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
+      }
+    };
+    fetchStok();
+  }, []);
+
   const handleAddBarang = () => {
     const formData = new FormData();
     formData.append("kategori", kategoriBarang);
     formData.append("judul", judul);
     formData.append("subtitle", subtitle);
-    formData.append("gambar", gambar); // Append the file
+    formData.append("gambar", gambar);
     formData.append("deskripsi_1", deskripsi_1);
     formData.append("deskripsi_2", deskripsi_2);
 
-    if (editingIndex !== null) {
-      axios
-        .put(`/promo/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          const updatedList = [...stok];
-          updatedList[editingIndex] = response.data;
-          setStok(updatedList);
-          console.log("Data berhasil diupdate:", response.data);
-        })
-        .catch((error) => {
-          console.error("Gagal mengupdate data:", error);
-        });
-    } else {
-      axios
-        .post("/promo/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log("Data berhasil ditambahkan:", response.data);
-          setStok((prevList) => [...prevList, response.data]);
-        })
-        .catch((error) => {
-          console.error("Gagal menambahkan data:", error);
-        });
-    }
-
-    setShowForm(false);
-    resetForm();
+    axios
+      .post("/promo/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("Data berhasil ditambahkan:", response.data);
+        setStok((prevList) => [...prevList, response.data]);
+        setShowForm(false);
+        resetForm();
+      })
+      .catch((error) => {
+        console.error("Gagal menambahkan data:", error);
+      });
   };
 
-  const handleEditBarang = (index) => {
-    const barang = stok[index];
-    setId(barang.id);
-    setKategoriBarang(barang.kategori);
-    setJudul(barang.judul);
-    setSubtitle(barang.subtitle);
-    setGambar(null); // Reset the file input
-    setDeskripsi1(barang.deskripsi_1);
-    setDeskripsi2(barang.deskripsi_2);
-    setEditingIndex(index);
-    setShowForm(true);
-  };
+ const handleEditBarang = () => {
+   const updatedData = {
+     kategori: kategoriBarang,
+     judul: judul,
+     subtitle: subtitle,
+     deskripsi_1: deskripsi_1,
+     deskripsi_2: deskripsi_2,
+   };
+
+   const formData = new FormData();
+   formData.append("kategori", updatedData.kategori);
+   formData.append("judul", updatedData.judul);
+   formData.append("subtitle", updatedData.subtitle);
+   formData.append("deskripsi_1", updatedData.deskripsi_1);
+   formData.append("deskripsi_2", updatedData.deskripsi_2);
+
+   if (gambar !== null) {
+     formData.append("gambar", gambar);
+   }
+
+   axios
+     .put(`/promo/${id}`, formData)
+     .then((response) => {
+       const updatedList = [...stok];
+       updatedList[editingIndex] = response.data;
+       setStok(updatedList);
+       console.log("Data berhasil diupdate:", response.data);
+       setShowForm(false);
+       resetForm();
+     })
+     .catch((error) => {
+       console.error("Gagal mengupdate data:", error);
+     });
+ };
+
+
 
   const handleDeleteBarang = (index) => {
     const barang = stok[index];
@@ -103,18 +120,6 @@ function MasterBarangMentah() {
     setId(null);
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get("/promo/");
-        setStok(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetch();
-  }, []);
-
   const handleShowImagePopup = (imageSrc) => {
     setPopupImageSrc(imageSrc);
     setShowImagePopup(true);
@@ -122,6 +127,19 @@ function MasterBarangMentah() {
 
   const handleCloseImagePopup = () => {
     setShowImagePopup(false);
+  };
+
+  const handleEditBarangClick = (index) => {
+    const barang = stok[index];
+    setId(barang.id);
+    setKategoriBarang(barang.kategori);
+    setJudul(barang.judul);
+    setSubtitle(barang.subtitle);
+    // setGambar(null); // Reset the file input
+    setDeskripsi1(barang.deskripsi_1);
+    setDeskripsi2(barang.deskripsi_2);
+    setEditingIndex(index);
+    setShowForm(true);
   };
 
   return (
@@ -203,7 +221,9 @@ function MasterBarangMentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <button
-                  onClick={handleAddBarang}
+                  onClick={
+                    editingIndex !== null ? handleEditBarang : handleAddBarang
+                  }
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
@@ -248,7 +268,7 @@ function MasterBarangMentah() {
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       <button
-                        onClick={() => handleEditBarang(index)}
+                        onClick={() => handleEditBarangClick(index)}
                         className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
                       >
                         Edit
@@ -272,3 +292,4 @@ function MasterBarangMentah() {
 }
 
 export default MasterBarangMentah;
+

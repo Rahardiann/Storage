@@ -16,52 +16,47 @@ function Gallery() {
 
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
+    resetForm();
   };
 
   const handleAddBarang = () => {
     const formData = new FormData();
     formData.append("gambar", fotoBarang);
 
-    if (editingIndex !== null) {
-      axios
-        .put(`/gallery/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((response) => {
-          console.log("Data berhasil diupdate:", response.data);
-          const updatedStok = [...stok];
-          updatedStok[editingIndex] = response.data.data;
-          setStok(updatedStok);
-        })
-        .catch((error) => {
-          console.error("Gagal mengupdate data:", error);
-        });
-    } else {
-      axios
-        .post("/gallery/", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((response) => {
-          console.log("Data berhasil ditambahkan:", response.data);
-          setStok((prevList) => [...prevList, response.data.data]);
-        })
-        .catch((error) => {
-          console.error("Gagal menambahkan data:", error);
-        });
-    }
-
-    setShowForm(false);
-    setShowFormedit(false);
-    setIDDentist("");
-    setFotoBarang(null);
+    axios
+      .post("/gallery/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        console.log("Data berhasil ditambahkan:", response.data);
+        setStok((prevList) => [...prevList, response.data.data]);
+        setShowForm(false);
+        resetForm();
+      })
+      .catch((error) => {
+        console.error("Gagal menambahkan data:", error);
+      });
   };
 
-  const handleEditBarang = (index) => {
-    const barang = stok[index];
-    setIDDentist(barang.id);
-    setFotoBarang(null);
-    setEditingIndex(index);
-    setShowFormedit(true);
+  const handleEditBarang = () => {
+    const formData = new FormData();
+    formData.append("gambar", fotoBarang);
+
+    axios
+      .put(`/gallery/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        console.log("Data berhasil diupdate:", response.data);
+        const updatedStok = [...stok];
+        updatedStok[editingIndex] = response.data.data;
+        setStok(updatedStok);
+        setShowFormedit(false);
+        resetForm();
+      })
+      .catch((error) => {
+        console.error("Gagal mengupdate data:", error);
+      });
   };
 
   const handleDeleteBarang = (index) => {
@@ -103,13 +98,26 @@ function Gallery() {
     setShowImagePopup(false);
   };
 
+  const handleEditBarangClick = (index) => {
+    const barang = stok[index];
+    setIDDentist(barang.id);
+    setEditingIndex(index);
+    setShowFormedit(true);
+  };
+
+  const resetForm = () => {
+    setIDDentist("");
+    setFotoBarang(null);
+    setEditingIndex(null);
+  };
+
   return (
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
         <div>
           <h1 className="font-sans text-2xl text-third font-bold mb-20">
-            Galerry
+            Gallery
           </h1>
           <div className="flex justify-between mb-4">
             <button
@@ -150,16 +158,16 @@ function Gallery() {
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
                   type="file"
-                  onChange={handleImageUpload} // Updated
+                  onChange={handleImageUpload}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
 
                 <button
-                  onClick={handleAddBarang}
+                  onClick={handleEditBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                  Update Barang
                 </button>
               </div>
             </div>
@@ -190,7 +198,7 @@ function Gallery() {
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
                   type="file"
-                  onChange={handleImageUpload} // Updated
+                  onChange={handleImageUpload}
                   placeholder="Nama Dentist"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
@@ -199,7 +207,7 @@ function Gallery() {
                   onClick={handleAddBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                  Tambah Barang
                 </button>
               </div>
             </div>
@@ -229,7 +237,7 @@ function Gallery() {
                     </td>
                     <td className=" text-center border-gray-500 px-4 py-2">
                       <button
-                        onClick={() => handleEditBarang(index)}
+                        onClick={() => handleEditBarangClick(index)}
                         className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
                       >
                         Edit
