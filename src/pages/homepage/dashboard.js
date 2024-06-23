@@ -3,6 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import React from "react";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import {
   BarChart,
   Bar,
@@ -14,26 +15,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 const Dashboard = () => {
-  const [stok, setStok] = useState([
-    // Tambahkan data dummy sesuai kebutuhan
-  ]);
+  const [stok, setStok] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [nama, setnama] = useState("");
-  const [no_hp, setNohp] = useState("");
-  const [gender, setGender] = useState("");
-  const [id, setIDDentist] = useState("");
+  const [nama, setNama] = useState("");
+  const [no_hp, setNoHp] = useState("");
   const [email, setEmail] = useState("");
-  const [showFormedit, setShowFormedit] = useState(false);
+  const [showFormEdit, setShowFormEdit] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
   const [manualUserCount, setManualUserCount] = useState(0);
   const [digitalUserCount, setDigitalUserCount] = useState(0);
 
   const handleCloseFormEdit = () => {
-    setShowFormedit(false);
+    setShowFormEdit(false);
   };
 
   const handleUpdateBarang = async () => {
@@ -41,29 +37,26 @@ const Dashboard = () => {
       nama: nama,
       no_hp: no_hp,
       email: email,
-      // password: password,
-      // gender: gender,
     };
 
     try {
-      const response = await axios.put(`/admin/${editingId}`, updatedBarang); // Use editingId
-      console.log(response.data.data);
+      const response = await axios.put(`/admin/${editingId}`, updatedBarang);
       setStok((prevStok) =>
         prevStok.map((item) => (item.id === editingId ? response.data : item))
       );
     } catch (error) {
-      console.error("Gagal mengupdate barang:", error);
+      console.error("Failed to update admin:", error);
     }
 
-    setShowFormedit(false);
+    setShowFormEdit(false);
     resetForm();
   };
 
   const resetForm = () => {
-    setnama("");
-    setNohp("");
+    setNama("");
+    setNoHp("");
     setEmail("");
-    setEditingId(null); // Reset the editing ID
+    setEditingId(null);
   };
 
   const handleEditBarang = async (id) => {
@@ -72,21 +65,25 @@ const Dashboard = () => {
       const barang = response.data.data[0];
 
       setEmail(barang.email);
-      setnama(barang.nama);
-      setNohp(barang.no_hp);
+      setNama(barang.nama);
+      setNoHp(barang.no_hp);
       setEditingId(id);
-      setShowFormedit(true);
+      setShowFormEdit(true);
     } catch (error) {
-      console.error("Gagal mengambil barang:", error);
+      console.error("Failed to fetch admin:", error);
     }
   };
 
   const handleDeleteBarang = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this admin?")) {
+      return;
+    }
+
     try {
-      await axios.delete(`/user/${id}`);
+      await axios.delete(`/admin/${id}`);
       setStok((prevStok) => prevStok.filter((item) => item.id !== id));
     } catch (error) {
-      console.error("Gagal menghapus barang:", error);
+      console.error("Failed to delete admin:", error);
     }
   };
 
@@ -100,10 +97,9 @@ const Dashboard = () => {
 
     try {
       const response = await axios.post("/admin/register", newBarang);
-      console.log(response.data.data);
       setStok((prevStok) => [...prevStok, response.data]);
     } catch (error) {
-      console.error("Gagal menambahkan admin:", error);
+      console.error("Failed to add admin:", error);
     }
 
     setShowForm(false);
@@ -119,7 +115,7 @@ const Dashboard = () => {
         setDigitalUserCount(responseAdmin.data.data.length);
         setStok(responseAdmin.data.data);
       } catch (error) {
-        console.error("Gagal mengambil data:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
 
@@ -174,30 +170,30 @@ const Dashboard = () => {
           <table className="table-auto min-w-max w-full border-gray-500">
             <thead className="bg-second text-gray-500">
               <tr>
-                <th className=" border-gray-500 px-4 py-2 w-32 ">ID Admin</th>
-                <th className=" border-gray-500 px-4 py-2">Nama Admin</th>
-                <th className=" border-gray-500 px-4 py-2">Phone Number</th>
-                <th className=" border-gray-500 px-4 py-2">Email</th>
-                <th className=" border-gray-500 px-4 py-2">edit</th>
-                <th className=" border-gray-500 px-4 py-2">Delete</th>
+                <th className="border-gray-500 px-4 py-2 w-32">ID Admin</th>
+                <th className="border-gray-500 px-4 py-2">Nama Admin</th>
+                <th className="border-gray-500 px-4 py-2">Phone Number</th>
+                <th className="border-gray-500 px-4 py-2">Email</th>
+                <th className="border-gray-500 px-4 py-2">Edit</th>
+                <th className="border-gray-500 px-4 py-2">Delete</th>
               </tr>
             </thead>
             <tbody>
-              {stok.map((item, index) => (
-                <tr className="bg-second">
-                  <td className=" text-center border-gray-500 px-2 py-2">
+              {stok.map((item) => (
+                <tr key={item.id} className="bg-second">
+                  <td className="text-center border-gray-500 px-2 py-2">
                     {item.id}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.nama}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.no_hp}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.email}
                   </td>
-                  <td className=" border-gray-500 text-center py-2">
+                  <td className="border-gray-500 text-center py-2">
                     <button
                       onClick={() => handleEditBarang(item.id)}
                       className="text-blue-500"
@@ -205,13 +201,13 @@ const Dashboard = () => {
                       <EditIcon />
                     </button>
                   </td>
-                  <td className=" border-gray-500 text-center py-2">
+                  <td className="border-gray-500 text-center py-2">
                     <button
                       onClick={() => handleDeleteBarang(item.id)}
                       className="text-red-500 ml-2"
                     >
                       <DeleteIcon />
-                    </button>{" "}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -219,10 +215,8 @@ const Dashboard = () => {
           </table>
         </div>
 
-        {/* Form edit */}
-        {showFormedit && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-            {/* Header Form */}
+        {showFormEdit && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full bg-white shadow-lg">
             <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
               Edit Admin
               <button
@@ -243,37 +237,31 @@ const Dashboard = () => {
                 </svg>
               </button>
             </div>
-            {/* Body Form */}
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-              {/* Bagian kategori */}
               <input
-                type=""
+                type="text"
                 value={nama}
-                onChange={(e) => setnama(e.target.value)}
+                onChange={(e) => setNama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-              {/* Bagian kategori */}
               <input
                 type="number"
                 value={no_hp}
-                onChange={(e) => setNohp(e.target.value)}
+                onChange={(e) => setNoHp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-
-              {/* Bagian kategori */}
               <input
-                type=""
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-
               <button
                 onClick={handleUpdateBarang}
-                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
               >
                 Update
               </button>
@@ -281,10 +269,8 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Form Input */}
         {showForm && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-            {/* Header Form */}
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full bg-white shadow-lg">
             <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
               Add Admin
               <button
@@ -305,47 +291,40 @@ const Dashboard = () => {
                 </svg>
               </button>
             </div>
-            {/* Body Form */}
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-              {/* Bagian kategori */}
               <input
-                type=""
+                type="text"
                 value={nama}
-                onChange={(e) => setnama(e.target.value)}
+                onChange={(e) => setNama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-              {/* Bagian kategori */}
               <input
                 type="number"
                 value={no_hp}
-                onChange={(e) => setNohp(e.target.value)}
+                onChange={(e) => setNoHp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-
-              {/* Bagian kategori */}
               <input
-                type=""
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-              {/* Bagian kategori */}
               <input
-                type=""
+                type="password"
                 value={password}
-                onChange={(e) => setpassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
-
               <button
                 onClick={handleAddBarang}
-                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
               >
-                Tambah Barang
+                Add Admin
               </button>
             </div>
           </div>

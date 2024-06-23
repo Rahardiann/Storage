@@ -63,7 +63,7 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
-            to="/barangjadi"
+            to="/pasien"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
@@ -75,7 +75,7 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
-            to="/barangmentah"
+            to="/booking"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
@@ -87,7 +87,7 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
-            to="/Master/MasterBarangjadi"
+            to="/dentist"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
@@ -111,7 +111,7 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
-            to="/Master/MasterBarangmentah"
+            to="/promo"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
@@ -123,7 +123,7 @@ const Sidebar = () => {
         </li>
         <li className="my-10">
           <Link
-            to="/Master/galery"
+            to="/gallery"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
