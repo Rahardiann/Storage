@@ -274,12 +274,7 @@ function Jadwal() {
                           {item.jadwal}
                         </td>
                         <td className=" text-center border-gray-500 px-4 py-2">
-                          <button
-                            onClick={() => handleEditBarang(index)}
-                            className="bg-blue-500 text-white font-bold py-1 px-2 rounded mr-2"
-                          >
-                            Edit
-                          </button>
+                          
                           <button
                             onClick={() => handleDeleteBarang(index)}
                             className="bg-red-500 text-white font-bold py-1 px-2 rounded"

@@ -36,7 +36,7 @@ function Stokbarangjadi() {
     };
 
     try {
-      const response = await axios.post("/user/registeruser", newBarang);
+      const response = await axios.post("/user/registerlogin", newBarang);
       console.log(response.data.data);
       setStok((prevStok) => [...prevStok, response.data.data]);
     } catch (error) {
@@ -57,6 +57,7 @@ function Stokbarangjadi() {
       // no_ktp: noktp,
       no_rekam_medis: nomr,
       gender: gender,
+      password: password,
     };
 
     try {

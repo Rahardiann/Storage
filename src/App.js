@@ -18,13 +18,13 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/barangjadi" element={<Patient/>} />
-        <Route path="/barangmentah" element={<Stokbarangmentah/>} />
-        <Route path="/riwayat" element={<Riwayat/>} />
-        <Route path="/master/kategoriBarang" element={<Kategori/>} />
-        <Route path="/master/masterBarangjadi" element={<Masterbarangjadi/>} />
-        <Route path="/master/masterbarangmentah" element={<MasterBarangMentah/>} />
-        <Route path="/master/galery" element={<Gallery/>} />
+        <Route path="/pasien" element={<Patient/>} />
+        <Route path="/booking" element={<Stokbarangmentah/>} />
+        <Route path="/jadwals" element={<Riwayat/>} />
+        <Route path="/jadwal" element={<Kategori/>} />
+        <Route path="/dentist" element={<Masterbarangjadi/>} />
+        <Route path="/promo" element={<MasterBarangMentah/>} />
+        <Route path="/gallery" element={<Gallery/>} />
         <Route path="/jadwal" element={<Jadwal/>} />
       </Routes>
     </Router>

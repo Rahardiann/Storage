@@ -3,6 +3,7 @@ import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import React from "react";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import {
   BarChart,
   Bar,
@@ -14,7 +15,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 const Dashboard = () => {
   const [stok, setStok] = useState([]);
@@ -24,14 +24,15 @@ const Dashboard = () => {
   const [gender, setGender] = useState("");
   const [id, setIDDentist] = useState("");
   const [email, setEmail] = useState("");
-  const [showFormedit, setShowFormedit] = useState(false);
+  const [showFormEdit, setShowFormEdit] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [password, setPassword] = useState("");
   const [password, setPassword] = useState("");
   const [manualUserCount, setManualUserCount] = useState(0);
   const [digitalUserCount, setDigitalUserCount] = useState(0);
 
   const handleCloseFormEdit = () => {
-    setShowFormedit(false);
+    setShowFormEdit(false);
   };
 
   const handleUpdateBarang = async () => {
@@ -52,7 +53,7 @@ const Dashboard = () => {
       setShowFormedit(false);
       resetForm();
     } catch (error) {
-      console.error("Gagal mengupdate barang:", error);
+      console.error("Failed to update admin:", error);
     }
   };
   
@@ -74,18 +75,23 @@ const Dashboard = () => {
       setNama(barang.nama);
       setNohp(barang.no_hp);
       setEditingId(id);
-      setShowFormedit(true);
+      setShowFormEdit(true);
     } catch (error) {
-      console.error("Gagal mengambil barang:", error);
+      console.error("Failed to fetch admin:", error);
     }
   };
 
   const handleDeleteBarang = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this admin?")) {
+      return;
+    }
+
     try {
+      await axios.delete(`/admin/${id}`);
       await axios.delete(`/admin/${id}`);
       setStok((prevStok) => prevStok.filter((item) => item.id !== id));
     } catch (error) {
-      console.error("Gagal menghapus barang:", error);
+      console.error("Failed to delete admin:", error);
     }
   };
 
@@ -104,7 +110,7 @@ const Dashboard = () => {
       setShowForm(false);
       resetForm();
     } catch (error) {
-      console.error("Gagal menambahkan admin:", error);
+      console.error("Failed to add admin:", error);
     }
   };
   
@@ -138,7 +144,7 @@ const Dashboard = () => {
         setStok(responseAdmin.data.data);
         calculateUserCounts(responseUser.data.data);
       } catch (error) {
-        console.error("Gagal mengambil data:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
 
@@ -204,16 +210,16 @@ const Dashboard = () => {
                   <td className=" text-center border-gray-500 px-2 py-2">
                     A00{index + 1}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.nama}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.no_hp}
                   </td>
-                  <td className=" text-center border-gray-500 px-4 py-2">
+                  <td className="text-center border-gray-500 px-4 py-2">
                     {item.email}
                   </td>
-                  <td className=" border-gray-500 text-center py-2">
+                  <td className="border-gray-500 text-center py-2">
                     <button
                       onClick={() => handleEditBarang(item.id)}
                       className="text-blue-500"
@@ -225,7 +231,7 @@ const Dashboard = () => {
                       className="text-red-500 ml-2"
                     >
                       <DeleteIcon />
-                    </button>{" "}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -257,8 +263,9 @@ const Dashboard = () => {
             </div>
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
               <input
-                type=""
+                type="text"
                 value={nama}
+                onChange={(e) => setNama(e.target.value)}
                 onChange={(e) => setNama(e.target.value)}
                 placeholder="Nama Admin"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
@@ -266,12 +273,12 @@ const Dashboard = () => {
               <input
                 type="number"
                 value={no_hp}
-                onChange={(e) => setNohp(e.target.value)}
+                onChange={(e) => setNoHp(e.target.value)}
                 placeholder="Phone Number"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               <input
-                type=""
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
@@ -279,7 +286,7 @@ const Dashboard = () => {
               />
               <button
                 onClick={handleUpdateBarang}
-                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
               >
                 Update
               </button>
@@ -311,7 +318,7 @@ const Dashboard = () => {
             </div>
             <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
               <input
-                type=""
+                type="text"
                 value={nama}
                 onChange={(e) => setNama(e.target.value)}
                 placeholder="Nama"
@@ -325,24 +332,25 @@ const Dashboard = () => {
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               <input
-                type=""
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               <input
-                type=""
+                type="password"
                 value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
               />
               <button
                 onClick={handleAddBarang}
-                className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
               >
-                Tambah Barang
+                Add Admin
               </button>
             </div>
           </div>
