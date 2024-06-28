@@ -26,11 +26,11 @@ function Stokbarangjadi() {
   const handleAddBarang = async () => {
     const newBarang = {
       email: email,
-      password: password,
+      // password: password,
       nama: nama,
       no_hp: nohp,
-      alamat: alamat,
-      no_ktp: noktp,
+      // alamat: alamat,
+      // no_ktp: noktp,
       no_rekam_medis: nomr,
       gender: gender,
     };
@@ -38,7 +38,7 @@ function Stokbarangjadi() {
     try {
       const response = await axios.post("/user/registeruser", newBarang);
       console.log(response.data.data);
-      setStok((prevStok) => [...prevStok, response.data]);
+      setStok((prevStok) => [...prevStok, response.data.data]);
     } catch (error) {
       console.error("Gagal menambahkan barang:", error);
     }
@@ -50,11 +50,11 @@ function Stokbarangjadi() {
   const handleUpdateBarang = async () => {
     const updatedBarang = {
       email: email,
-      password: password,
+      // password: password,
       nama: nama,
       no_hp: nohp,
-      alamat: alamat,
-      no_ktp: noktp,
+      // alamat: alamat,
+      // no_ktp: noktp,
       no_rekam_medis: nomr,
       gender: gender,
     };
@@ -63,7 +63,7 @@ function Stokbarangjadi() {
       const response = await axios.put(`/user/${editingId}`, updatedBarang);
       console.log(response.data.data);
       setStok((prevStok) =>
-        prevStok.map((item) => (item.id === editingId ? response.data : item))
+        prevStok.map((item) => (item.id === editingId ? response.data.data : item))
       );
     } catch (error) {
       console.error("Gagal mengupdate barang:", error);
@@ -83,19 +83,6 @@ function Stokbarangjadi() {
     setnomr("");
     setGender("");
     setEditingId(null);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setnoktp(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
   };
 
   function hitungUsia(tglLahir) {
@@ -161,6 +148,11 @@ function Stokbarangjadi() {
     }
   };
 
+  const handleShowForm = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -171,7 +163,7 @@ function Stokbarangjadi() {
           </h1>
           <div className="flex justify-between mb-4">
             <button
-              onClick={() => setShowForm(true)}
+              onClick={handleShowForm}
               className="bg-main hover:bg-second text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
               ADD
@@ -206,13 +198,13 @@ function Stokbarangjadi() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                <input
+                {/* <input
                   type="text"
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
                   placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                /> */}
                 <input
                   type="text"
                   value={nama}
@@ -227,20 +219,20 @@ function Stokbarangjadi() {
                   placeholder="No HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
+                {/* <input
                   type="text"
                   value={alamat}
                   onChange={(e) => setalamat(e.target.value)}
                   placeholder="Alamat"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
-                <input
+                /> */}
+                {/* <input
                   type="number"
                   value={noktp}
                   onChange={(e) => setnoktp(e.target.value)}
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                /> */}
                 <input
                   type="number"
                   value={nomr}
@@ -293,25 +285,32 @@ function Stokbarangjadi() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                <input
+                {/* <input
                   type="text"
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
                   placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                /> */}
                 <input
                   type="text"
                   value={nama}
                   onChange={(e) => setnama(e.target.value)}
-                  placeholder="Nama"
+                  placeholder="Nama Lengkap"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
+                {/* <input
                   type="text"
                   value={password}
                   onChange={(e) => setpassword(e.target.value)}
                   placeholder="Password"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                /> */}
+                <input
+                  type="number"
+                  value={nomr}
+                  onChange={(e) => setnomr(e.target.value)}
+                  placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input
@@ -321,27 +320,20 @@ function Stokbarangjadi() {
                   placeholder="No HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
-                <input
+                {/* <input
                   type="text"
                   value={alamat}
                   onChange={(e) => setalamat(e.target.value)}
                   placeholder="Alamat"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
-                <input
+                /> */}
+                {/* <input
                   type="number"
                   value={noktp}
                   onChange={(e) => setnoktp(e.target.value)}
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
-                <input
-                  type="number"
-                  value={nomr}
-                  onChange={(e) => setnomr(e.target.value)}
-                  placeholder="No Rekam Medis"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                /> */}
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
@@ -372,7 +364,7 @@ function Stokbarangjadi() {
                   <th className=" border-gray-500 px-4 py-2">Nama Lengkap</th>
                   <th className=" border-gray-500 px-4 py-2">No RM</th>
                   <th className=" border-gray-500 px-4 py-2">Usia</th>
-                  <th className=" border-gray-500 px-4 py-2">gender</th>
+                  <th className=" border-gray-500 px-4 py-2">Gender</th>
                   <th className=" border-gray-500 px-4 py-2">Alamat</th>
                   <th className=" border-gray-500 px-4 py-2">Nomor Telepon</th>
                   <th className=" border-gray-500 px-4 py-2">Email</th>

@@ -311,12 +311,6 @@ function Masterbarangjadi() {
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
                 <input
-                  type="file"
-                  onChange={handleImageUpload}
-                  placeholder=""
-                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
-                />
-                <input
                   type="text"
                   value={namadentist}
                   onChange={(e) => setNamaDentist(e.target.value)}
@@ -328,6 +322,12 @@ function Masterbarangjadi() {
                   value={jumlahBarang}
                   onChange={(e) => setJumlahBarang(e.target.value)}
                   placeholder="NO HP"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
+                />
+                 <input
+                  type="file"
+                  onChange={handleImageUpload}
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
-import EditIcon from "@material-ui/icons/Edit";
+import Select from "react-select";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 function Stokbarangmentah() {
@@ -16,12 +16,20 @@ function Stokbarangmentah() {
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [dentist, setDentist] = useState("");
+  const [time, setTime] = useState(""); // Added state for time
+  const [dentist, setDentist] = useState(""); // Added state for dentist
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [timeOptions, setTimeOptions] = useState([]);
+  const [dentistOptions, setDentistOptions] = useState([]);
 
-  const handleDeleteBarang = (index) => {
-    // Implementasi logika untuk menghapus barang
-    console.log("Hapus barang dengan index:", index);
+  const handleDeleteBarang = async (id) => {
+    try {
+      await axios.delete(`/booking/${id}`);
+      setBooking((prevBooking) => prevBooking.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error(`Gagal menghapus booking dengan ID ${id}:`, error);
+    }
   };
 
   const handleAddBarang = () => {
@@ -41,49 +49,54 @@ function Stokbarangmentah() {
     setNamaBarang("");
     setJumlahBarang("");
     setDate("");
-    setTime("");
-    setDentist("");
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFotoBarang(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    setTime(""); // Reset time state
+    setDentist(""); // Reset dentist state
   };
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get("/booking/all");
         setBooking(response.data.data);
-      } catch (err) {
-        console.log(err);
+
+        const response2 = await axios.get("/user/");
+        setUsers(response2.data.data);
+
+        // Fetch time options from API based on date (dummy implementation)
+        if (date) {
+          const timeResponse = await axios.get("/jadwal/2/filter", { keyword: date });
+          setTimeOptions(timeResponse.data.data);
+        }
+
+        // Fetch dentist options from API (dummy implementation)
+        const dentistResponse = await axios.get("/dokter/");
+        setDentistOptions(dentistResponse.data.data);
+        console.log(dentistOptions)
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-    fetch();
-  }, []);
 
-  const handleShowImagePopup = (imageSrc) => {
-    setPopupImageSrc(imageSrc);
-    setShowImagePopup(true);
-  };
+    fetchData();
+  }, [date]);
 
   const handleCloseImagePopup = () => {
     setShowImagePopup(false);
   };
 
-  function formatDate(dateString) {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0]; // Hanya ambil bagian tanggalnya saja
-  }
+  const options = users.map((user) => ({
+    value: user.id,
+    label: user.nama,
+  }));
+
+  const handleInputChange = (newValue) => {
+    const inputValue = newValue.replace(/\W/g, "");
+    return inputValue;
+  };
+
+  const handleUserChange = (selectedOption) => {
+    setSelectedUser(selectedOption);
+  };
 
   return (
     <div className="flex h-screen">
@@ -134,21 +147,27 @@ function Stokbarangmentah() {
               </div>
               {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Dropdown ID User */}
-                <input
-                  type="number"
-                  value={kategoriBarang}
-                  onChange={(e) => setKategoriBarang(e.target.value)}
-                  placeholder="ID User"
+                {/* Dropdown Username */}
+                <Select
+                  value={selectedUser}
+                  onChange={handleUserChange}
+                  options={options}
+                  isSearchable={true}
+                  placeholder="Pilih Nama User"
+                  onInputChange={handleInputChange}
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                {/* Dropdown Username */}
-                <input
-                  type="text"
-                  value={namaBarang}
-                  onChange={(e) => setNamaBarang(e.target.value)}
-                  placeholder="Username"
+                 {/* Dropdown Dentist */}
+                 <Select
+                  value={dentist}
+                  onChange={(selectedOption) => setDentist(selectedOption)}
+                  options={dentistOptions.map((dentist) => ({
+                    value: dentist.id,
+                    label: dentist.nama,
+                  }))}
+                  isSearchable={true}
+                  placeholder="Pilih Dokter"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
@@ -160,32 +179,18 @@ function Stokbarangmentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                {/* Dropdown Kategori Barang */}
-                <select
+                {/* Dropdown Time */}
+                <Select
                   value={time}
-                  onChange={(e) => setTime(e.target.value)}
+                  onChange={(selectedOption) => setTime(selectedOption)}
+                  options={timeOptions.map((time) => ({
+                    value: time,
+                    label: time,
+                  }))}
+                  isSearchable={true}
+                  placeholder="Pilih Jam"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                >
-                  <option value="" disabled>
-                    Time
-                  </option>
-                  <option value="kategori1">09 : 00</option>
-                  <option value="kategori2">10 : 00</option>
-                  <option value="kategori3">12 : 00</option>
-                </select>
-                {/* Dropdown Nama Barang */}
-                <select
-                  value={dentist}
-                  onChange={(e) => setDentist(e.target.value)}
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                >
-                  <option value="" disabled>
-                    Dentist
-                  </option>
-                  <option value="barang1">Herr Muller</option>
-                  <option value="barang2">Frau Welder</option>
-                  <option value="barang3">Frau Ritter</option>
-                </select>
+                />
 
                 <button
                   onClick={handleAddBarang}
@@ -202,12 +207,14 @@ function Stokbarangmentah() {
             <table className="table-auto  w-full">
               <thead className="bg-second text-gray-500">
                 <tr>
-                  <th className=" border-gray-500 px-4 py-2 w-32">ID User</th>
-                  <th className=" border-gray-500 px-4 py-2 w-38">Username</th>
+                  <th className=" border-gray-500 px-4 py-2 w-32">ID Booking</th>
+                  <th className=" border-gray-500 px-4 py-2 w-38">Nama Lengkap</th>
                   <th className=" border-gray-500 px-4 py-2 w-32">No MR</th>
-                  <th className=" border-gray-500 px-4 py-2 ">Date</th>
+                  <th className=" border-gray-500 px-4 py-2 ">Tanggal</th>
                   <th className=" border-gray-500 px-4 py-2">Time</th>
                   <th className=" border-gray-500 px-4 py-2">Dentist</th>
+                  <th className=" border-gray-500 px-4 py-2">Promo</th>
+                  <th className=" border-gray-500 px-4 py-2">Nomor Telepon</th>
                   <th className=" border-gray-500 px-4 py-2 w-24">Action</th>
                 </tr>
               </thead>
@@ -215,7 +222,7 @@ function Stokbarangmentah() {
                 {booking.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
-                      {item.id_user}
+                      B{index + 1}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.user?.nama}
@@ -232,10 +239,16 @@ function Stokbarangmentah() {
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.dokter?.nama}
                     </td>
+                    <td className="text-center border-gray-500 px-4 py-2">
+                      {item.promo?.judul}
+                    </td>
+                    <td className="text-center border-gray-500 px-4 py-2">
+                      {item.user?.no_hp}
+                    </td>
 
                     <td className=" border-gray-500 text-center py-2">
                       <button
-                        onClick={() => handleDeleteBarang(index)}
+                        onClick={() => handleDeleteBarang(item.id)}
                         className="text-red-500 ml-2"
                       >
                         <DeleteIcon />
