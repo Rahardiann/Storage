@@ -39,7 +39,7 @@ const LoginForm = () => {
       navigate("/dashboard"); // Redirect to the dashboard or any other page upon successful login
     } catch (error) {
       console.error("Login failed:", error.message);
-      toast.error("Login failed. Please check your credentials.");
+      toast.error("Password atau username mungkin salah!");
     }
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../config/axiosConfig";
 
-const TimeButtonList = ({ id }) => {
+const TimeButtonList = ({ id, selectedDate, onDateChange }) => {
   const times = [
     "08.00",
     "08.30",
@@ -27,19 +27,32 @@ const TimeButtonList = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/jadwal/all`);
-        const timesById = response.data.data.find(item => item.id === id);
+        const response = await axios.get(`jadwal/1/filter/${selectedDate}`);
+        const timesById = response.data.data.find((item) => item.id === id);
+        console.log(timesById);
         if (timesById) {
           const available = timesById.jam.split(",");
           setAvailableTimes(available);
           setSelectedTimes(available);
+        } else {
+          setAvailableTimes([]);
+          setSelectedTimes([]);
         }
       } catch (error) {
         console.error(error);
+        setAvailableTimes([]);
+        setSelectedTimes([]);
       }
     };
-    fetchData();
-  }, [id]);
+
+    // Reset state when selectedDate changes
+    setAvailableTimes([]);
+    setSelectedTimes([]);
+
+    if (selectedDate) {
+      fetchData();
+    }
+  }, [id, selectedDate]);
 
   const handleTimeClick = (time) => {
     const updatedSelectedTimes = [...selectedTimes];

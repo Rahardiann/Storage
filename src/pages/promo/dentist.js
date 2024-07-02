@@ -324,7 +324,7 @@ function Masterbarangjadi() {
                   placeholder="NO HP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
-                 <input
+                <input
                   type="file"
                   onChange={handleImageUpload}
                   placeholder=""
@@ -424,8 +424,8 @@ function Masterbarangjadi() {
                     <td className="border-gray-500 text-center py-2">
                       <TimeButtonList
                         id={item.id}
-                        onTimeSelect={handleTimeSelect}
-                        availability={timeAvailability[item.id] || {}}
+                        selectedDate={selectedDate}
+                        onDateChange={handleDateChange}
                       />
                     </td>
                     <td className="border-gray-500 text-center py-2">

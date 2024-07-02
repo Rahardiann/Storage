@@ -16,8 +16,8 @@ function Stokbarangmentah() {
   const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [date, setDate] = useState("");
-  const [time, setTime] = useState(""); // Added state for time
-  const [dentist, setDentist] = useState(""); // Added state for dentist
+  const [time, setTime] = useState(""); 
+  const [dentist, setDentist] = useState(null); 
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [timeOptions, setTimeOptions] = useState([]);
@@ -32,26 +32,40 @@ function Stokbarangmentah() {
     }
   };
 
-  const handleAddBarang = () => {
+  const handleAddBarang = async () => {
     const newBarang = {
       kategori: kategoriBarang,
       nama: namaBarang,
       date: date,
-      time: time,
-      dentist: dentist,
+      time: time.value,
+      dentist: dentist.value,
       jumlahBarang: jumlahBarang,
     };
-
-    setListBarang((prevList) => [...prevList, newBarang]);
-    setShowForm(false);
-    // Reset form input
-    setKategoriBarang("");
-    setNamaBarang("");
-    setJumlahBarang("");
-    setDate("");
-    setTime(""); // Reset time state
-    setDentist(""); // Reset dentist state
+  
+    try {
+      // Kirim POST request ke endpoint /booking/ dengan data newBarang
+      const response = await axios.post('/booking/', newBarang);
+  
+      // Handle jika POST request berhasil
+      console.log('Barang berhasil ditambahkan:', response.data);
+  
+      // Update state listBarang dengan menambahkan newBarang ke dalamnya
+      setListBarang((prevList) => [...prevList, newBarang]);
+      setShowForm(false);
+  
+      // Reset form input
+      setKategoriBarang('');
+      setNamaBarang('');
+      setJumlahBarang('');
+      setDate('');
+      setTime('');
+      setDentist(null);
+    } catch (error) {
+      // Handle jika terjadi error saat melakukan POST request
+      console.error('Gagal menambahkan barang:', error);
+    }
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,26 +73,42 @@ function Stokbarangmentah() {
         const response = await axios.get("/booking/all");
         setBooking(response.data.data);
 
-        const response2 = await axios.get("/user/");
-        setUsers(response2.data.data);
+        const userResponse = await axios.get("/user/");
+        setUsers(userResponse.data.data);
 
-        // Fetch time options from API based on date (dummy implementation)
-        if (date) {
-          const timeResponse = await axios.get("/jadwal/2/filter", { keyword: date });
-          setTimeOptions(timeResponse.data.data);
-        }
-
-        // Fetch dentist options from API (dummy implementation)
         const dentistResponse = await axios.get("/dokter/");
         setDentistOptions(dentistResponse.data.data);
-        console.log(dentistOptions)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [date]);
+  }, []);
+
+  useEffect(() => {
+    const fetchTimeOptions = async () => {
+      if (date && dentist) {
+        try {
+          const timeResponse = await axios.get(`/jadwal/${dentist.value}/${date}`);
+          const jamFix = timeResponse.data.data.map(item => ({
+            id: item.id,
+            jam: item.jam,
+          }));
+
+          setTimeOptions(jamFix[0].jam);
+          console.log(jamFix[0].jam)
+          console.log(date)
+        } catch (error) {
+          console.error("Error fetching time options:", error);
+        }
+      } else {
+        setTimeOptions([]);
+      }
+    };
+
+    fetchTimeOptions();
+  }, [date, dentist]);
 
   const handleCloseImagePopup = () => {
     setShowImagePopup(false);
@@ -102,7 +132,6 @@ function Stokbarangmentah() {
     <div className="flex h-screen">
       <Sidebar />
       <div className="p-8 w-screen overflow-auto">
-        {/* Konten Stokbarangjadi */}
         <div>
           <h1 className="font-sans text-2xl text-third font-bold mb-20">
             Booking
@@ -121,10 +150,8 @@ function Stokbarangmentah() {
             />
           </div>
 
-          {/* Form Input */}
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
-              {/* Header Form */}
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
                 Tambah Booking
                 <button
@@ -145,9 +172,8 @@ function Stokbarangmentah() {
                   </svg>
                 </button>
               </div>
-              {/* Body Form */}
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* Dropdown Username */}
+                
                 <Select
                   value={selectedUser}
                   onChange={handleUserChange}
@@ -158,8 +184,7 @@ function Stokbarangmentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                 {/* Dropdown Dentist */}
-                 <Select
+                <Select
                   value={dentist}
                   onChange={(selectedOption) => setDentist(selectedOption)}
                   options={dentistOptions.map((dentist) => ({
@@ -171,7 +196,6 @@ function Stokbarangmentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                {/* Dropdown Tanggal */}
                 <input
                   type="date"
                   value={date}
@@ -179,22 +203,21 @@ function Stokbarangmentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                {/* Dropdown Time */}
-                <Select
-                  value={time}
-                  onChange={(selectedOption) => setTime(selectedOption)}
-                  options={timeOptions.map((time) => ({
-                    value: time,
-                    label: time,
-                  }))}
-                  isSearchable={true}
-                  placeholder="Pilih Jam"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
+                  <Select
+                    value={time}
+                    onChange={(selectedOption) => setTime(selectedOption)}
+                    options={timeOptions.map((item) => ({
+                      value: item.id,
+                      label: item,
+                    }))}
+                    isSearchable={true}
+                    placeholder="Pilih Jam"
+                    className="border border-gray-400 p-2 rounded mb-2 w-full"
+                  />
 
                 <button
                   onClick={handleAddBarang}
-                  className="bg-main  text-white font-bold rounded py-2 px-4 mt-4 w-full"
+                  className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
                   Tambah Barang
                 </button>
@@ -202,20 +225,19 @@ function Stokbarangmentah() {
             </div>
           )}
 
-          {/* Tabel dengan Data */}
           <div className="overflow-x-auto">
-            <table className="table-auto  w-full">
+            <table className="table-auto w-full">
               <thead className="bg-second text-gray-500">
                 <tr>
-                  <th className=" border-gray-500 px-4 py-2 w-32">ID Booking</th>
-                  <th className=" border-gray-500 px-4 py-2 w-38">Nama Lengkap</th>
-                  <th className=" border-gray-500 px-4 py-2 w-32">No MR</th>
-                  <th className=" border-gray-500 px-4 py-2 ">Tanggal</th>
-                  <th className=" border-gray-500 px-4 py-2">Time</th>
-                  <th className=" border-gray-500 px-4 py-2">Dentist</th>
-                  <th className=" border-gray-500 px-4 py-2">Promo</th>
-                  <th className=" border-gray-500 px-4 py-2">Nomor Telepon</th>
-                  <th className=" border-gray-500 px-4 py-2 w-24">Action</th>
+                  <th className="border-gray-500 px-4 py-2 w-32">ID Booking</th>
+                  <th className="border-gray-500 px-4 py-2 w-38">Nama Lengkap</th>
+                  <th className="border-gray-500 px-4 py-2 w-32">No MR</th>
+                  <th className="border-gray-500 px-4 py-2">Tanggal</th>
+                  <th className="border-gray-500 px-4 py-2">Time</th>
+                  <th className="border-gray-500 px-4 py-2">Dentist</th>
+                  <th className="border-gray-500 px-4 py-2">Promo</th>
+                  <th className="border-gray-500 px-4 py-2">Nomor Telepon</th>
+                  <th className="border-gray-500 px-4 py-2 w-24">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -246,7 +268,7 @@ function Stokbarangmentah() {
                       {item.user?.no_hp}
                     </td>
 
-                    <td className=" border-gray-500 text-center py-2">
+                    <td className="border-gray-500 text-center py-2">
                       <button
                         onClick={() => handleDeleteBarang(item.id)}
                         className="text-red-500 ml-2"
@@ -262,7 +284,6 @@ function Stokbarangmentah() {
         </div>
       </div>
 
-      {/* Pop-up Image */}
       {showImagePopup && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
           <div className="bg-white p-8 rounded-lg">
