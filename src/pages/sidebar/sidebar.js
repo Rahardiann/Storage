@@ -148,7 +148,7 @@ const Sidebar = () => {
         </li> */}
         <li className="my-10">
           <Link
-            to="/logout"
+            to="/"
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}

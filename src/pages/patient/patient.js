@@ -7,8 +7,6 @@ import EditIcon from "@material-ui/icons/Edit";
 
 function Stokbarangjadi() {
   const [stok, setStok] = useState([]);
-  const [showImagePopup, setShowImagePopup] = useState(false);
-  const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showFormedit, setShowFormedit] = useState(false);
   const [email, setemail] = useState("");
@@ -18,21 +16,21 @@ function Stokbarangjadi() {
   const [nomr, setnomr] = useState("");
   const [gender, setGender] = useState("");
   const [userOptions, setuserOptions] = useState([]);
-  const [listBarang, setListBarang] = useState([]);
   const [nohp, setnohp] = useState("");
   const [alamat, setalamat] = useState("");
+  const [tanggalLahir, setTanggalLahir] = useState("");
   const [editingId, setEditingId] = useState(null);
 
   const handleAddBarang = async () => {
     const newBarang = {
-      email: email,
-      // password: password,
-      nama: nama,
-      no_hp: nohp,
-      // alamat: alamat,
-      // no_ktp: noktp,
-      no_rekam_medis: nomr,
-      gender: gender,
+      email: email || "",
+      password: password || "",
+      nama: nama || "",
+      no_hp: nohp || "",
+      alamat: alamat || "",
+      tanggal_lahir: tanggalLahir || "",
+      no_rekam_medis: nomr || "",
+      gender: gender || "",
     };
 
     try {
@@ -49,22 +47,23 @@ function Stokbarangjadi() {
 
   const handleUpdateBarang = async () => {
     const updatedBarang = {
-      email: email,
-      // password: password,
-      nama: nama,
-      no_hp: nohp,
-      // alamat: alamat,
-      // no_ktp: noktp,
-      no_rekam_medis: nomr,
-      gender: gender,
-      password: password,
+      email: email || "",
+      password: password || "",
+      nama: nama || "",
+      no_hp: nohp || "",
+      alamat: alamat || "",
+      tanggal_lahir: tanggalLahir || "",
+      no_rekam_medis: nomr || "",
+      gender: gender || "",
     };
 
     try {
       const response = await axios.put(`/user/${editingId}`, updatedBarang);
       console.log(response.data.data);
       setStok((prevStok) =>
-        prevStok.map((item) => (item.id === editingId ? response.data.data : item))
+        prevStok.map((item) =>
+          item.id === editingId ? response.data.data : item
+        )
       );
     } catch (error) {
       console.error("Gagal mengupdate barang:", error);
@@ -83,6 +82,7 @@ function Stokbarangjadi() {
     setnoktp("");
     setnomr("");
     setGender("");
+    setTanggalLahir("");
     setEditingId(null);
   };
 
@@ -141,6 +141,7 @@ function Stokbarangjadi() {
       setalamat(barang.alamat);
       setnoktp(barang.no_ktp);
       setnomr(barang.no_rekam_medis);
+      setTanggalLahir(barang.tanggal_lahir);
       setGender(barang.gender);
       setEditingId(id);
       setShowFormedit(true);
@@ -205,13 +206,27 @@ function Stokbarangjadi() {
                   onChange={(e) => setemail(e.target.value)}
                   placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
-                /> */}
+                  /> */}
                 <input
                   type="text"
                   value={nama}
                   onChange={(e) => setnama(e.target.value)}
                   placeholder="Nama"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="number"
+                  value={nomr}
+                  onChange={(e) => setnomr(e.target.value)}
+                  placeholder="No Rekam Medis"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="date"
+                  value={tanggalLahir}
+                  onChange={(e) => setTanggalLahir(e.target.value)}
+                  placeholder="Tanggal"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
                   type="number"
@@ -234,13 +249,6 @@ function Stokbarangjadi() {
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 /> */}
-                <input
-                  type="number"
-                  value={nomr}
-                  onChange={(e) => setnomr(e.target.value)}
-                  placeholder="No Rekam Medis"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                />
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
@@ -313,6 +321,13 @@ function Stokbarangjadi() {
                   onChange={(e) => setnomr(e.target.value)}
                   placeholder="No Rekam Medis"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="date"
+                  value={tanggalLahir}
+                  onChange={(e) => setTanggalLahir(e.target.value)}
+                  placeholder="Tanggal"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full mr-2"
                 />
                 <input
                   type="number"

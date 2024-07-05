@@ -8,20 +8,19 @@ import DeleteIcon from "@material-ui/icons/Delete";
 function Stokbarangmentah() {
   const [booking, setBooking] = useState([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
-  const [popupImageSrc, setPopupImageSrc] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [kategoriBarang, setKategoriBarang] = useState("");
-  const [namaBarang, setNamaBarang] = useState("");
   const [jumlahBarang, setJumlahBarang] = useState("");
-  const [fotoBarang, setFotoBarang] = useState("");
   const [listBarang, setListBarang] = useState([]);
   const [date, setDate] = useState("");
-  const [time, setTime] = useState(""); 
-  const [dentist, setDentist] = useState(null); 
+  const [time, setTime] = useState("");
+  const [promo, setPromo] = useState("");
+  const [dentist, setDentist] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedPromo, setSelectedPromo] = useState(null);
   const [users, setUsers] = useState([]);
   const [timeOptions, setTimeOptions] = useState([]);
   const [dentistOptions, setDentistOptions] = useState([]);
+  const [promoOptions, setPromoOptions] = useState([]);
 
   const handleDeleteBarang = async (id) => {
     try {
@@ -34,38 +33,44 @@ function Stokbarangmentah() {
 
   const handleAddBarang = async () => {
     const newBarang = {
-      kategori: kategoriBarang,
-      nama: namaBarang,
-      date: date,
-      time: time.value,
-      dentist: dentist.value,
-      jumlahBarang: jumlahBarang,
+      user: {
+        id: selectedUser.value,
+      },
+      dentist: {
+        id: dentist.value,
+      },
+      jadwal: {
+        jam: time.label,
+        jadwal: date,
+      },
+      judul: {
+        id: selectedPromo ? { id: selectedPromo.value } : null,
+      },
     };
-  
+
     try {
       // Kirim POST request ke endpoint /booking/ dengan data newBarang
-      const response = await axios.post('/booking/', newBarang);
-  
+      const response = await axios.post("/booking/", newBarang);
+
       // Handle jika POST request berhasil
-      console.log('Barang berhasil ditambahkan:', response.data);
-  
+      console.log("Barang berhasil ditambahkan:", response.data);
+
       // Update state listBarang dengan menambahkan newBarang ke dalamnya
-      setListBarang((prevList) => [...prevList, newBarang]);
+      setBooking((prevBooking) => [...prevBooking, response.data.data]);
       setShowForm(false);
-  
+
       // Reset form input
-      setKategoriBarang('');
-      setNamaBarang('');
-      setJumlahBarang('');
-      setDate('');
-      setTime('');
+      setDate("");
+      setTime("");
+      setPromo("");
       setDentist(null);
+      setSelectedUser(null);
+      setSelectedPromo(null);
     } catch (error) {
       // Handle jika terjadi error saat melakukan POST request
-      console.error('Gagal menambahkan barang:', error);
+      console.error("Gagal menambahkan barang:", error);
     }
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,6 +83,9 @@ function Stokbarangmentah() {
 
         const dentistResponse = await axios.get("/dokter/");
         setDentistOptions(dentistResponse.data.data);
+
+        const promoResponse = await axios.get("/promo/");
+        setPromoOptions(promoResponse.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -88,22 +96,23 @@ function Stokbarangmentah() {
 
   useEffect(() => {
     const fetchTimeOptions = async () => {
+      setTimeOptions([]); // Reset timeOptions whenever date or dentist changes
       if (date && dentist) {
         try {
-          const timeResponse = await axios.get(`/jadwal/${dentist.value}/${date}`);
-          const jamFix = timeResponse.data.data.map(item => ({
+          const timeResponse = await axios.get(
+            `/jadwal/${dentist.value}/${date}`
+          );
+          const jamFix = timeResponse.data.data.map((item) => ({
             id: item.id,
             jam: item.jam,
           }));
 
           setTimeOptions(jamFix[0].jam);
-          console.log(jamFix[0].jam)
-          console.log(date)
+          console.log(jamFix[0].jam);
+          console.log(date);
         } catch (error) {
           console.error("Error fetching time options:", error);
         }
-      } else {
-        setTimeOptions([]);
       }
     };
 
@@ -126,6 +135,10 @@ function Stokbarangmentah() {
 
   const handleUserChange = (selectedOption) => {
     setSelectedUser(selectedOption);
+  };
+
+  const handlePromoChange = (selectedOption) => {
+    setSelectedPromo(selectedOption);
   };
 
   return (
@@ -173,7 +186,6 @@ function Stokbarangmentah() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                
                 <Select
                   value={selectedUser}
                   onChange={handleUserChange}
@@ -203,23 +215,35 @@ function Stokbarangmentah() {
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
 
-                  <Select
-                    value={time}
-                    onChange={(selectedOption) => setTime(selectedOption)}
-                    options={timeOptions.map((item) => ({
-                      value: item.id,
-                      label: item,
-                    }))}
-                    isSearchable={true}
-                    placeholder="Pilih Jam"
-                    className="border border-gray-400 p-2 rounded mb-2 w-full"
-                  />
+                <Select
+                  value={time}
+                  onChange={(selectedOption) => setTime(selectedOption)}
+                  options={timeOptions.map((item) => ({
+                    value: item.id,
+                    label: item,
+                  }))}
+                  isSearchable={true}
+                  placeholder="Pilih Jam"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+
+                <Select
+                  value={promo}
+                  onChange={(selectedOption) => setPromo(selectedOption)}
+                  options={promoOptions.map((item) => ({
+                    value: item.id,
+                    label: item.judul,
+                  }))}
+                  isSearchable={true}
+                  placeholder="Pilih Promo"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
 
                 <button
                   onClick={handleAddBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  Tambah Barang
+                  Save
                 </button>
               </div>
             </div>
@@ -230,7 +254,9 @@ function Stokbarangmentah() {
               <thead className="bg-second text-gray-500">
                 <tr>
                   <th className="border-gray-500 px-4 py-2 w-32">ID Booking</th>
-                  <th className="border-gray-500 px-4 py-2 w-38">Nama Lengkap</th>
+                  <th className="border-gray-500 px-4 py-2 w-38">
+                    Nama Lengkap
+                  </th>
                   <th className="border-gray-500 px-4 py-2 w-32">No MR</th>
                   <th className="border-gray-500 px-4 py-2">Tanggal</th>
                   <th className="border-gray-500 px-4 py-2">Time</th>
