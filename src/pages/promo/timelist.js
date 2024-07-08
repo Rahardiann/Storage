@@ -28,7 +28,9 @@ const TimeButtonList = ({ id, selectedDate, onDateChange }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`jadwal/1/filter/${selectedDate}`);
-        const timesById = response.data.data.find((item) => item.id === id);
+        const timesById = response.data.data.find(
+          (item) => item.id_dokter === id
+        );
         console.log(timesById);
         if (timesById) {
           const available = timesById.jam.split(",");
@@ -68,12 +70,11 @@ const TimeButtonList = ({ id, selectedDate, onDateChange }) => {
   const handleSave = () => {
     // Prepare data to send
     const data = {
-      jam: selectedTimes.join(","), // Convert selected times to comma-separated string
+      jam: selectedTimes.join(","),
     };
 
-    // Send update request to server
     axios
-      .put(`/jadwal/${id}`, data)
+      .put(`/jadwal/${id}/${selectedDate}`, data)
       .then((response) => {
         console.log(response.data);
         // Handle success response
