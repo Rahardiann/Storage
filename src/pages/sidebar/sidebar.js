@@ -121,7 +121,7 @@ const Sidebar = () => {
             {!minimized && <span>Promo</span>}
           </Link>
         </li>
-        <li className="my-10">
+        {/* <li className="my-10">
           <Link
             to="/gallery"
             className={`flex items-center text-main text-base sidebar-item ${
@@ -132,7 +132,7 @@ const Sidebar = () => {
             <FaImage className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
             {!minimized && <span>Galery</span>}
           </Link>
-        </li>
+        </li> */}
 
         {/* <li className="my-10">
           <Link
