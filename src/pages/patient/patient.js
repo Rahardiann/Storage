@@ -168,11 +168,11 @@ function Stokbarangjadi() {
               onClick={handleShowForm}
               className="bg-main hover:bg-second text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
-              ADD
+              Tambah Pasien
             </button>
             <input
               type="text"
-              placeholder="Cari barang..."
+              placeholder="Cari Pasien..."
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
@@ -232,7 +232,7 @@ function Stokbarangjadi() {
                   type="number"
                   value={nohp}
                   onChange={(e) => setnohp(e.target.value)}
-                  placeholder="No HP"
+                  placeholder="No Telepon"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 {/* <input
@@ -294,13 +294,6 @@ function Stokbarangjadi() {
                 </button>
               </div>
               <div className="bg-gray-100 shadow-lg py-4 rounded-lg p-4">
-                {/* <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
-                  placeholder="Email"
-                  className="border border-gray-400 p-2 rounded mb-2 w-full"
-                /> */}
                 <input
                   type="text"
                   value={nama}
@@ -333,7 +326,14 @@ function Stokbarangjadi() {
                   type="number"
                   value={nohp}
                   onChange={(e) => setnohp(e.target.value)}
-                  placeholder="No HP"
+                  placeholder="No Telepon"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
+                  placeholder="Email"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 {/* <input

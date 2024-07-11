@@ -157,7 +157,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="ml-24 mt-4 flex justify-between items-center">
+        {/* <div className="ml-24 mt-4 flex justify-between items-center">
           <h1 className="text-2xl text-main font-bold">Admin List</h1>
           <button
             onClick={() => setShowForm(true)}
@@ -165,7 +165,7 @@ const Dashboard = () => {
           >
             Add
           </button>
-        </div>
+        </div> */}
 
         <div className="overflow-x-auto ml-16 mr-8 mt-8">
           <table className="table-auto min-w-max w-full border-gray-500">
@@ -175,7 +175,7 @@ const Dashboard = () => {
                 <th className=" border-gray-500 px-4 py-2">Nama</th>
                 <th className=" border-gray-500 px-4 py-2">Nomor Telepon</th>
                 <th className=" border-gray-500 px-4 py-2">Email</th>
-                <th className=" border-gray-500 px-4 py-2">Action</th>
+                {/* <th className=" border-gray-500 px-4 py-2">Action</th> */}
               </tr>
             </thead>
             <tbody>
@@ -193,7 +193,7 @@ const Dashboard = () => {
                   <td className=" text-center border-gray-500 px-4 py-2">
                     {item.email}
                   </td>
-                  <td className=" border-gray-500 text-center py-2">
+                  {/* <td className=" border-gray-500 text-center py-2">
                     <button
                       onClick={() => handleEditBarang(item.id)}
                       className="text-blue-500"
@@ -206,7 +206,7 @@ const Dashboard = () => {
                     >
                       <DeleteIcon />
                     </button>{" "}
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

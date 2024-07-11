@@ -154,11 +154,11 @@ function Stokbarangmentah() {
               onClick={() => setShowForm(true)}
               className="bg-main hover:bg-blue-200 text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
-              ADD
+              Tambah Booking
             </button>
             <input
               type="text"
-              placeholder="Cari barang..."
+              placeholder="Cari booking..."
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
