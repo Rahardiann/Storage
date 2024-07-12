@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
+import { useNavigate } from "react-router-dom";
 
 function MasterBarangMentah() {
   const [stok, setStok] = useState([]);
@@ -10,11 +11,13 @@ function MasterBarangMentah() {
   const [kategoriBarang, setKategoriBarang] = useState("");
   const [judul, setJudul] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [gambar, setGambar] = useState(null); // Changed to null for file input
+  const [gambar, setGambar] = useState(null);
   const [deskripsi_1, setDeskripsi1] = useState("");
   const [deskripsi_2, setDeskripsi2] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [id, setId] = useState(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchStok = async () => {
@@ -38,11 +41,7 @@ function MasterBarangMentah() {
     formData.append("deskripsi_2", deskripsi_2);
 
     axios
-      .post("/promo/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post("/promo/", formData)
       .then((response) => {
         console.log("Data berhasil ditambahkan:", response.data);
         setStok((prevList) => [...prevList, response.data]);
@@ -54,42 +53,30 @@ function MasterBarangMentah() {
       });
   };
 
- const handleEditBarang = () => {
-   const updatedData = {
-     kategori: kategoriBarang,
-     judul: judul,
-     subtitle: subtitle,
-     deskripsi_1: deskripsi_1,
-     deskripsi_2: deskripsi_2,
-   };
-
-   const formData = new FormData();
-   formData.append("kategori", updatedData.kategori);
-   formData.append("judul", updatedData.judul);
-   formData.append("subtitle", updatedData.subtitle);
-   formData.append("deskripsi_1", updatedData.deskripsi_1);
-   formData.append("deskripsi_2", updatedData.deskripsi_2);
-
-   if (gambar !== null) {
-     formData.append("gambar", gambar);
-   }
-
-   axios
-     .put(`/promo/${id}`, formData)
-     .then((response) => {
-       const updatedList = [...stok];
-       updatedList[editingIndex] = response.data;
-       setStok(updatedList);
-       console.log("Data berhasil diupdate:", response.data);
-       setShowForm(false);
-       resetForm();
-     })
-     .catch((error) => {
-       console.error("Gagal mengupdate data:", error);
-     });
- };
-
-
+  const handleEditBarang = () => {
+    const formData = new FormData();
+    formData.append("kategori", kategoriBarang);
+    formData.append("judul", judul);
+    formData.append("subtitle", subtitle);
+    formData.append("deskripsi_1", deskripsi_1);
+    formData.append("deskripsi_2", deskripsi_2);
+    formData.append("gambar", gambar);
+  
+    axios
+      .put(`/promo/${id}`, formData)
+      .then((response) => {
+        const updatedList = [...stok];
+        updatedList[editingIndex] = response.data.data;
+        setStok(updatedList);
+        console.log("Data berhasil diupdate:", response.data);
+        setShowForm(false);
+        resetForm();
+        navigate("/promo")
+      })
+      .catch((error) => {
+        console.error("Gagal mengupdate data:", error);
+      });
+  };  
 
   const handleDeleteBarang = (index) => {
     const barang = stok[index];
@@ -118,15 +105,6 @@ function MasterBarangMentah() {
     setDeskripsi2("");
     setEditingIndex(null);
     setId(null);
-  };
-
-  const handleShowImagePopup = (imageSrc) => {
-    setPopupImageSrc(imageSrc);
-    setShowImagePopup(true);
-  };
-
-  const handleCloseImagePopup = () => {
-    setShowImagePopup(false);
   };
 
   const handleEditBarangClick = (index) => {

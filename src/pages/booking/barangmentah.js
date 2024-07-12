@@ -21,6 +21,7 @@ function Stokbarangmentah() {
   const [timeOptions, setTimeOptions] = useState([]);
   const [dentistOptions, setDentistOptions] = useState([]);
   const [promoOptions, setPromoOptions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleDeleteBarang = async (id) => {
     try {
@@ -141,6 +142,14 @@ function Stokbarangmentah() {
     setSelectedPromo(selectedOption);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredBooking = booking.filter((item) =>
+    item.user.nama.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -158,7 +167,9 @@ function Stokbarangmentah() {
             </button>
             <input
               type="text"
-              placeholder="Cari barang..."
+              placeholder="Cari Nama Pasien"
+              value={searchQuery}
+              onChange={handleSearchChange}
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
@@ -267,7 +278,7 @@ function Stokbarangmentah() {
                 </tr>
               </thead>
               <tbody>
-                {booking.map((item, index) => (
+                {filteredBooking.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
                       B{index + 1}

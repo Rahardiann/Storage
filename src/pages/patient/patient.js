@@ -20,6 +20,7 @@ function Stokbarangjadi() {
   const [alamat, setalamat] = useState("");
   const [tanggalLahir, setTanggalLahir] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleAddBarang = async () => {
     const newBarang = {
@@ -29,7 +30,7 @@ function Stokbarangjadi() {
       no_hp: nohp || "",
       alamat: alamat || "",
       tanggal_lahir: tanggalLahir || "",
-      no_rekam_medis: nomr || "",
+      no_rekam_medis: nomr || null,
       gender: gender || "",
     };
 
@@ -53,7 +54,7 @@ function Stokbarangjadi() {
       no_hp: nohp || "",
       alamat: alamat || "",
       tanggal_lahir: tanggalLahir || "",
-      no_rekam_medis: nomr || "",
+      no_rekam_medis: nomr || null,
       gender: gender || "",
     };
 
@@ -155,6 +156,14 @@ function Stokbarangjadi() {
     setShowForm(true);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredStok = stok.filter((item) =>
+    item.nama.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -172,7 +181,9 @@ function Stokbarangjadi() {
             </button>
             <input
               type="text"
-              placeholder="Cari barang..."
+              placeholder="Cari Nama Pasien"
+              value={searchQuery}
+              onChange={handleSearchChange}
               className="border border-gray-400 p-2 rounded-5 w-80"
             />
           </div>
@@ -389,8 +400,8 @@ function Stokbarangjadi() {
                 </tr>
               </thead>
               <tbody>
-                {stok.map((item, index) => (
-                  <tr key={index}>
+                {filteredStok.map((item, index) => (
+                  <tr key={item.id}>
                     <td className=" border-gray-500 text-center py-2">
                       {index + 1}
                     </td>

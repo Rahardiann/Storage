@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { useNavigate } from "react-router-dom";
 import TimeButtonList from "./timelist";
 
 function Masterbarangjadi() {
@@ -27,56 +26,49 @@ function Masterbarangjadi() {
   const [searchDropdownValue, setSearchDropdownValue] = useState("");
   const [jadwalData, setJadwalData] = useState([]);
 
+  const navigate = useNavigate()
+
   const handleCloseFormEdit = () => {
     setShowFormedit(false);
   };
 
   const handleAddBarang = () => {
-    const newBarang = {
-      kategori: kategoriBarang,
-      nama: namadentist,
-      no_hp: jumlahBarang,
-      email: fotoBarang,
-      spesialist: spesialist,
-      id: id,
-    };
+    const formData = new FormData();
+    formData.append('nama', namadentist);
+    formData.append('no_hp', jumlahBarang);
+    formData.append('gambar', fotoBarang);
 
-    if (editingIndex !== null) {
-      const updatedList = [...listBarang];
-      updatedList[editingIndex] = newBarang;
-      setListBarang(updatedList);
-      setEditingIndex(null);
-      axios
-        .put(`/dokter/${id}`, newBarang)
-        .then((response) => {
-          console.log("Data berhasil diupdate:", response.data);
-        })
-        .catch((error) => {
-          console.error("Gagal mengupdate data:", error);
-        });
-    } else {
-      setListBarang((prevList) => [...prevList, newBarang]);
-      axios
-        .post("/dokter/", newBarang)
-        .then((response) => {
-          console.log("Data berhasil ditambahkan:", response.data);
-        })
-        .catch((error) => {
-          console.error("Gagal menambahkan data:", error);
-        });
-    }
-
-    setShowForm(false);
-    // Reset form input
-    setIDDentist("");
-    setKategoriBarang("");
-    setNamaDentist("");
-    setJumlahBarang("");
-    setFotoBarang("");
-    setSpesialist("");
+    axios
+      .post("/dokter/", formData)
+      .then((response) => {
+        console.log("Data berhasil ditambahkan:", response.data.data);
+        setListBarang((prevList) => [...prevList, response.data.data]);
+        setShowForm(false);
+        resetForm();
+      })
+      .catch((error) => {
+        console.error("Gagal menambahkan data:", error);
+      });
   };
 
-  const handleEditBarang = async (index) => {
+  const handleEditBarang = (formData) => {
+    axios
+      .put(`/dokter/${id}`, formData)
+      .then((response) => {
+        console.log("Data berhasil diupdate:", response.data.data);
+        const updatedList = [...listBarang];
+        updatedList[editingIndex] = response.data.data;
+        setListBarang(updatedList);
+        setShowFormedit(false);
+        resetForm();
+        navigate("/dentist")
+      })
+      .catch((error) => {
+        console.error("Gagal mengupdate data:", error);
+      });
+  };
+
+  const handleEditBarangForm = async (index) => {
     const barang = stok[index];
     setIDDentist(barang.id);
     setKategoriBarang(barang.kategori);
@@ -122,28 +114,10 @@ function Masterbarangjadi() {
     }
   };
 
-  const handleDropdownChange = async (e) => {
-    const selectedDate = e.target.value;
-    setSearchDropdownValue(selectedDate);
-
-    if (selectedDate) {
-      try {
-        const response = await axios.post("/jadwal/filter", {
-          jadwal: selectedDate,
-        });
-        if (response.data.success) {
-          setJadwalData(response.data.data);
-        } else {
-          console.error("Failed to filter jadwal:", response.data.message);
-        }
-      } catch (error) {
-        console.error("Error filtering jadwal data:", error);
-      }
-    } else {
-      // Jika dropdown kosong, ambil ulang semua jadwal
-      const response = await axios.get("/jadwal/all");
-      setJadwalData(response.data);
-    }
+  const resetForm = () => {
+    setNamaDentist("");
+    setJumlahBarang("");
+    setFotoBarang(null); // Reset to null
   };
 
   useEffect(() => {
@@ -281,7 +255,7 @@ function Masterbarangjadi() {
                   onClick={handleAddBarang}
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                  {editingIndex !== null ? "Update" : "Tambah"}
                 </button>
               </div>
             </div>
@@ -430,7 +404,7 @@ function Masterbarangjadi() {
                     </td>
                     <td className="border-gray-500 text-center py-2">
                       <button
-                        onClick={() => handleEditBarang(index)}
+                        onClick={() => handleEditBarangForm(index)}
                         className="bg-green-500 text-white font-bold py-1 px-2 rounded mr-2"
                       >
                         Edit

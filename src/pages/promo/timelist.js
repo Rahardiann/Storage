@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../config/axiosConfig";
+import { toast } from "react-toastify";
 
 const TimeButtonList = ({ id, selectedDate, onDateChange }) => {
   const times = [
@@ -76,6 +77,7 @@ const TimeButtonList = ({ id, selectedDate, onDateChange }) => {
     axios
       .put(`/jadwal/${id}/${selectedDate}`, data)
       .then((response) => {
+        toast.success(response.data.message);
         console.log(response.data);
         // Handle success response
       })
