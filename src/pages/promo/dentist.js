@@ -192,12 +192,12 @@ function Masterbarangjadi() {
             Dentist
           </h1>
           <div className="flex justify-between mb-4">
-            <button
+            {/* <button
               onClick={() => setShowForm(true)}
               className="bg-main hover:bg-second text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
               Add Dentist
-            </button>
+            </button> */}
 
             <input
               type="date"
@@ -372,8 +372,8 @@ function Masterbarangjadi() {
                   <th className="border-gray-500 px-4 py-2">Nama Dentist</th>
                   <th className="border-gray-500 px-4 py-2">No Hp</th>
                   <th className="border-gray-500 px-4 py-2">Time Selection</th>
-                  <th className="border-gray-500 px-4 py-2">Edit</th>
-                  <th className="border-gray-500 px-4 py-2">Delete</th>
+                  {/* <th className="border-gray-500 px-4 py-2">Edit</th> */}
+                  {/* <th className="border-gray-500 px-4 py-2">Delete</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -402,7 +402,7 @@ function Masterbarangjadi() {
                         onDateChange={handleDateChange}
                       />
                     </td>
-                    <td className="border-gray-500 text-center py-2">
+                    {/* <td className="border-gray-500 text-center py-2">
                       <button
                         onClick={() => handleEditBarangForm(index)}
                         className="bg-green-500 text-white font-bold py-1 px-2 rounded mr-2"
@@ -417,7 +417,7 @@ function Masterbarangjadi() {
                       >
                         Delete
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

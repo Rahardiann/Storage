@@ -133,19 +133,19 @@ function MasterBarangMentah() {
               onClick={() => setShowForm(true)}
               className="bg-main hover:bg-blue-200 text-white font-bold rounded-3xl mr-4 w-40 h-10"
             >
-              ADD
+              Tambah Promo
             </button>
-            <input
+            {/* <input
               type="text"
               placeholder="Cari barang..."
               className="border border-gray-400 p-2 rounded-5 w-80"
-            />
+            /> */}
           </div>
 
           {showForm && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded-lg max-w-3xl w-full">
               <div className="bg-main text-white font-bold rounded-t-lg px-4 py-3 relative">
-                Master Barang Mentah
+                Tambah Promo
                 <button
                   onClick={() => setShowForm(false)}
                   className="absolute top-0 right-0 m-2 text-gray-300 font-bold"
@@ -169,7 +169,7 @@ function MasterBarangMentah() {
                   type="text"
                   value={judul}
                   onChange={(e) => setJudul(e.target.value)}
-                  placeholder="Nama Barang"
+                  placeholder="Nama Promo"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input
@@ -204,7 +204,7 @@ function MasterBarangMentah() {
                   }
                   className="bg-main text-white font-bold rounded py-2 px-4 mt-4 w-full"
                 >
-                  {editingIndex !== null ? "Update Barang" : "Tambah Barang"}
+                  {editingIndex !== null ? "Update Promo" : "Tambah Promo"}
                 </button>
               </div>
             </div>
