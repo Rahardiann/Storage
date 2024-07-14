@@ -4,6 +4,7 @@ import axios from "../../config/axiosConfig";
 import PopupImage from "../../assets/login.png";
 import Select from "react-select";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { useNavigate } from "react-router-dom";
 
 function Stokbarangmentah() {
   const [booking, setBooking] = useState([]);
@@ -22,6 +23,8 @@ function Stokbarangmentah() {
   const [dentistOptions, setDentistOptions] = useState([]);
   const [promoOptions, setPromoOptions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const navigate = useNavigate()
 
   const handleDeleteBarang = async (id) => {
     try {
@@ -45,7 +48,7 @@ function Stokbarangmentah() {
         jadwal: date,
       },
       judul: {
-        id: selectedPromo ? { id: selectedPromo.value } : null,
+        id: selectedPromo ? selectedPromo.value  : null,
       },
     };
 
@@ -67,6 +70,7 @@ function Stokbarangmentah() {
       setDentist(null);
       setSelectedUser(null);
       setSelectedPromo(null);
+      navigate("/booking")
     } catch (error) {
       // Handle jika terjadi error saat melakukan POST request
       console.error("Gagal menambahkan barang:", error);
@@ -147,7 +151,7 @@ function Stokbarangmentah() {
   };
 
   const filteredBooking = booking.filter((item) =>
-    item.user.nama.toLowerCase().includes(searchQuery.toLowerCase())
+    item.user?.nama.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -239,8 +243,8 @@ function Stokbarangmentah() {
                 />
 
                 <Select
-                  value={promo}
-                  onChange={(selectedOption) => setPromo(selectedOption)}
+                  value={selectedPromo}
+                  onChange={(selectedOption) => handlePromoChange(selectedOption)}
                   options={promoOptions.map((item) => ({
                     value: item.id,
                     label: item.judul,

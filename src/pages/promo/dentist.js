@@ -74,7 +74,7 @@ function Masterbarangjadi() {
     setKategoriBarang(barang.kategori);
     setNamaDentist(barang.nama);
     setJumlahBarang(barang.no_hp);
-    setFotoBarang(barang.email);
+    setFotoBarang(barang.email); 
     setSpesialist(barang.spesialist);
     setEditingIndex(index);
     setShowFormedit(true);
@@ -141,15 +141,6 @@ function Masterbarangjadi() {
 
     fetchData();
   }, []);
-
-  const handleShowImagePopup = (imageSrc) => {
-    setPopupImageSrc(imageSrc);
-    setShowImagePopup(true);
-  };
-
-  const handleCloseImagePopup = () => {
-    setShowImagePopup(false);
-  };
 
   const handleTimeSelect = (time) => {
     console.log("Selected time:", time);

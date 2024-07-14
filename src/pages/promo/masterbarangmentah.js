@@ -176,21 +176,21 @@ function MasterBarangMentah() {
                   type="text"
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
-                  placeholder="Subtitle"
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input
                   type="text"
                   value={deskripsi_1}
                   onChange={(e) => setDeskripsi1(e.target.value)}
-                  placeholder="Deskripsi 1"
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input
                   type="text"
                   value={deskripsi_2}
                   onChange={(e) => setDeskripsi2(e.target.value)}
-                  placeholder="Deskripsi 2"
+                  placeholder=""
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 />
                 <input

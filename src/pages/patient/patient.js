@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar/sidebar";
 import axios from "../../config/axiosConfig";
-import PopupImage from "../../assets/login.png";
-import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
 function Stokbarangjadi() {
@@ -260,6 +258,13 @@ function Stokbarangjadi() {
                   placeholder="No KTP"
                   className="border border-gray-400 p-2 rounded mb-2 w-full"
                 /> */}
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
+                  placeholder="Email"
+                  className="border border-gray-400 p-2 rounded mb-2 w-full"
+                />
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
