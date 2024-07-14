@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaBox,
@@ -19,6 +19,7 @@ import { FaPerson, FaTimeline } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [minimized, setMinimized] = useState(window.innerWidth <= 768);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,6 +32,11 @@ const Sidebar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <div
@@ -152,7 +158,7 @@ const Sidebar = () => {
             className={`flex items-center text-main text-base sidebar-item ${
               minimized ? "pl-2" : "pl-4"
             } hover:text-gray-400`}
-            onClick={() => setMinimized(window.innerWidth <= 768)}
+            onClick={handleLogout}
           >
             <FaSignOutAlt className={`ml-2 ${minimized ? "ml-3" : "mr-4"}`} />{" "}
             {!minimized && <span>Logout</span>}

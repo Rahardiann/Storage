@@ -32,9 +32,10 @@ const LoginForm = () => {
         password: user.password,
       });
 
-      const token = response.data.token; // Assuming your backend sends back a token upon successful login
+      console.log(response.data)
+      const token = response.data.data; // Assuming your backend sends back a token upon successful login
 
-      localStorage.setItem("token", token); // Save the token to local storage
+      sessionStorage.setItem("token", token); // Save the token to local storage
 
       navigate("/dashboard"); // Redirect to the dashboard or any other page upon successful login
     } catch (error) {
