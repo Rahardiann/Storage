@@ -285,7 +285,7 @@ function Stokbarangmentah() {
                 {filteredBooking.map((item, index) => (
                   <tr key={index} className="bg-second">
                     <td className="text-center border-gray-500 px-2 py-2">
-                      B{index + 1}
+                      B{item.id}
                     </td>
                     <td className="text-center border-gray-500 px-4 py-2">
                       {item.user?.nama}
